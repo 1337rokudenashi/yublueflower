@@ -10,6 +10,11 @@
 
 ## Overview
 
+<h1 align="center">
+  <img src="https://github.com/user-attachments/assets/ac0ac510-ee57-4d09-9f81-77dc7da964e7" alt="yublueflower" width="700px">
+  <br>
+</h1>
+
 yublueflower is a suite of workflows designed to integrate open-source tools for offensive security.
 1. **Reconnaissance Phase**: In this phase, web crawling is done passively and actively.
 2. **Vulnerability Assessment Phase**: In this phase, vulnerability assessment is carried out through an offensive approach.
