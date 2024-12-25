@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# A suite of workflows that integrate with open-source tools for offensive security.
+# A suite of workflows designed to integrate open-source tools for offensive security.
 
 # Function to display the banner
 function display_banner() {
@@ -41,7 +41,7 @@ function display_banner() {
                                                   `  
 EOF
     echo -e "\033[0m"  # Reset text color
-    echo "A suite of workflows that integrate with open-source tools for offensive security."
+    echo "A suite of workflows designed to integrate open-source tools for offensive security."
     echo "Author: 1337rokudenashi"
     echo "Current yublueflower version v0.0.1 (latest)"
     echo ""
