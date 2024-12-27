@@ -56,6 +56,13 @@ To run the tool, use the following command:
 ```bash
 ./yublueflower.sh -url http://testphp.vulnweb.com/ -silent
 ```
+
+<h1 align="center">
+  <img src="https://github.com/user-attachments/assets/1fcb637c-c8a2-4658-8680-2dffac2145c7" alt="yublueflower" width="700px">
+  <img src="https://github.com/user-attachments/assets/6853bfc6-401b-4d01-8cea-c3b2c4418c45" alt="yublueflower" width="700px">
+  <br>
+</h1>
+
 ## Contributing
 
 We welcome contributions! Feel free to fork the repository, improve the tool, and submit a pull request.
