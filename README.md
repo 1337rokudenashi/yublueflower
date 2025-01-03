@@ -16,10 +16,6 @@
 </h1>
 
 A suite of workflows designed to integrate open-source tools for offensive security, yublueflower provides comprehensive vulnerability assessments.
-1. **Reconnaissance Phase**: In this phase, web crawling is done passively and actively.
-2. **Vulnerability Assessment Phase**: In this phase, vulnerability assessment is carried out through an offensive approach.
-3. **Reporting Phase**: In this phase, a report is generated.
-
 This tool is designed to be flexible and effective in supporting offensive security workflows. It has been tested to work smoothly on **WSL (Windows Subsystem for Linux) with Kali Linux**.
 
 ## Features
