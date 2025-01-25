@@ -11,12 +11,12 @@
 ## Overview
 
 <h1 align="center">
-  <img src="https://github.com/user-attachments/assets/ac0ac510-ee57-4d09-9f81-77dc7da964e7" alt="yublueflower" width="700px">
+  <img src="https://github.com/user-attachments/assets/ba00d713-dcb8-4715-9070-b7ce949cffba" alt="yublueflower" width="700px">
   <br>
 </h1>
 
 A suite of workflows designed to integrate open-source tools for offensive security, yublueflower provides comprehensive vulnerability assessments.
-This tool is designed to be flexible and effective in supporting offensive security workflows. It has been tested to work smoothly on **WSL (Windows Subsystem for Linux) with Kali Linux**.
+This tool is designed to be flexible and effective in supporting offensive security workflows. It has been tested to work smoothly on WSL (Windows Subsystem for Linux) with Kali Linux.
 
 ## Features
 
@@ -54,8 +54,8 @@ To run the tool, use the following command:
 ```
 
 <h1 align="center">
-  <img src="https://github.com/user-attachments/assets/1fcb637c-c8a2-4658-8680-2dffac2145c7" alt="yublueflower" width="700px">
-  <img src="https://github.com/user-attachments/assets/6853bfc6-401b-4d01-8cea-c3b2c4418c45" alt="yublueflower" width="700px">
+  <img src="https://github.com/user-attachments/assets/490ae4f3-aafe-45e0-b14b-dce15ef7a81a" alt="yublueflower" width="700px">
+  <img src="https://github.com/user-attachments/assets/67463fd1-4a07-4270-8adf-b07732f58a70" alt="yublueflower" width="700px">
   <br>
 </h1>
 
