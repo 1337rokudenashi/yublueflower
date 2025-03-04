@@ -75,7 +75,7 @@ bash yublueflower
 To run the tool, use the following command:
 
 ```bash
-yublueflower -url http://testphp.vulnweb.com/ -silent
+yublueflower -url http://testphp.vulnweb.com/
 ```
 
 ```bash
