@@ -1,0 +1,185 @@
+#!/bin/bash
+
+# A suite integrating open-source workflows tailored for offensive security.
+
+# Function to display the banner
+function display_banner() {
+    echo -e "\033[36m"  # Set text color to cyan
+    cat << "EOF"
+            .      .-~\
+           / `-'.'    `- :
+           |    /          `._
+           |   |   .-.        {
+            \  |   `-'         `.
+          .  \ |                /    We exploit flaws, not people.
+        ~-.`.\ \|            .-~_
+           `.\-.\       .-~      \
+             `-'/~~ -.~          /
+           .-~/|`-._ /~~-.~ -- ~
+          /  |  \    ~- . _\
+EOF
+    echo -e "\033[0m"  # Reset text color
+    echo "A suite integrating open-source workflows tailored for offensive security."
+    echo "Author: 1337rokudenashi"
+    echo "Current yublueflower version v0.0.3 (latest)"
+    echo ""
+}
+
+# Function to install dependencies
+function install_dependencies() {
+    echo -e "\033[36m🟢 Preparing for needs...\033[0m"
+
+    yublueflower_path="$HOME/.local/bin/yublueflower"
+    bash_yublueflower_path=$(realpath "$0")
+
+    if [[ "$bash_yublueflower_path" != "$yublueflower_path" ]]; then
+        mkdir -p "$HOME/.local/bin"
+        cp "$bash_yublueflower_path" "$yublueflower_path"
+        chmod +x "$yublueflower_path"
+    fi
+
+    if ! grep -q "export PATH=\$HOME/.local/bin:\$PATH" ~/.profile; then
+        echo "export PATH=\$HOME/.local/bin:\$PATH" >> ~/.profile
+    fi
+    
+    go_version=$(go version 2>/dev/null | awk '{print $3}' | sed 's/go//')
+    required_go_version="1.23.0"
+
+    if [[ -z "$go_version" ]] || [[ "$(printf '%s\n' "$go_version" "$required_go_version" | sort -V | tail -n1)" != "$go_version" ]]; then
+        echo "Installing go.dev $required_go_version"
+
+        wget -q https://go.dev/dl/go1.23.0.linux-amd64.tar.gz -O /tmp/go.tar.gz
+        rm -rf $HOME/go 2>/dev/null  
+        mkdir -p $HOME/go
+        tar -C $HOME/go --strip-components=1 -xzf /tmp/go.tar.gz
+        rm -f /tmp/go.tar.gz
+
+        export GOROOT=$HOME/go
+        export GOPATH=$HOME/godev  
+        export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
+
+        if ! grep -q "export GOROOT=$HOME/go" ~/.profile; then
+            echo "export GOROOT=$HOME/go" >> ~/.profile
+        fi
+        if ! grep -q "export GOPATH=$HOME/godev" ~/.profile; then
+            echo "export GOPATH=$HOME/godev" >> ~/.profile
+        fi
+        if ! grep -q "export PATH=\$GOROOT/bin:\$GOPATH/bin:\$PATH" ~/.profile; then
+            echo "export PATH=\$GOROOT/bin:\$GOPATH/bin:\$PATH" >> ~/.profile
+        fi
+    fi
+
+    mkdir -p "$GOPATH/bin" "$GOPATH/src" "$GOPATH/pkg"
+
+    node_version=$(node -v 2>/dev/null | sed 's/v//')
+    required_node_version="22.14.0"
+
+    if [[ -z "$node_version" ]] || [[ "$(printf '%s\n' "$node_version" "$required_node_version" | sort -V | tail -n1)" != "$node_version" ]]; then
+        echo "Installing node.js v$required_node_version"
+
+        wget -q https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz -O /tmp/node.tar.xz
+        rm -rf $HOME/node 2>/dev/null
+        mkdir -p $HOME/node
+        tar -C $HOME/node --strip-components=1 -xf /tmp/node.tar.xz
+        rm -f /tmp/node.tar.xz
+
+        export PATH=$HOME/node/bin:$PATH
+
+        if ! grep -q "export PATH=\$HOME/node/bin:\$PATH" ~/.profile; then
+            echo "export PATH=\$HOME/node/bin:\$PATH" >> ~/.profile
+        fi
+    fi
+
+    go install -v github.com/projectdiscovery/urlfinder/cmd/urlfinder@latest
+    go install github.com/projectdiscovery/katana/cmd/katana@latest
+    go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+    go install github.com/charmbracelet/glow@latest
+    
+    clear
+}
+
+# Function to display help message
+function display_help() {
+    echo -e "\033[36mUsage:\033[0m"
+    echo "yublueflower -url http://testphp.vulnweb.com/"
+    echo ""
+    echo -e "\033[36mOptions:\033[0m"
+    echo "-help       Show this help message."
+    echo "-url <URL>  Run a vulnerability assessment on the specified URL."
+    echo "-silent     Only display results from the vulnerability assessment phase and suppress outputs from the reconnaissance phase."
+}
+
+# Function to run the tools in sequence: URLFinder, Katana, then Nuclei
+function run_tests() {
+    local url=$1
+    local silent=$2
+    local report_dir="$HOME/glow_yublueflower"
+    local output_file="yublueflower_$(date '+%Y%m%d_%H%M%S')"
+    local output_path="$report_dir/$output_file"
+    mkdir -p "$report_dir"
+    local start_time=$(date "+%H:%M:%S %d-%m-%Y")
+    echo "Testing started at $start_time"
+
+    if ! [[ "$url" =~ ^https?:// ]]; then
+        echo -e "\033[31m[!] Invalid URL format. Please include http:// or https://.\033[0m"
+        exit 1
+    fi
+
+    # Remove http:// or https:// for the purpose of URLFinder
+    domain=$(echo "$url" | sed -E 's|https?://||' | cut -d'/' -f1)
+
+    # Step 1: Reconnaissance
+    echo -e "\033[36m🟢 Reconnaissance Phase: Passively and actively gathering URLs...\033[0m"
+    timestamp=$(date "+%Y%m%d%H%M%S")
+    if [[ "$silent" != "-silent" ]]; then
+        urlfinder -d "$domain" -silent | grep --text "\?.*=" | awk -F'[?]' '!seen[$1]++ {split($2, a, "&"); print $1 "?" a[1]}' | tee /tmp/passively_gathering_urls_$timestamp.txt
+        katana -u "$url" -mr ".*\?.*" -silent | awk -F'[?]' '!seen[$1]++ {split($2, a, "&"); print $1 "?" a[1]}' | tee /tmp/actively_gathering_urls_$timestamp.txt
+    else
+        urlfinder -d "$domain" -silent | grep --text "\?.*=" | awk -F'[?]' '!seen[$1]++ {split($2, a, "&"); print $1 "?" a[1]}' > /tmp/passively_gathering_urls_$timestamp.txt
+        katana -u "$url" -mr ".*\?.*" -silent | awk -F'[?]' '!seen[$1]++ {split($2, a, "&"); print $1 "?" a[1]}' > /tmp/actively_gathering_urls_$timestamp.txt
+    fi
+
+    # Step 2: Vulnerability Assessment
+    echo -e "\033[36m🟢 Vulnerability Assessment Phase: Assessing vulnerabilities through an offensive perspective...\033[0m"
+    nuclei -u "$url" -silent -markdown-export "$output_path"
+    nuclei -list /tmp/passively_gathering_urls_$timestamp.txt -dast -silent -markdown-export "$output_path" ; nuclei -list /tmp/actively_gathering_urls_$timestamp.txt -dast -silent -markdown-export "$output_path"
+    nuclei -u "$url" -tags cve -silent -markdown-export "$output_path"
+
+    # Step 3: Reporting
+    echo -e "\033[36m🟢 Reporting Phase: A thorough report is generated...\033[0m"
+    echo "Results have been saved to $report_dir"
+
+    index_file="$output_path/index.md"
+    if [[ -f "$index_file" ]]; then
+        rm -f "$index_file"
+    fi
+
+    # Conclusion
+    echo "Testing finished at $(date "+%H:%M:%S %d-%m-%Y")"
+    echo -e "Use the command \033[36mglow $output_file\033[0m to read the results of the report."
+
+    rm -f /tmp/passively_gathering_urls_$timestamp.txt /tmp/actively_gathering_urls_$timestamp.txt
+}
+
+# Main execution
+if [[ -z "$1" ]]; then
+    install_dependencies
+    display_banner
+    display_help
+    exec bash -l
+fi
+
+if [[ "$1" == "-help" ]]; then
+    display_banner
+    display_help
+    exit 0
+fi
+
+if [[ "$1" == "-url" && -n "$2" ]]; then
+    install_dependencies
+    display_banner
+    run_tests "$2" "$3"
+else
+    echo -e "\033[31m[!] Invalid arguments. Use -help for usage instructions.\033[0m"
+    exit 1
+fi
