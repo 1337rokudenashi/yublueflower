@@ -43,15 +43,13 @@ This tool is designed to be flexible and effective in supporting offensive secur
 ## Features
 
 - **Reconnaissance Phase**:
-  - Passive crawling to collect URLs.
-  - Active crawling for deeper URL discovery.
+  - Automatically passive crawling to collect URLs and active crawling for deeper URL discovery.
 - **Vulnerability Assessment Phase**:
-  - Automatically scans for vulnerabilities built on common vulnerabilities and exposures (cve).
-  - Automatically tests for vulnerabilities leveraging dynamic application security testing (dast).
+  - Automatically scans and tests for vulnerabilities by leveraging security flaw templates.
 - **Reporting Phase**:
   - Automatically saves results in a timestamped folder.
 - **Options**:
-  - Silent mode suppresses the output of the reconnaissance process, helping to reduce clutter in the terminal during the scan.
+  - Silent mode hides reconnaissance output, keeping your terminal clean and uncluttered during the scan.
 
 ## System Requirements
 
