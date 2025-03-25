@@ -161,7 +161,7 @@ http://testphp.vulnweb.com/product.php?pic=6
 🟢 Reporting Phase: Results flawlessly generated...
 Results at /home/yublueflower/glow_yublueflower
 Testing finished at 13:44:01 01-03-2025
-Use command glow yublueflower_20250301_133701 to read results.
+Use command glow yublueflower_20250301_133701 to see results.
 ```
 
 ## Contributing
