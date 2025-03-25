@@ -32,9 +32,10 @@ Usage:
 yublueflower -url http://testphp.vulnweb.com/
 
 Options:
--help       Show this help message.
--url <URL>  Run a vulnerability assessment on the specified URL.
--silent     Only display results from the vulnerability assessment phase and suppress outputs from the reconnaissance phase.
+-help                 Show help message.
+-url <URL>            Scan as well as test utilizing security flaw templates.
+-highly-aggressive    Highly aggressive testing.
+-silent               Skip URL gathering noise to keep testing clean.
 ```
 
 A suite integrating open-source workflows tailored for offensive security, yublueflower provides comprehensive vulnerability assessments.
@@ -43,13 +44,14 @@ This tool is designed to be flexible and effective in supporting offensive secur
 ## Features
 
 - **Reconnaissance Phase**:
-  - Automatically passive crawling to collect URLs and active crawling for deeper URL discovery.
+  - Aggressively gathering URLs.
 - **Vulnerability Assessment Phase**:
-  - Automatically scans and tests for vulnerabilities by leveraging security flaw templates.
+  - Assessing vulnerabilities offensively, scanning as well as testing utilizing security flaw templates.
 - **Reporting Phase**:
-  - Automatically saves results in a timestamped folder.
+  - Results flawlessly generated.
 - **Options**:
-  - Silent mode hides reconnaissance output, keeping your terminal clean and uncluttered during the scan.
+  - Highly aggressive testing.
+  - Skip URL gathering noise to keep testing clean.
 
 ## System Requirements
 
@@ -95,7 +97,7 @@ Author: 1337rokudenashi
 Current yublueflower version v0.0.3 (latest)
 
 Testing started at 13:37:01 01-03-2025
-🟢 Reconnaissance Phase: Passively and actively gathering URLs...
+🟢 Reconnaissance Phase: Aggressively gathering URLs...
 http://testphp.vulnweb.com/redir.php?r=https://getgophish.com/
 http://testphp.vulnweb.com/AJAX/infoartist.php?id=1 AND UPDATEXML(3477,CONCAT(0x2e,0x7176716271,(SELECT (ELT(3477=3477,1))),0x716b786b71),6541)
 http://testphp.vulnweb.com/artists.php?artist=1 order by 4
@@ -125,7 +127,7 @@ http://testphp.vulnweb.com/listproducts.php?cat=1
 http://testphp.vulnweb.com/hpp/params.php?p=valid
 http://testphp.vulnweb.com/showimage.php?file=./pictures/3.jpg
 http://testphp.vulnweb.com/product.php?pic=6
-🟢 Vulnerability Assessment Phase: Assessing vulnerabilities through an offensive perspective...
+🟢 Vulnerability Assessment Phase: Assessing vulnerabilities offensively, scanning as well as testing utilizing security flaw templates...
 [waf-detect:nginxgeneric] [http] [info] http://testphp.vulnweb.com/
 [php-errors] [http] [info] http://testphp.vulnweb.com/ ["Warning: mysql_connect()"]
 [nginx-version] [http] [info] http://testphp.vulnweb.com/ ["nginx/1.19.0"]
@@ -156,10 +158,10 @@ http://testphp.vulnweb.com/product.php?pic=6
 [linux-lfi-fuzz] [http] [high] http://testphp.vulnweb.com/showimage.php?file=../../etc/passwd [GET]
 [reflected-xss] [http] [medium] http://testphp.vulnweb.com/hpp/?pp=12'"><77225> [query:pp] [GET]
 [reflected-xss] [http] [medium] http://testphp.vulnweb.com/artists.php?artist=3'"><77225> [query:artist] [GET]
-🟢 Reporting Phase: A thorough report is generated...
-Results have been saved to /home/yublueflower/glow_yublueflower
+🟢 Reporting Phase: Results flawlessly generated...
+Results at /home/yublueflower/glow_yublueflower
 Testing finished at 13:44:01 01-03-2025
-Use the command glow yublueflower_20250301_133701 to read the results of the report.
+Use command glow yublueflower_20250301_133701 to read results.
 ```
 
 ## Contributing
