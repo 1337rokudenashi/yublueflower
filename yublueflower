@@ -184,7 +184,7 @@ function bash_yublueflower() {
     [[ -f "$output_path/index.md" ]] && rm -f "$output_path/index.md"
 
     echo "Testing finished at $(date "+%H:%M:%S %d-%m-%Y")"
-    echo -e "Use command \033[36mglow $output_file\033[0m to read results."
+    echo -e "Use command \033[36mglow $output_file\033[0m to see results."
 
     rm -f /tmp/passively_gathering_urls_$timestamp.txt /tmp/actively_gathering_urls_$timestamp.txt
 }
