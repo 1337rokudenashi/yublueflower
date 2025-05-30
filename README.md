@@ -26,7 +26,7 @@
 
 A suite integrating open-source workflows tailored for offensive security.
 Author: 1337rokudenashi
-Current yublueflower version v0.0.5 (latest)
+Current yublueflower version v0.0.4 (latest)
 
 Usage:
 yublueflower --url http://testphp.vulnweb.com
