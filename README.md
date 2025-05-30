@@ -26,7 +26,7 @@
 
 A suite integrating open-source workflows tailored for offensive security.
 Author: 1337rokudenashi
-Current yublueflower version v0.0.4 (latest)
+Current yublueflower version v0.0.5 (latest)
 
 Usage:
 yublueflower --url http://testphp.vulnweb.com
@@ -41,18 +41,14 @@ Options:
 
 It has been tested to work smoothly on WSL (Windows Subsystem for Linux) with Kali Linux.
 
-## Features
+## Workflow
 
-- **Reconnaissance**:
-  - Aggressively gathering URLs.
-- **Security Testing**:
+- **Security Recon Intrusion Path**
+  - Aggressively gather URLs.
+- **Security Testing**
   - Scan as well as test utilizing security flaw templates.
-- **Results**:
-  - See what threats can be exploited.
-- **Options**:
-  - Highly aggressive testing.
-  - Skip URL gathering noise to keep testing clean.
-  - Accept piped URLs.
+- **Security Issue Intrusion Path**
+  - See what issues can be exploited.
 
 ## System Requirements
 
