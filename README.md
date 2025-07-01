@@ -152,4 +152,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Author
 
-Developed and maintained by 1337rokudenashi...
+Developed and maintained by 1337rokudenashi.
