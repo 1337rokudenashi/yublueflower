@@ -146,6 +146,18 @@ Use command glow yublueflower_20250501_133700 to see what issues can be exploite
 
 We welcome contributions! Feel free to fork the repository, improve the tool, and submit a pull request.
 
+## With ❤️ to Those Who Build with Open Tools
+
+**yublueflower** is a labor of love in offensive security.
+
+It’s built on the work of:
+
+- [ProjectDiscovery](https://github.com/projectdiscovery) — behind `urlfinder`, `katana`, `httpx`, and `nuclei`  
+- [Charmbracelet](https://github.com/charmbracelet) — behind `glow`
+
+Open-source makes it possible.  
+If it helps, please support them — star, share, or contribute.
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
