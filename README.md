@@ -1,13 +1,3 @@
-<h1 align="center">yublueflower</h1>
-
-<p align="center">
-  A tailored workflow suite for offensive security.
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Kali-268BEE?style=for-the-badge&logo=kalilinux&logoColor=white">
-</p>
-
 ## Overview
 
 ```bash
@@ -17,43 +7,39 @@
       | /       `._
       || .-.      {
       |\ `-'       `.
-   .  \|            /   We exploit flaws, not people.
+   .  \|            /   yublueflower v0.0.1 (latest)
  ~-.`.\\|        .-~_
     `.\-\     .-~   \
       `-'\~~.~      /
     .-~/|`-/~-.~--~
    /  |  \   ~-_\
 
+Tagline       : Bugs, but rewarded
 Author        : 1337rokudenashi
-Version       : yublueflower v0.0.5 (latest)
-Tagline       : yublueflower — A tailored workflow suite for offensive security.
-Time          : 13:37:00 01-05-2025
 Architecture  : Kali GNU/Linux Rolling (x86_64)
+Time          : 2025-05-01 13:37:01
 Uptime        : 13 hours, 37 minutes
 
 Usage:
 yublueflower --url http://testphp.vulnweb.com
 
 Options:
---help                    Show help message.
---url string[]            Scan as well as test utilizing security flaw templates.
---non-intrusive-gather    Use --non-intrusive-gather sources to gather URLs (Wayback, AlienVault, Common Crawl).
---silent                  Skip noisy URL logs.
---highly-aggressive-test  Use --highly-aggressive-test to uncover less obvious flaws.
---pipe-urls               Works great with piped input.
+--help                    Show help message
+--live-session string[]   Set session (e.g., --live-session "Cookie: laravel_session=...; XSRF-TOKEN=...")
+--bubble-tea              Use --bubble-tea to pipe URLs
+--web-archives            Use --web-archives to gather URLs using web archives (Wayback, AlienVault, Common Crawl)
+--silent                  Keep crawl URL logs behaved
+--extended-workflows      Use --extended-workflows to discover security issues others miss
 ```
 
-It has been tested to work smoothly on WSL (Windows Subsystem for Linux) with Kali Linux.
+<h1 align="center">yublueflower v0.0.1 (latest)</h1>
 
-## Workflow
+<p align="center">
+  <img src="https://img.shields.io/badge/bash-%2523121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white">
+  <img src="https://img.shields.io/badge/kali%20linux-%2523121011.svg?style=for-the-badge&logo=kali-linux&logoColor=white">
+</p>
 
-```mermaid
-flowchart LR
-    A[Aggressively gather URLs] --> B[Scan as well as test utilizing security flaw templates]
-    B --> C[See what issues can be exploited]
-```
-
-## System Requirements
+## Required
 
 - **Operating System**: WSL (Windows Subsystem for Linux) with Kali Linux
 - **Dependencies**: go.dev (see [installation instructions](https://go.dev/doc/install))
@@ -74,7 +60,7 @@ bash yublueflower
 To run the tool, use the following command:
 
 ```bash
-yublueflower --url http://testphp.vulnweb.com/
+yublueflower --url http://testphp.vulnweb.com
 ```
 
 ## License
