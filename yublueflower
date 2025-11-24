@@ -1,0 +1,288 @@
+#!/bin/bash
+[[ ! -x "$0" ]] && chmod +x "$0"
+
+export LC_ALL=C
+
+# Bugs, but rewarded
+
+function yublueflower_banner() {
+    echo -e "\033[36m"  
+    cat << "EOF"
+       .   .-~\
+      /'.'   `-:
+      | /       `._
+      || .-.      {
+      |\ `-'       `.
+   .  \|            /   yublueflower v0.0.1 (latest)
+ ~-.`.\\|        .-~_
+    `.\-\     .-~   \
+      `-'\~~.~      /
+    .-~/|`-/~-.~--~
+   /  |  \   ~-_\
+EOF
+    echo -e "\033[0m"  
+    echo "Tagline       : Bugs, but rewarded"
+    echo "Author        : 1337rokudenashi"
+    echo "Architecture  : $(lsb_release -ds) ($(uname -m))"
+    echo "Time          : $(date '+%Y-%m-%d %H:%M:%S')"
+    echo "Uptime        : $(uptime -p | sed 's/up //')"
+    echo ""
+}
+
+function yublueflower_env() {
+    yublueflower="$HOME/.local/bin/yublueflower"
+    path=$(realpath "$0")
+    [[ "$path" != "$yublueflower" ]] && mkdir -p "$HOME/.local/bin" && cp "$path" "$yublueflower" && chmod +x "$yublueflower"
+
+    if ! grep -q "export PATH=\$HOME/.local/bin:\$PATH" ~/.profile; then
+        echo "export PATH=\$HOME/.local/bin:\$PATH" >> ~/.profile
+    fi
+
+    node_version=$(node -v 2>/dev/null | sed 's/v//')
+    required_node_version="22.14.0"
+
+    if [[ -z "$node_version" ]] || [[ "$(printf '%s\n' "$node_version" "$required_node_version" | sort -V | tail -n1)" != "$node_version" ]]; then
+        echo "Installing node.js v$required_node_version"
+
+        wget -q https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz -O /tmp/node.tar.xz
+        rm -rf $HOME/yublueflower-env/node 2>/dev/null
+        mkdir -p $HOME/yublueflower-env/node
+        tar -C $HOME/yublueflower-env/node --strip-components=1 -xf /tmp/node.tar.xz
+        rm -rf /tmp/node.tar.xz
+
+        export PATH=$HOME/yublueflower-env/node/bin:$PATH
+
+        if ! grep -q "export PATH=\$HOME/yublueflower-env/node/bin:\$PATH" ~/.profile; then
+            echo "export PATH=\$HOME/yublueflower-env/node/bin:\$PATH" >> ~/.profile
+        fi
+    fi
+    
+    go_version=$(go version 2>/dev/null | awk '{print $3}' | sed 's/go//')
+    required_go_version="1.24.4"
+
+    if [[ -z "$go_version" ]] || [[ "$(printf '%s\n' "$go_version" "$required_go_version" | sort -V | tail -n1)" != "$go_version" ]]; then
+        echo "Installing go.dev $required_go_version"
+
+        wget -q https://go.dev/dl/go1.24.4.linux-amd64.tar.gz -O /tmp/go.tar.gz
+        rm -rf $HOME/yublueflower-env/go 2>/dev/null  
+        mkdir -p $HOME/yublueflower-env/go
+        tar -C $HOME/yublueflower-env/go --strip-components=1 -xzf /tmp/go.tar.gz
+        rm -rf /tmp/go.tar.gz
+
+        export GOROOT=$HOME/yublueflower-env/go
+        export GOPATH=$HOME/yublueflower-env/go/env  
+        export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
+
+        if ! grep -q "export GOROOT=$HOME/yublueflower-env/go" ~/.profile; then
+            echo "export GOROOT=$HOME/yublueflower-env/go" >> ~/.profile
+        fi
+        if ! grep -q "export GOPATH=$HOME/yublueflower-env/go/env" ~/.profile; then
+        echo "export GOPATH=$HOME/yublueflower-env/go/env" >> ~/.profile
+        fi
+        if ! grep -q "export PATH=\$GOROOT/bin:\$GOPATH/bin:\$PATH" ~/.profile; then
+            echo "export PATH=\$GOROOT/bin:\$GOPATH/bin:\$PATH" >> ~/.profile
+        fi
+    fi
+
+    mkdir -p "$GOPATH/bin" "$GOPATH/src" "$GOPATH/pkg"
+
+    go install -v github.com/projectdiscovery/urlfinder/cmd/urlfinder@latest
+    go install github.com/projectdiscovery/katana/cmd/katana@latest
+    go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+    go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+    go install github.com/charmbracelet/glow@latest
+    
+    clear
+}
+
+function yublueflower_help() {
+    echo -e "\033[36mUsage:\033[0m"
+    echo "yublueflower --url http://testphp.vulnweb.com"
+    echo ""
+    echo -e "\033[36mOptions:\033[0m"
+    echo "--help                    Show help message"
+    echo "--live-session string[]   Set session (e.g., --live-session \"Cookie: laravel_session=...; XSRF-TOKEN=...\")"
+    echo "--bubble-tea              Use --bubble-tea to pipe URLs"
+    echo "--web-archives            Use --web-archives to gather URLs using web archives (Wayback, AlienVault, Common Crawl)"
+    echo "--silent                  Keep crawl URL logs behaved"
+    echo "--extended-workflows      Use --extended-workflows to discover security issues others miss"
+}
+
+function yublueflower_log() {
+    if [[ "$silent" == "--silent" ]]; then
+        cat >> "$yublueflower_URLs_raw"
+        cat >> "$yublueflower_JSLs_raw"
+    else
+        tee -a "$yublueflower_URLs_raw"
+        tee -a "$yublueflower_JSLs_raw"
+    fi
+}
+
+function yublueflower_workflow() {
+    yublueflower_banner
+    local url="" web_archives="" extended_workflows="" silent="" bubble_tea=false
+    local -a live_session=()
+    while [[ "$#" -gt 0 ]]; do
+        case "$1" in
+            --url)
+                if [[ -n "$2" && "$2" != -* ]]; then
+                    url="$2"
+                    shift 2
+                else
+                    echo -e "\033[31m[!] Missing URL after --url. Use --help for usage instructions\033[0m"
+                    exit 1
+                fi
+                ;;
+            --web-archives)
+                web_archives="--web-archives"
+                shift;;
+            --silent)
+                silent="--silent"
+                shift;;
+            --extended-workflows)
+                extended_workflows="--extended-workflows"
+                shift;;
+            --bubble-tea)
+                bubble_tea=true
+                shift;;
+            --live-session)
+                shift
+                header=""
+                while [[ "$1" != --* && -n "$1" ]]; do
+                    header+="$1 "
+                    shift
+                done
+                header="${header%" "}"
+                if [[ -n "$header" ]]; then
+                    live_session+=("$header")
+                else
+                    echo -e "\033[31m[!] Missing header after --live-session. Use --help for usage instructions\033[0m"
+                    exit 1
+                fi
+                ;;
+            *)
+                echo -e "\033[31m[!] Unrecognized argument: $1. Use --help for usage instructions\033[0m"
+                exit 1;;
+        esac
+    done
+
+    if [[ "$bubble_tea" == true ]]; then
+        xargs -P1 -I{} bash -c 'yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {}
+        exit 0
+    fi
+
+    if [[ -z "$url" ]]; then
+        echo -e "\033[31m[!] Missing required --url argument. Use --help for usage instructions\033[0m"
+        exit 1
+    fi
+
+    local yublueflower_home="$HOME/yublueflower-cli"
+    local wrkd="yublueflower_$(date '+%Y%m%d_%H%M%S')"
+    local wrkp="$yublueflower_home/$wrkd"
+    mkdir -p "$yublueflower_home"
+    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "Testing started at $timestamp"
+
+    if ! [[ "$url" =~ ^https?:// ]]; then
+        echo -e "\033[31m[!] Please include http:// or https://. Use --help for usage instructions\033[0m"
+        exit 1
+    fi
+
+    domain=$(echo "$url" | sed -E 's|https?://||' | cut -d'/' -f1)
+    timestamp=$(date "+%Y%m%d%H%M%S")
+    yublueflower_URLs_raw="/tmp/yublueflower_URLs_raw_$timestamp.txt"    
+    yublueflower_URLs_tmp="/tmp/yublueflower_URLs_tmp_$timestamp.txt"
+    yublueflower_URLs_wrk="/tmp/yublueflower_URLs_wrk_$timestamp.txt"
+    > "$yublueflower_URLs_raw"
+
+    yublueflower_JSLs_raw="/tmp/yublueflower_JSLs_raw_$timestamp.txt"    
+    yublueflower_JSLs_tmp="/tmp/yublueflower_JSLs_tmp_$timestamp.txt"
+    yublueflower_JSLs_wrk="/tmp/yublueflower_JSLs_wrk_$timestamp.txt"
+    > "$yublueflower_JSLs_raw"
+    
+    yublueflower_EXTs_regex='\.(jpg|jpeg|png|gif|svg|ico|css|js|woff2?|ttf|eot|pdf|zip|tar|gz|rar|mp4|mp3|docx?|xlsx?|pptx?|exe|apk|json|xml|csv)(\?|$)'
+
+    yublueflower_KEYs_regex='(\?|&)(utm_(source|medium|campaign|term|content)|fbclid|gclid|yclid|msclkid|ga(_cid|id)?|mc_(cid|eid)|_hs(enc|mi)?|ref(_src|_url|id)?|src|source(Name)?|from|via|tracking|track(id)?|click|ad(id|group(id)?)?|pixel|campaignid|theme|style|layout|format|viewtype|preview|width|height|nocache|noload|cache|ver(sion)?|ts|timestamp|_|cb|rnd|client|browser|device|screen|dpi|env|platform|debug|log|tab|offset|start(index)?|step|scroll|position|expand|collapse|open|closed|show)='
+
+    if [[ "$web_archives" != "--web-archives" ]]; then
+        katana -u "$url" -match-regex ".*\?.*=.*" -silent | perl -pe 's/[^[:print:]\t\r\n]//g' | grep -E "^${url%/}(/|$)" | grep -Ev "$yublueflower_EXTs_regex" | grep -Ev "$yublueflower_KEYs_regex" | awk -F'?' '!seen[$1]++ && $2 { split($2, a, "&"); split(a[1], b, "="); if (b[1] != "") print $1 "?" b[1] "=yublueflower" }' \
+        | grep -Ev 'https?://[^ ]+https?://' | grep -Ev '[?&][^=]*[^a-zA-Z0-9_.-][^=]*=' | httpx -silent | cut -d' ' -f1 | yublueflower_log | while read -r line; do echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"; done
+        if [[ "$extended_workflows" == "--extended-workflows" ]]; then
+            katana -u "$url" -jsl -xhr -silent | grep -E "^${url%/}(/|$)" | grep '\.js' | sed -E 's/(\.js).*/\1/' | yublueflower_log | while read -r line; do echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"; done
+        fi
+    else
+        urlfinder -d "$domain" -silent | perl -pe 's/[^[:print:]\t\r\n]//g' | grep -E "^${url%/}(/|$)" | grep "\?.*=" | grep -Ev "$yublueflower_EXTs_regex" | grep -Ev "$yublueflower_KEYs_regex" | awk -F'?' '!seen[$1]++ && $2 { split($2, a, "&"); split(a[1], b, "="); if (b[1] != "") print $1 "?" b[1] "=yublueflower" }' \
+        | grep -Ev 'https?://[^ ]+https?://' | grep -Ev '[?&][^=]*[^a-zA-Z0-9_.-][^=]*=' | httpx -silent | cut -d' ' -f1 | yublueflower_log | while read -r line; do echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"; done
+        if [[ "$extended_workflows" == "--extended-workflows" ]]; then
+            urlfinder -u "$url" -jsl -xhr -silent | grep -E "^${url%/}(/|$)" | grep '\.js' | sed -E 's/(\.js).*/\1/' | yublueflower_log | while read -r line; do echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"; done
+
+            katana -u "$url" -match-regex ".*\?.*=.*" -silent | perl -pe 's/[^[:print:]\t\r\n]//g' | grep -E "^${url%/}(/|$)" | grep -Ev "$yublueflower_EXTs_regex" | grep -Ev "$yublueflower_KEYs_regex" | awk -F'?' '!seen[$1]++ && $2 { split($2, a, "&"); split(a[1], b, "="); if (b[1] != "") print $1 "?" b[1] "=yublueflower" }' \
+            | grep -Ev 'https?://[^ ]+https?://' | grep -Ev '[?&][^=]*[^a-zA-Z0-9_.-][^=]*=' | httpx -silent | cut -d' ' -f1 | yublueflower_log | while read -r line; do echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"; done
+            katana -u "$url" -jsl -xhr -silent | grep -E "^${url%/}(/|$)" | grep '\.js' | sed -E 's/(\.js).*/\1/' | yublueflower_log | while read -r line; do echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"; done
+        fi
+    fi
+
+    tee -a "$yublueflower_URLs_tmp" < "$yublueflower_URLs_raw" > /dev/null && awk -F'[?]' '!seen[$1]++' "$yublueflower_URLs_tmp" | sort -u | tee "$yublueflower_URLs_wrk" > /dev/null && tee "$yublueflower_URLs_tmp" < "$yublueflower_URLs_wrk" > /dev/null
+    tee -a "$yublueflower_JSLs_tmp" < "$yublueflower_JSLs_raw" > /dev/null && awk -F'[?]' '!seen[$1]++' "$yublueflower_JSLs_tmp" | sort -u | tee "$yublueflower_JSLs_wrk" > /dev/null && tee "$yublueflower_JSLs_tmp" < "$yublueflower_JSLs_wrk" > /dev/null
+
+    rm -rf "$yublueflower_URLs_raw" "$yublueflower_URLs_tmp"
+    rm -rf "$yublueflower_JSLs_raw" "$yublueflower_JSLs_tmp"
+    
+    rraw=()
+    for h in "${live_session[@]}"; do
+        rraw+=("-header" "$h")
+    done
+
+    yublueflower_LOGs_raw="/tmp/yublueflower_LOGs_raw_$timestamp.txt"
+    yublueflower_LOGs_wrk="/tmp/yublueflower_LOGs_wrk_$timestamp.txt"
+    > "$yublueflower_LOGs_raw"
+
+    if [[ "$extended_workflows" != "--extended-workflows" ]]; then
+        nuclei -u "$url" -timestamp "${rraw[@]}" -headless -silent -markdown-export "$wrkp" | tee -a "$yublueflower_LOGs_raw"
+        xargs -a "$yublueflower_URLs_wrk" -I {} -P 10 nuclei -u {} -timestamp -dast -silent -markdown-export "$wrkp" | tee -a "$yublueflower_LOGs_raw"
+    else
+        nuclei -u "$url" -timestamp "${rraw[@]}" -headless -silent -markdown-export "$wrkp" | tee -a "$yublueflower_LOGs_raw"
+        xargs -a "$yublueflower_JSLs_wrk" -I {} -P 10 nuclei -u {} -timestamp -tags js -silent -markdown-export "$wrkp" | tee -a "$yublueflower_LOGs_raw"
+        xargs -a "$yublueflower_URLs_wrk" -I {} -P 10 nuclei -u {} -timestamp -dast -fa high -silent -markdown-export "$wrkp" | tee -a "$yublueflower_LOGs_raw"
+    fi
+
+    perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yublueflower_LOGs_raw" | tee "$yublueflower_LOGs_wrk" > /dev/null
+    p1=0; p2=0; p3=0; p4=0; p5=0; unknown=0
+    while IFS= read -r line; do
+        case "$line" in
+            *"[critical]"*) ((p1++));;
+            *"[high]"*)     ((p2++));;
+            *"[medium]"*)   ((p3++));;
+            *"[low]"*)      ((p4++));;
+            *"[info]"*)     ((p5++));;
+            *"[unknown]"*)  ((unknown++));;
+        esac
+    done < "$yublueflower_LOGs_wrk"
+
+    echo -e "\033[36m🧠 Priority P1–P5\033[0m"
+    echo "Bug Bounty rewards await, P1 is bounty, P5 is trivia"
+    echo -e "P1: Critical      → $p1"
+    echo -e "P2: High          → $p2"
+    echo -e "P3: Medium        → $p3"
+    echo -e "P4: Low           → $p4"
+    echo -e "P5: Informational → $p5"
+    echo -e "Unknown           → $unknown"
+    echo -e "[\033[36m$(date '+%Y-%m-%d %H:%M:%S')\033[0m] Write-up path \033[36mglow $yublueflower_home/$wrkd\033[0m — security issues await"
+    [[ -f "$wrkp/index.md" ]] && rm -rf "$wrkp/index.md"
+    echo "Testing finished at $(date "+%Y-%m-%d %H:%M:%S")"
+    rm -rf "$yublueflower_LOGs_raw"
+
+    rm -rf "$yublueflower_URLs_wrk"
+    rm -rf "$yublueflower_JSLs_wrk"
+    rm -rf "$yublueflower_LOGs_wrk"
+}
+
+[[ -z $1 || $1 == --help ]] && {
+    [[ -z $1 ]] && yublueflower_env
+    yublueflower_banner
+    yublueflower_help
+    [[ -z $1 ]] && exec bash -l
+    [[ $1 == --help ]] && exit 0
+}
+
+yublueflower_workflow "$@"
