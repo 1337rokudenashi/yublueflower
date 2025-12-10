@@ -25,11 +25,11 @@ yublueflower --url http://testphp.vulnweb.com
 
 Options:
 --help                    Show help message
---live-session string[]   Set session (e.g., --live-session "Cookie: laravel_session=...; XSRF-TOKEN=...")
---bubble-tea              Use --bubble-tea to pipe URLs
---web-archives            Use --web-archives to gather URLs using web archives (Wayback, AlienVault, Common Crawl)
+--live-session string[]   Use --live-session to pass session (e.g., --live-session "Cookie: laravel_session=...; XSRF-TOKEN=...")
+--bubble-tea              Use --bubble-tea to pipe base URLs
+--web-archives            Use --web-archives to time travel assets
 --silent                  Keep crawl URL logs behaved
---extended-workflows      Use --extended-workflows to discover security issues others miss
+--extended-workflows      Use --extended-workflows to get high Bug Bounty rewards
 ```
 
 <h1 align="center">yublueflower v0.0.1 (latest)</h1>
