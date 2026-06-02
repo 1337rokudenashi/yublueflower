@@ -32,7 +32,7 @@ Options:
 --extended-workflows      Use --extended-workflows to get high Bug Bounty rewards
 ```
 
-<h1 align="center">yublueflower v0.0.1 (latest)</h1>
+<h1 align="center">yublueflower v0.0.2 (latest)</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/bash-%2523121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white">
