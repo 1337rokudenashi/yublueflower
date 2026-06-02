@@ -7,7 +7,7 @@
       | /       `._
       || .-.      {
       |\ `-'       `.
-   .  \|            /   yublueflower v0.0.1 (latest)
+   .  \|            /   yublueflower v0.0.2 (latest)
  ~-.`.\\|        .-~_
     `.\-\     .-~   \
       `-'\~~.~      /
