@@ -13,7 +13,7 @@ function yublueflower_banner() {
       | /       `._
       || .-.      {
       |\ `-'       `.
-   .  \|            /   yublueflower v0.0.2 (latest)
+   .  \|            /   yublueflower v0.0.3 (latest)
  ~-.`.\\|        .-~_
     `.\-\     .-~   \
       `-'\~~.~      /
@@ -57,7 +57,7 @@ function yublueflower_env() {
         fi
     fi
     
-    go_version=$(go version 2>/dev/null | awk '{print $3}' | sed 's/go//')
+    go_version=$(go version 2>/dev/null | gawk '{print $3}' | sed 's/go//')
     required_go_version="1.26.3"
 
     if [[ -z "$go_version" ]] || [[ "$(printf '%s\n' "$go_version" "$required_go_version" | sort -V | tail -n1)" != "$go_version" ]]; then
@@ -108,12 +108,12 @@ function yublueflower_help() {
     echo "--extended-workflows      Use --extended-workflows to get high Bug Bounty rewards"
 }
 
-function yublueflower_URLs_log() {
-    [[ "$silent" == "--silent" ]] && cat >> "$yublueflower_URLs_raw" || tee -a "$yublueflower_URLs_raw"
+function yublueflower_1337c0de_log() {
+    [[ "$silent" == "--silent" ]] && cat >> "$yublueflower_1337c0de_raw" || tee -a "$yublueflower_1337c0de_raw"
 }
 
-function yublueflower_EXTs_log() {
-    [[ "$silent" == "--silent" ]] && cat >> "$yublueflower_EXTs_raw" || tee -a "$yublueflower_EXTs_raw"
+function yublueflower_1337scr1_log() {
+    [[ "$silent" == "--silent" ]] && cat >> "$yublueflower_1337scr1_raw" || tee -a "$yublueflower_1337scr1_raw"
 }
 
 function yublueflower_workflow() {
@@ -189,27 +189,27 @@ function yublueflower_workflow() {
 
     domain=$(echo "$url" | sed -E 's|https?://||' | cut -d'/' -f1)
     timestamp=$(date "+%Y%m%d%H%M%S")
-    yublueflower_URLs_raw="/tmp/yublueflower_URLs_raw_$timestamp.txt"    
-    yublueflower_URLs_tmp="/tmp/yublueflower_URLs_tmp_$timestamp.txt"
-    yublueflower_URLs_wrk="/tmp/yublueflower_URLs_wrk_$timestamp.txt"
-    > "$yublueflower_URLs_raw"
+    yublueflower_1337c0de_raw="/tmp/yublueflower_1337c0de_raw_$timestamp.txt"    
+    yublueflower_1337c0de_tmp="/tmp/yublueflower_1337c0de_tmp_$timestamp.txt"
+    yublueflower_1337c0de_wrk="/tmp/yublueflower_1337c0de_wrk_$timestamp.txt"
+    > "$yublueflower_1337c0de_raw"
 
-    yublueflower_EXTs_raw="/tmp/yublueflower_EXTs_raw_$timestamp.txt"    
-    yublueflower_EXTs_tmp="/tmp/yublueflower_EXTs_tmp_$timestamp.txt"
-    yublueflower_EXTs_wrk="/tmp/yublueflower_EXTs_wrk_$timestamp.txt"
-    > "$yublueflower_EXTs_raw"
+    yublueflower_1337scr1_raw="/tmp/yublueflower_1337scr1_raw_$timestamp.txt"    
+    yublueflower_1337scr1_tmp="/tmp/yublueflower_1337scr1_tmp_$timestamp.txt"
+    yublueflower_1337scr1_wrk="/tmp/yublueflower_1337scr1_wrk_$timestamp.txt"
+    > "$yublueflower_1337scr1_raw"
     
-    yublueflower_EXTs_regex='\.(jpg|jpeg|png|gif|svg|ico|css|js|woff2?|ttf|eot|pdf|zip|tar|gz|rar|mp4|mp3|docx?|xlsx?|pptx?|exe|apk|json|xml|csv)(\?|$)'
+    yublueflower_1337scr1_regex='\.(jpg|jpeg|png|gif|svg|ico|css|js|woff2?|ttf|eot|pdf|zip|tar|gz|rar|mp4|mp3|docx?|xlsx?|pptx?|exe|apk|json|xml|csv)(\?|$)'
 
-    yublueflower_KEYs_regex='(\?|&)(utm_(source|medium|campaign|term|content)|fbclid|gclid|yclid|msclkid|ga(_cid|id)?|mc_(cid|eid)|_hs(enc|mi)?|ref(_src|_url|id)?|src|source(Name)?|from|via|tracking|track(id)?|click|ad(id|group(id)?)?|pixel|campaignid|theme|style|layout|format|viewtype|preview|width|height|nocache|noload|cache|ver(sion)?|ts|timestamp|_|cb|rnd|client|browser|device|screen|dpi|env|platform|debug|log|tab|offset|start(index)?|step|scroll|position|expand|collapse|open|closed|show)='
+    yublueflower_1337b4sh_regex='(\?|&)(utm_(source|medium|campaign|term|content)|fbclid|gclid|yclid|msclkid|ga(_cid|id)?|mc_(cid|eid)|_hs(enc|mi)?|ref(_src|_url|id)?|src|source(Name)?|from|via|tracking|track(id)?|click|ad(id|group(id)?)?|pixel|campaignid|theme|style|layout|format|viewtype|preview|width|height|nocache|noload|cache|ver(sion)?|ts|timestamp|_|cb|rnd|client|browser|device|screen|dpi|env|platform|debug|log|tab|offset|start(index)?|step|scroll|position|expand|collapse|open|closed|show)='
 
     if [[ "$web_archives" != "--web-archives" ]]; then
         katana -u "$url" -match-regex '.*\?.*=.*' -silent |
         perl -pe 's/[^[:print:]\t\r\n]//g' |
         grep -E "^${url%/}(/|$)" |
-        grep -Ev "$yublueflower_EXTs_regex" |
-        grep -Ev "$yublueflower_KEYs_regex" |
-        awk -F'?' '
+        grep -Ev "$yublueflower_1337scr1_regex" |
+        grep -Ev "$yublueflower_1337b4sh_regex" |
+        gawk -F'?' '
         $2{
             out=$1"?"
 
@@ -231,40 +231,73 @@ function yublueflower_workflow() {
         grep -Ev 'https?://[^ ]+https?://' |
         grep -Ev '[?&][^=]*[^a-zA-Z0-9_.-][^=]*=' |
         cut -d' ' -f1 |
-        awk -F'?' '
+        gawk -F'?' '
         {
-            path=$1
+            path = $1
 
-            gsub(/[0-9]+/,":id",path)
-            gsub(/_[0-9]+/,"_:id",path)
+            nseg = split(path, seg, "/")
 
-            sig=path
+            path = ""
 
-            if($2){
-                delete keys
+            for (i = 1; i <= nseg; i++) {
 
-                n=split($2,p,"&")
-
-                for(i=1;i<=n;i++){
-                    split(p[i],kv,"=")
-
-                    if(kv[1]!="")
-                        keys[kv[1]]=1
+                if (seg[i] ~ /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/) {
+                    seg[i] = ":uuid"
+                }
+                else if (seg[i] ~ /^[0-9a-fA-F]{24,}$/) {
+                    seg[i] = ":rid"
+                }
+                else if (length(seg[i]) >= 14 && seg[i] ~ /^[A-Za-z0-9_-]+$/ && seg[i] ~ /[A-Za-z]/ && seg[i] ~ /[0-9]/) {
+                    seg[i] = ":rid"
+                }
+                else if (seg[i] ~ /^[0-9]+$/) {
+                    seg[i] = ":id"
                 }
 
-                for(i=1;i<=n;i++){
-                    split(p[i],kv,"=")
+                path = (path == "" ? seg[i] : path "/" seg[i])
+            }
 
-                    if(keys[kv[1]]){
-                        sig=sig"&"kv[1]
-                        delete keys[kv[1]]
+            sig = path
+
+            if ($2) {
+
+                delete ordered
+                delete keys
+
+                c = 0
+
+                n = split($2, p, "&")
+
+                for (i = 1; i <= n; i++) {
+
+                    split(p[i], kv, "=")
+
+                    if (kv[1] != "" && !keys[kv[1]]++) {
+                        ordered[++c] = kv[1]
                     }
+                }
+
+                for (i = 1; i <= c; i++) {
+
+                    for (j = i + 1; j <= c; j++) {
+
+                        if (ordered[i] > ordered[j]) {
+                            tmp = ordered[i]
+                            ordered[i] = ordered[j]
+                            ordered[j] = tmp
+                        }
+                    }
+                }
+
+                for (i = 1; i <= c; i++) {
+                    sig = sig "&" ordered[i]
                 }
             }
 
-            if(!seen[sig]++)
+            if (!seen[sig]++) {
                 print
-        }' | yublueflower_URLs_log | while read -r line; do
+            }
+        }' | yublueflower_1337c0de_log | while read -r line; do
             echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
         done
 
@@ -275,7 +308,7 @@ function yublueflower_workflow() {
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
-            yublueflower_EXTs_log | while read -r line; do
+            yublueflower_1337scr1_log | while read -r line; do
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
         fi
@@ -284,9 +317,9 @@ function yublueflower_workflow() {
         perl -pe 's/[^[:print:]\t\r\n]//g' |
         grep -E "^${url%/}(/|$)" |
         grep "\?.*=" |
-        grep -Ev "$yublueflower_EXTs_regex" |
-        grep -Ev "$yublueflower_KEYs_regex" |
-        awk -F'?' '
+        grep -Ev "$yublueflower_1337scr1_regex" |
+        grep -Ev "$yublueflower_1337b4sh_regex" |
+        gawk -F'?' '
         $2{
             out=$1"?"
 
@@ -308,40 +341,73 @@ function yublueflower_workflow() {
         grep -Ev 'https?://[^ ]+https?://' |
         grep -Ev '[?&][^=]*[^a-zA-Z0-9_.-][^=]*=' |
         cut -d' ' -f1 |
-        awk -F'?' '
+        gawk -F'?' '
         {
-            path=$1
+            path = $1
 
-            gsub(/[0-9]+/,":id",path)
-            gsub(/_[0-9]+/,"_:id",path)
+            nseg = split(path, seg, "/")
 
-            sig=path
+            path = ""
 
-            if($2){
-                delete keys
+            for (i = 1; i <= nseg; i++) {
 
-                n=split($2,p,"&")
-
-                for(i=1;i<=n;i++){
-                    split(p[i],kv,"=")
-
-                    if(kv[1]!="")
-                        keys[kv[1]]=1
+                if (seg[i] ~ /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/) {
+                    seg[i] = ":uuid"
+                }
+                else if (seg[i] ~ /^[0-9a-fA-F]{24,}$/) {
+                    seg[i] = ":rid"
+                }
+                else if (length(seg[i]) >= 14 && seg[i] ~ /^[A-Za-z0-9_-]+$/ && seg[i] ~ /[A-Za-z]/ && seg[i] ~ /[0-9]/) {
+                    seg[i] = ":rid"
+                }
+                else if (seg[i] ~ /^[0-9]+$/) {
+                    seg[i] = ":id"
                 }
 
-                for(i=1;i<=n;i++){
-                    split(p[i],kv,"=")
+                path = (path == "" ? seg[i] : path "/" seg[i])
+            }
 
-                    if(keys[kv[1]]){
-                        sig=sig"&"kv[1]
-                        delete keys[kv[1]]
+            sig = path
+
+            if ($2) {
+
+                delete ordered
+                delete keys
+
+                c = 0
+
+                n = split($2, p, "&")
+
+                for (i = 1; i <= n; i++) {
+
+                    split(p[i], kv, "=")
+
+                    if (kv[1] != "" && !keys[kv[1]]++) {
+                        ordered[++c] = kv[1]
                     }
+                }
+
+                for (i = 1; i <= c; i++) {
+
+                    for (j = i + 1; j <= c; j++) {
+
+                        if (ordered[i] > ordered[j]) {
+                            tmp = ordered[i]
+                            ordered[i] = ordered[j]
+                            ordered[j] = tmp
+                        }
+                    }
+                }
+
+                for (i = 1; i <= c; i++) {
+                    sig = sig "&" ordered[i]
                 }
             }
 
-            if(!seen[sig]++)
+            if (!seen[sig]++) {
                 print
-        }' | yublueflower_URLs_log | while read -r line; do
+            }
+        }' | yublueflower_1337c0de_log | while read -r line; do
             echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
         done
 
@@ -353,16 +419,16 @@ function yublueflower_workflow() {
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
-            yublueflower_EXTs_log | while read -r line; do
+            yublueflower_1337scr1_log | while read -r line; do
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
 
             katana -u "$url" -match-regex '.*\?.*=.*' -silent |
             perl -pe 's/[^[:print:]\t\r\n]//g' |
             grep -E "^${url%/}(/|$)" |
-            grep -Ev "$yublueflower_EXTs_regex" |
-            grep -Ev "$yublueflower_KEYs_regex" |
-            awk -F'?' '
+            grep -Ev "$yublueflower_1337scr1_regex" |
+            grep -Ev "$yublueflower_1337b4sh_regex" |
+            gawk -F'?' '
             $2{
                 out=$1"?"
 
@@ -384,40 +450,73 @@ function yublueflower_workflow() {
             grep -Ev 'https?://[^ ]+https?://' |
             grep -Ev '[?&][^=]*[^a-zA-Z0-9_.-][^=]*=' |
             cut -d' ' -f1 |
-            awk -F'?' '
+            gawk -F'?' '
             {
-                path=$1
+                path = $1
 
-                gsub(/[0-9]+/,":id",path)
-                gsub(/_[0-9]+/,"_:id",path)
+                nseg = split(path, seg, "/")
 
-                sig=path
+                path = ""
 
-                if($2){
-                    delete keys
+                for (i = 1; i <= nseg; i++) {
 
-                    n=split($2,p,"&")
-
-                    for(i=1;i<=n;i++){
-                        split(p[i],kv,"=")
-
-                        if(kv[1]!="")
-                            keys[kv[1]]=1
+                    if (seg[i] ~ /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/) {
+                        seg[i] = ":uuid"
+                    }
+                    else if (seg[i] ~ /^[0-9a-fA-F]{24,}$/) {
+                        seg[i] = ":rid"
+                    }
+                    else if (length(seg[i]) >= 14 && seg[i] ~ /^[A-Za-z0-9_-]+$/ && seg[i] ~ /[A-Za-z]/ && seg[i] ~ /[0-9]/) {
+                        seg[i] = ":rid"
+                    }
+                    else if (seg[i] ~ /^[0-9]+$/) {
+                        seg[i] = ":id"
                     }
 
-                    for(i=1;i<=n;i++){
-                        split(p[i],kv,"=")
+                    path = (path == "" ? seg[i] : path "/" seg[i])
+                }
 
-                        if(keys[kv[1]]){
-                            sig=sig"&"kv[1]
-                            delete keys[kv[1]]
+                sig = path
+
+                if ($2) {
+
+                    delete ordered
+                    delete keys
+
+                    c = 0
+
+                    n = split($2, p, "&")
+
+                    for (i = 1; i <= n; i++) {
+
+                        split(p[i], kv, "=")
+
+                        if (kv[1] != "" && !keys[kv[1]]++) {
+                            ordered[++c] = kv[1]
                         }
+                    }
+
+                    for (i = 1; i <= c; i++) {
+
+                        for (j = i + 1; j <= c; j++) {
+
+                            if (ordered[i] > ordered[j]) {
+                                tmp = ordered[i]
+                                ordered[i] = ordered[j]
+                                ordered[j] = tmp
+                            }
+                        }
+                    }
+
+                    for (i = 1; i <= c; i++) {
+                        sig = sig "&" ordered[i]
                     }
                 }
 
-                if(!seen[sig]++)
+                if (!seen[sig]++) {
                     print
-            }' | yublueflower_URLs_log | while read -r line; do
+                }
+            }' | yublueflower_1337c0de_log | while read -r line; do
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
 
@@ -427,37 +526,37 @@ function yublueflower_workflow() {
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
-            yublueflower_EXTs_log | while read -r line; do
+            yublueflower_1337scr1_log | while read -r line; do
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
         fi
     fi
 
-    tee -a "$yublueflower_URLs_tmp" < "$yublueflower_URLs_raw" > /dev/null && awk -F'[?]' '!seen[$1]++' "$yublueflower_URLs_tmp" | sort -u | tee "$yublueflower_URLs_wrk" > /dev/null && tee "$yublueflower_URLs_tmp" < "$yublueflower_URLs_wrk" > /dev/null
-    tee -a "$yublueflower_EXTs_tmp" < "$yublueflower_EXTs_raw" > /dev/null && awk -F'[?]' '!seen[$1]++' "$yublueflower_EXTs_tmp" | sort -u | tee "$yublueflower_EXTs_wrk" > /dev/null && tee "$yublueflower_EXTs_tmp" < "$yublueflower_EXTs_wrk" > /dev/null
+    tee -a "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_raw" > /dev/null && gawk -F'[?]' '!seen[$1]++' "$yublueflower_1337c0de_tmp" | sort -u | tee "$yublueflower_1337c0de_wrk" > /dev/null && tee "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_wrk" > /dev/null
+    tee -a "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_raw" > /dev/null && gawk -F'[?]' '!seen[$1]++' "$yublueflower_1337scr1_tmp" | sort -u | tee "$yublueflower_1337scr1_wrk" > /dev/null && tee "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_wrk" > /dev/null
 
-    rm -rf "$yublueflower_URLs_raw" "$yublueflower_URLs_tmp"
-    rm -rf "$yublueflower_EXTs_raw" "$yublueflower_EXTs_tmp"
+    rm -rf "$yublueflower_1337c0de_raw" "$yublueflower_1337c0de_tmp"
+    rm -rf "$yublueflower_1337scr1_raw" "$yublueflower_1337scr1_tmp"
     
     rraw=()
     for h in "${live_session[@]}"; do
         rraw+=("-header" "$h")
     done
 
-    yublueflower_LOGs_raw="/tmp/yublueflower_LOGs_raw_$timestamp.txt"
-    yublueflower_LOGs_wrk="/tmp/yublueflower_LOGs_wrk_$timestamp.txt"
-    > "$yublueflower_LOGs_raw"
+    yublueflower_1337pwnd_raw="/tmp/yublueflower_1337pwnd_raw_$timestamp.txt"
+    yublueflower_1337pwnd_wrk="/tmp/yublueflower_1337pwnd_wrk_$timestamp.txt"
+    > "$yublueflower_1337pwnd_raw"
 
     if [[ "$extended_workflows" != "--extended-workflows" ]]; then
-        nuclei -u "$url" -timestamp "${rraw[@]}" -headless -silent -markdown-export "$wrkp" | tee -a "$yublueflower_LOGs_raw"
-        xargs -a "$yublueflower_URLs_wrk" -I {} -P 5 nuclei -u {} -timestamp -dast -silent -markdown-export "$wrkp" | tee -a "$yublueflower_LOGs_raw"
+        nuclei -u "$url" -timestamp "${rraw[@]}" -headless -silent -markdown-export "$wrkp" | tee -a "$yublueflower_1337pwnd_raw"
+        xargs -a "$yublueflower_1337c0de_wrk" -I {} -P 5 nuclei -u {} -timestamp -dast -silent -markdown-export "$wrkp" | tee -a "$yublueflower_1337pwnd_raw"
     else
-        nuclei -u "$url" -timestamp "${rraw[@]}" -headless -silent -markdown-export "$wrkp" | tee -a "$yublueflower_LOGs_raw"
-        xargs -a "$yublueflower_URLs_wrk" -I {} -P 5 nuclei -u {} -timestamp -dast -fa high -silent -markdown-export "$wrkp" | tee -a "$yublueflower_LOGs_raw"
-        xargs -a "$yublueflower_EXTs_wrk" -I {} -P 5 nuclei -u {} -timestamp -tags exposure -silent -markdown-export "$wrkp" | tee -a "$yublueflower_LOGs_raw"
+        nuclei -u "$url" -timestamp "${rraw[@]}" -headless -silent -markdown-export "$wrkp" | tee -a "$yublueflower_1337pwnd_raw"
+        xargs -a "$yublueflower_1337c0de_wrk" -I {} -P 5 nuclei -u {} -timestamp -dast -fa high -silent -markdown-export "$wrkp" | tee -a "$yublueflower_1337pwnd_raw"
+        xargs -a "$yublueflower_1337scr1_wrk" -I {} -P 5 nuclei -u {} -timestamp -tags exposure -silent -markdown-export "$wrkp" | tee -a "$yublueflower_1337pwnd_raw"
     fi
 
-    perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yublueflower_LOGs_raw" | tee "$yublueflower_LOGs_wrk" > /dev/null
+    perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yublueflower_1337pwnd_raw" | tee "$yublueflower_1337pwnd_wrk" > /dev/null
     p1=0; p2=0; p3=0; p4=0; p5=0; unknown=0
     while IFS= read -r line; do
         case "$line" in
@@ -468,7 +567,7 @@ function yublueflower_workflow() {
             *"[info]"*)     ((p5++));;
             *"[unknown]"*)  ((unknown++));;
         esac
-    done < "$yublueflower_LOGs_wrk"
+    done < "$yublueflower_1337pwnd_wrk"
 
     echo -e "\033[36m🧠 Priority P1–P5\033[0m"
     echo "Bug Bounty rewards await, P1 is bounty, P5 is trivia"
@@ -481,11 +580,11 @@ function yublueflower_workflow() {
     echo -e "[\033[36m$(date '+%Y-%m-%d %H:%M:%S')\033[0m] Write-up path \033[36mglow $yublueflower_home/$wrkd\033[0m — security issues await"
     [[ -f "$wrkp/index.md" ]] && rm -rf "$wrkp/index.md"
     echo "Testing finished at $(date "+%Y-%m-%d %H:%M:%S")"
-    rm -rf "$yublueflower_LOGs_raw"
+    rm -rf "$yublueflower_1337pwnd_raw"
 
-    rm -rf "$yublueflower_URLs_wrk"
-    rm -rf "$yublueflower_EXTs_wrk"
-    rm -rf "$yublueflower_LOGs_wrk"
+    rm -rf "$yublueflower_1337c0de_wrk"
+    rm -rf "$yublueflower_1337scr1_wrk"
+    rm -rf "$yublueflower_1337pwnd_wrk"
 }
 
 if [[ -n $1 && $1 != --help ]]; then
