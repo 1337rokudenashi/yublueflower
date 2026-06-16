@@ -201,7 +201,7 @@ function yublueflower_workflow() {
     
     yublueflower_1337scr1_regex='\.(jpg|jpeg|png|gif|svg|ico|css|js|woff2?|ttf|eot|pdf|zip|tar|gz|rar|mp4|mp3|docx?|xlsx?|pptx?|exe|apk|json|xml|csv)(\?|$)'
 
-    yublueflower_1337b4sh_regex='(\?|&)(utm_(source|medium|campaign|term|content)|fbclid|gclid|yclid|msclkid|ga(_cid|id)?|mc_(cid|eid)|_hs(enc|mi)?|ref(_src|_url|id)?|src|source(Name)?|from|via|tracking|track(id)?|click|ad(id|group(id)?)?|pixel|campaignid|theme|style|layout|format|viewtype|preview|width|height|nocache|noload|cache|ver(sion)?|ts|timestamp|_|cb|rnd|client|browser|device|screen|dpi|env|platform|debug|log|tab|offset|start(index)?|step|scroll|position|expand|collapse|open|closed|show)='
+    yublueflower_1337b4sh_regex='(\?|&)(utm_(source|medium|campaign|term|content)|fbclid|gclid|yclid|msclkid|ga(_cid|id)?|mc_(cid|eid)|_hs(enc|mi)?|ref(_src|_url|id)?|src|source(Name)?|from|via|tracking|track(id)?|click|ad(id|group(id)?)?|pixel|campaignid|theme|style|layout|format|viewtype|preview|width|height|nocache|noload|cache|ver(sion)?|ts|timestamp|_|cb|rnd|client|browser|device|screen|dpi|env|platform|debug|log|tab|offset|start(index)?|step|scroll|position|expand|collapse|open|closed|show|autoplay|resumeTime|chaseplay|msockid|frm_id|ncid|_gl|twclid)='
 
     if [[ "$web_archives" != "--web-archives" ]]; then
         katana -u "$url" -match-regex '.*\?.*=.*' -silent |
@@ -302,9 +302,9 @@ function yublueflower_workflow() {
         done
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
-            katana -u "$url" -jsl -xhr -silent |
+            katana -u "$url" -silent |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '\.(env|git|json|js|yml|yaml)(\?|$)' |
+            grep -Ei '(\.(env|git|json|yml|yaml)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
@@ -415,7 +415,7 @@ function yublueflower_workflow() {
             urlfinder -d "$domain" -silent |
             perl -pe 's/[^[:print:]\t\r\n]//g' |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '\.(env|git|json|js|yml|yaml)(\?|$)' |
+            grep -Ei '(\.(env|git|json|yml|yaml)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
@@ -520,9 +520,9 @@ function yublueflower_workflow() {
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
 
-            katana -u "$url" -jsl -xhr -silent |
+            katana -u "$url" -silent |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '\.(env|git|json|js|yml|yaml)(\?|$)' |
+            grep -Ei '(\.(env|git|json|yml|yaml)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
@@ -532,8 +532,8 @@ function yublueflower_workflow() {
         fi
     fi
 
-    tee -a "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_raw" > /dev/null && gawk -F'[?]' '!seen[$1]++' "$yublueflower_1337c0de_tmp" | sort -u | tee "$yublueflower_1337c0de_wrk" > /dev/null && tee "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_wrk" > /dev/null
-    tee -a "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_raw" > /dev/null && gawk -F'[?]' '!seen[$1]++' "$yublueflower_1337scr1_tmp" | sort -u | tee "$yublueflower_1337scr1_wrk" > /dev/null && tee "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_wrk" > /dev/null
+    tee -a "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_raw" > /dev/null && sort -u "$yublueflower_1337c0de_tmp" | tee "$yublueflower_1337c0de_wrk" > /dev/null && tee "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_wrk" > /dev/null
+    tee -a "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_raw" > /dev/null && sort -u "$yublueflower_1337scr1_tmp" | tee "$yublueflower_1337scr1_wrk" > /dev/null && tee "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_wrk" > /dev/null
 
     rm -rf "$yublueflower_1337c0de_raw" "$yublueflower_1337c0de_tmp"
     rm -rf "$yublueflower_1337scr1_raw" "$yublueflower_1337scr1_tmp"
