@@ -548,12 +548,52 @@ function yublueflower_workflow() {
     > "$yublueflower_1337pwnd_raw"
 
     if [[ "$extended_workflows" != "--extended-workflows" ]]; then
-        nuclei -u "$url" -timestamp "${rraw[@]}" -headless -silent -markdown-export "$wrkp" | tee -a "$yublueflower_1337pwnd_raw"
-        xargs -a "$yublueflower_1337c0de_wrk" -I {} -P 5 nuclei -u {} -timestamp -dast -silent -markdown-export "$wrkp" | tee -a "$yublueflower_1337pwnd_raw"
+
+        for pwnd in info low medium high critical unknown; do
+            nuclei -u "$url" \
+                -s "$pwnd" \
+                -timestamp "${rraw[@]}" \
+                -headless \
+                -silent \
+                -markdown-export "$wrkp"
+        done | tee -a "$yublueflower_1337pwnd_raw"
+
+        xargs -a "$yublueflower_1337c0de_wrk" -I {} -P 5 \
+            nuclei -u {} \
+            -timestamp \
+            -dast \
+            -silent \
+            -markdown-export "$wrkp" \
+            | tee -a "$yublueflower_1337pwnd_raw"
+
     else
-        nuclei -u "$url" -timestamp "${rraw[@]}" -headless -silent -markdown-export "$wrkp" | tee -a "$yublueflower_1337pwnd_raw"
-        xargs -a "$yublueflower_1337c0de_wrk" -I {} -P 5 nuclei -u {} -timestamp -dast -fa high -silent -markdown-export "$wrkp" | tee -a "$yublueflower_1337pwnd_raw"
-        xargs -a "$yublueflower_1337scr1_wrk" -I {} -P 5 nuclei -u {} -timestamp -tags exposure -silent -markdown-export "$wrkp" | tee -a "$yublueflower_1337pwnd_raw"
+
+        for pwnd in info low medium high critical unknown; do
+            nuclei -u "$url" \
+                -s "$pwnd" \
+                -timestamp "${rraw[@]}" \
+                -headless \
+                -silent \
+                -markdown-export "$wrkp"
+        done | tee -a "$yublueflower_1337pwnd_raw"
+
+        xargs -a "$yublueflower_1337c0de_wrk" -I {} -P 5 \
+            nuclei -u {} \
+            -timestamp \
+            -dast \
+            -fa high \
+            -silent \
+            -markdown-export "$wrkp" \
+            | tee -a "$yublueflower_1337pwnd_raw"
+
+        xargs -a "$yublueflower_1337scr1_wrk" -I {} -P 5 \
+            nuclei -u {} \
+            -timestamp \
+            -tags exposure \
+            -silent \
+            -markdown-export "$wrkp" \
+            | tee -a "$yublueflower_1337pwnd_raw"
+
     fi
 
     perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yublueflower_1337pwnd_raw" | tee "$yublueflower_1337pwnd_wrk" > /dev/null
