@@ -204,7 +204,7 @@ function yublueflower_workflow() {
     yublueflower_1337b4sh_regex='(\?|&)(utm_(source|medium|campaign|term|content)|fbclid|gclid|yclid|msclkid|ga(_cid|id)?|mc_(cid|eid)|_hs(enc|mi)?|ref(_src|_url|id)?|src|source(Name)?|from|via|tracking|track(id)?|click|ad(id|group(id)?)?|pixel|campaignid|theme|style|layout|format|viewtype|preview|width|height|nocache|noload|cache|ver(sion)?|ts|timestamp|_|cb|rnd|client|browser|device|screen|dpi|env|platform|debug|log|tab|offset|start(index)?|step|scroll|position|expand|collapse|open|closed|show|autoplay|resumeTime|chaseplay|msockid|frm_id|ncid|_gl|twclid)='
 
     if [[ "$web_archives" != "--web-archives" ]]; then
-        timeout -k 10s 5m katana -u "$url" -match-regex '.*\?.*=.*' -jsl -hl -xhr -silent |
+        timeout -k 10s 5m katana -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
         perl -pe 's/[^[:print:]\t\r\n]//g' |
         grep -E "^${url%/}(/|$)" |
         grep -Ev "$yublueflower_1337scr1_regex" |
@@ -302,7 +302,7 @@ function yublueflower_workflow() {
         done
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
-            timeout -k 10s 5m katana -u "$url" -jsl -hl -xhr -silent |
+            timeout -k 10s 5m katana -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
             grep -Ei '(\.(env|git|json|yml|yaml)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
@@ -423,7 +423,7 @@ function yublueflower_workflow() {
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
 
-            timeout -k 10s 5m katana -u "$url" -match-regex '.*\?.*=.*' -jsl -hl -xhr -silent |
+            timeout -k 10s 5m katana -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
             perl -pe 's/[^[:print:]\t\r\n]//g' |
             grep -E "^${url%/}(/|$)" |
             grep -Ev "$yublueflower_1337scr1_regex" |
@@ -520,7 +520,7 @@ function yublueflower_workflow() {
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
 
-            timeout -k 10s 5m katana -u "$url" -jsl -hl -xhr -silent |
+            timeout -k 10s 5m katana -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
             grep -Ei '(\.(env|git|json|yml|yaml)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
