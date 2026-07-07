@@ -304,7 +304,7 @@ function yublueflower_workflow() {
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
             timeout -k 10s 5m katana -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '(\.(env|git|json|yml|yaml)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$))' |
+            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
@@ -415,7 +415,7 @@ function yublueflower_workflow() {
             timeout -k 10s 5m urlfinder -d "$domain" -silent |
             perl -pe 's/[^[:print:]\t\r\n]//g' |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '(\.(env|git|json|yml|yaml)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$))' |
+            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
@@ -522,7 +522,7 @@ function yublueflower_workflow() {
 
             timeout -k 10s 5m katana -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '(\.(env|git|json|yml|yaml)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$))' |
+            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
