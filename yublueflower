@@ -204,7 +204,7 @@ function yublueflower_workflow() {
     yublueflower_1337b4sh_regex='(\?|&)(utm_(source|medium|campaign|term|content)|fbclid|gclid|yclid|msclkid|ga(_cid|id)?|mc_(cid|eid)|_hs(enc|mi)?|ref(_src|_url|id)?|src|source(Name)?|from|via|tracking|track(id)?|click|ad(id|group(id)?)?|pixel|campaignid|theme|style|layout|format|viewtype|preview|width|height|nocache|noload|cache|ver(sion)?|ts|timestamp|_|cb|rnd|client|browser|device|screen|dpi|env|platform|debug|log|tab|offset|start(index)?|step|scroll|position|expand|collapse|open|closed|show|autoplay|resumeTime|chaseplay|msockid|frm_id|ncid|_gl|twclid)='
 
     if [[ "$web_archives" != "--web-archives" ]]; then
-        timeout -k 10s 5m katana -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
+        timeout -k 5s 10m katana -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
         perl -pe 's/[^[:print:]\t\r\n]//g' |
         grep -E "^${url%/}(/|$)" |
         grep -Ev "$yublueflower_1337scr1_regex" |
@@ -302,7 +302,7 @@ function yublueflower_workflow() {
         done
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
-            timeout -k 10s 5m katana -u "$url" -js-crawl -silent |
+            timeout -k 5s 10m katana -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
             grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
@@ -313,7 +313,7 @@ function yublueflower_workflow() {
             done
         fi
     else
-        timeout -k 10s 5m urlfinder -d "$domain" -silent |
+        timeout -k 5s 10m urlfinder -d "$domain" -silent |
         perl -pe 's/[^[:print:]\t\r\n]//g' |
         grep -E "^${url%/}(/|$)" |
         grep "\?.*=" |
@@ -412,7 +412,7 @@ function yublueflower_workflow() {
         done
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
-            timeout -k 10s 5m urlfinder -d "$domain" -silent |
+            timeout -k 5s 10m urlfinder -d "$domain" -silent |
             perl -pe 's/[^[:print:]\t\r\n]//g' |
             grep -E "^${url%/}(/|$)" |
             grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$))' |
@@ -423,7 +423,7 @@ function yublueflower_workflow() {
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
 
-            timeout -k 10s 5m katana -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
+            timeout -k 5s 10m katana -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
             perl -pe 's/[^[:print:]\t\r\n]//g' |
             grep -E "^${url%/}(/|$)" |
             grep -Ev "$yublueflower_1337scr1_regex" |
@@ -520,7 +520,7 @@ function yublueflower_workflow() {
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
 
-            timeout -k 10s 5m katana -u "$url" -js-crawl -silent |
+            timeout -k 5s 10m katana -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
             grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
@@ -549,47 +549,75 @@ function yublueflower_workflow() {
 
     if [[ "$extended_workflows" != "--extended-workflows" ]]; then
 
-        for pwnd in info low medium high critical unknown; do
-            nuclei -u "$url" \
+        for pwnd in info unknown; do
+            timeout -k 5s 10m nuclei -u "$url" \
                 -s "$pwnd" \
                 -timestamp "${rraw[@]}" \
                 -headless \
+                -headc 5 \
+                -c 50 \
                 -silent \
                 -markdown-export "$wrkp"
         done | tee -a "$yublueflower_1337pwnd_raw"
 
-        xargs -a "$yublueflower_1337c0de_wrk" -I {} -P 5 \
-            nuclei -u {} \
+        for pwnd in low medium high critical; do
+            timeout -k 5s 10m nuclei -u "$url" \
+                -s "$pwnd" \
+                -timestamp "${rraw[@]}" \
+                -headless \
+                -headc 5 \
+                -c 50 \
+                -silent \
+                -markdown-export "$wrkp"
+        done | tee -a "$yublueflower_1337pwnd_raw"
+
+        timeout -k 5s 10m nuclei -l "$yublueflower_1337c0de_wrk" \
             -timestamp \
             -dast \
+            -c 50 \
             -silent \
             -markdown-export "$wrkp" \
             | tee -a "$yublueflower_1337pwnd_raw"
 
     else
 
-        for pwnd in info low medium high critical unknown; do
-            nuclei -u "$url" \
+        for pwnd in info unknown; do
+            timeout -k 5s 10m nuclei -u "$url" \
                 -s "$pwnd" \
                 -timestamp "${rraw[@]}" \
                 -headless \
+                -headc 5 \
+                -c 50 \
                 -silent \
                 -markdown-export "$wrkp"
         done | tee -a "$yublueflower_1337pwnd_raw"
 
-        xargs -a "$yublueflower_1337c0de_wrk" -I {} -P 5 \
-            nuclei -u {} \
+        for pwnd in low medium high critical; do
+            timeout -k 5s 10m nuclei -u "$url" \
+                -s "$pwnd" \
+                -timestamp "${rraw[@]}" \
+                -headless \
+                -headc 5 \
+                -c 50 \
+                -silent \
+                -markdown-export "$wrkp"
+        done | tee -a "$yublueflower_1337pwnd_raw"
+
+        timeout -k 5s 10m nuclei -l "$yublueflower_1337scr1_wrk" \
             -timestamp \
-            -dast \
-            -fa high \
+            -tags exposure \
+            -c 50 \
             -silent \
             -markdown-export "$wrkp" \
             | tee -a "$yublueflower_1337pwnd_raw"
 
-        xargs -a "$yublueflower_1337scr1_wrk" -I {} -P 5 \
-            nuclei -u {} \
+        timeout -k 5s 10m nuclei -l "$yublueflower_1337c0de_wrk" \
             -timestamp \
-            -tags exposure \
+            -headless \
+            -headc 5 \
+            -dast \
+            -fa high \
+            -c 50 \
             -silent \
             -markdown-export "$wrkp" \
             | tee -a "$yublueflower_1337pwnd_raw"
