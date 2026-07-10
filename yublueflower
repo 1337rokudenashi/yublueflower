@@ -5,7 +5,7 @@ export LC_ALL=C
 
 # Bugs, but rewarded
 
-function yublueflower_banner() {
+function ottsecx_banner() {
     echo -e "\033[36m"  
     cat << "EOF"
        .   .-~\
@@ -13,7 +13,7 @@ function yublueflower_banner() {
       | /       `._
       || .-.      {
       |\ `-'       `.
-   .  \|            /   yublueflower v0.0.3 (latest)
+   .  \|            /   ottsecx v0.0.3 (latest)
  ~-.`.\\|        .-~_
     `.\-\     .-~   \
       `-'\~~.~      /
@@ -29,10 +29,10 @@ EOF
     echo ""
 }
 
-function yublueflower_env() {
-    yublueflower="$HOME/.local/bin/yublueflower"
+function ottsecx_env() {
+    ottsecx="$HOME/.local/bin/ottsecx"
     path=$(realpath "$0")
-    [[ "$path" != "$yublueflower" ]] && mkdir -p "$HOME/.local/bin" && cp "$path" "$yublueflower" && chmod +x "$yublueflower"
+    [[ "$path" != "$ottsecx" ]] && mkdir -p "$HOME/.local/bin" && cp "$path" "$ottsecx" && chmod +x "$ottsecx"
 
     if ! grep -q "export PATH=\$HOME/.local/bin:\$PATH" ~/.profile; then
         echo "export PATH=\$HOME/.local/bin:\$PATH" >> ~/.profile
@@ -45,15 +45,15 @@ function yublueflower_env() {
         echo "Installing node.js v$required_node_version"
 
         wget -q https://nodejs.org/dist/v24.16.0/node-v24.16.0-linux-x64.tar.xz -O /tmp/node.tar.xz
-        rm -rf $HOME/yublueflower-env/node 2>/dev/null
-        mkdir -p $HOME/yublueflower-env/node
-        tar -C $HOME/yublueflower-env/node --strip-components=1 -xf /tmp/node.tar.xz
+        rm -rf $HOME/ottsecx-env/node 2>/dev/null
+        mkdir -p $HOME/ottsecx-env/node
+        tar -C $HOME/ottsecx-env/node --strip-components=1 -xf /tmp/node.tar.xz
         rm -rf /tmp/node.tar.xz
 
-        export PATH=$HOME/yublueflower-env/node/bin:$PATH
+        export PATH=$HOME/ottsecx-env/node/bin:$PATH
 
-        if ! grep -q "export PATH=\$HOME/yublueflower-env/node/bin:\$PATH" ~/.profile; then
-            echo "export PATH=\$HOME/yublueflower-env/node/bin:\$PATH" >> ~/.profile
+        if ! grep -q "export PATH=\$HOME/ottsecx-env/node/bin:\$PATH" ~/.profile; then
+            echo "export PATH=\$HOME/ottsecx-env/node/bin:\$PATH" >> ~/.profile
         fi
     fi
     
@@ -64,20 +64,20 @@ function yublueflower_env() {
         echo "Installing go.dev $required_go_version"
 
         wget -q https://go.dev/dl/go1.26.3.linux-amd64.tar.gz -O /tmp/go.tar.gz
-        rm -rf $HOME/yublueflower-env/go 2>/dev/null  
-        mkdir -p $HOME/yublueflower-env/go
-        tar -C $HOME/yublueflower-env/go --strip-components=1 -xzf /tmp/go.tar.gz
+        rm -rf $HOME/ottsecx-env/go 2>/dev/null  
+        mkdir -p $HOME/ottsecx-env/go
+        tar -C $HOME/ottsecx-env/go --strip-components=1 -xzf /tmp/go.tar.gz
         rm -rf /tmp/go.tar.gz
 
-        export GOROOT=$HOME/yublueflower-env/go
-        export GOPATH=$HOME/yublueflower-env/go/env  
+        export GOROOT=$HOME/ottsecx-env/go
+        export GOPATH=$HOME/ottsecx-env/go/env  
         export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
-        if ! grep -q "export GOROOT=$HOME/yublueflower-env/go" ~/.profile; then
-            echo "export GOROOT=$HOME/yublueflower-env/go" >> ~/.profile
+        if ! grep -q "export GOROOT=$HOME/ottsecx-env/go" ~/.profile; then
+            echo "export GOROOT=$HOME/ottsecx-env/go" >> ~/.profile
         fi
-        if ! grep -q "export GOPATH=$HOME/yublueflower-env/go/env" ~/.profile; then
-        echo "export GOPATH=$HOME/yublueflower-env/go/env" >> ~/.profile
+        if ! grep -q "export GOPATH=$HOME/ottsecx-env/go/env" ~/.profile; then
+        echo "export GOPATH=$HOME/ottsecx-env/go/env" >> ~/.profile
         fi
         if ! grep -q "export PATH=\$GOROOT/bin:\$GOPATH/bin:\$PATH" ~/.profile; then
             echo "export PATH=\$GOROOT/bin:\$GOPATH/bin:\$PATH" >> ~/.profile
@@ -95,9 +95,9 @@ function yublueflower_env() {
     clear
 }
 
-function yublueflower_help() {
+function ottsecx_help() {
     echo -e "\033[36mUsage:\033[0m"
-    echo "yublueflower --url http://testphp.vulnweb.com"
+    echo "ottsecx --url http://testphp.vulnweb.com"
     echo ""
     echo -e "\033[36mOptions:\033[0m"
     echo "--help                    Show help message"
@@ -108,16 +108,16 @@ function yublueflower_help() {
     echo "--extended-workflows      Use --extended-workflows to get high Bug Bounty rewards"
 }
 
-function yublueflower_1337c0de_log() {
-    [[ "$silent" == "--silent" ]] && cat >> "$yublueflower_1337c0de_raw" || tee -a "$yublueflower_1337c0de_raw"
+function ottsecx_1337c0de_log() {
+    [[ "$silent" == "--silent" ]] && cat >> "$ottsecx_1337c0de_raw" || tee -a "$ottsecx_1337c0de_raw"
 }
 
-function yublueflower_1337scr1_log() {
-    [[ "$silent" == "--silent" ]] && cat >> "$yublueflower_1337scr1_raw" || tee -a "$yublueflower_1337scr1_raw"
+function ottsecx_1337scr1_log() {
+    [[ "$silent" == "--silent" ]] && cat >> "$ottsecx_1337scr1_raw" || tee -a "$ottsecx_1337scr1_raw"
 }
 
-function yublueflower_workflow() {
-    yublueflower_banner
+function ottsecx_workflow() {
+    ottsecx_banner
     local url="" web_archives="" extended_workflows="" silent=""
     local bubble_tea=false
     local -a live_session=()
@@ -166,7 +166,7 @@ function yublueflower_workflow() {
     done
 
     if [[ "$bubble_tea" == true ]]; then
-        xargs -P1 -I{} bash -c 'yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {}
+        xargs -P1 -I{} bash -c 'ottsecx --url "$1" '"$web_archives $extended_workflows $silent"'' _ {}
         exit 0
     fi
 
@@ -175,10 +175,10 @@ function yublueflower_workflow() {
         exit 1
     fi
 
-    local yublueflower_home="$HOME/yublueflower-cli"
-    local wrkd="yublueflower_$(date '+%Y%m%d_%H%M%S')"
-    local wrkp="$yublueflower_home/$wrkd"
-    mkdir -p "$yublueflower_home"
+    local ottsecx_home="$HOME/ottsecx-cli"
+    local wrkd="ottsecx_$(date '+%Y%m%d_%H%M%S')"
+    local wrkp="$ottsecx_home/$wrkd"
+    mkdir -p "$ottsecx_home"
     local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
     echo "Testing started at $timestamp"
 
@@ -189,26 +189,26 @@ function yublueflower_workflow() {
 
     domain=$(echo "$url" | sed -E 's|https?://||' | cut -d'/' -f1)
     timestamp=$(date "+%Y%m%d%H%M%S")
-    yublueflower_1337c0de_raw="/tmp/yublueflower_1337c0de_raw_$timestamp.txt"    
-    yublueflower_1337c0de_tmp="/tmp/yublueflower_1337c0de_tmp_$timestamp.txt"
-    yublueflower_1337c0de_wrk="/tmp/yublueflower_1337c0de_wrk_$timestamp.txt"
-    > "$yublueflower_1337c0de_raw"
+    ottsecx_1337c0de_raw="/tmp/ottsecx_1337c0de_raw_$timestamp.txt"    
+    ottsecx_1337c0de_tmp="/tmp/ottsecx_1337c0de_tmp_$timestamp.txt"
+    ottsecx_1337c0de_wrk="/tmp/ottsecx_1337c0de_wrk_$timestamp.txt"
+    > "$ottsecx_1337c0de_raw"
 
-    yublueflower_1337scr1_raw="/tmp/yublueflower_1337scr1_raw_$timestamp.txt"    
-    yublueflower_1337scr1_tmp="/tmp/yublueflower_1337scr1_tmp_$timestamp.txt"
-    yublueflower_1337scr1_wrk="/tmp/yublueflower_1337scr1_wrk_$timestamp.txt"
-    > "$yublueflower_1337scr1_raw"
+    ottsecx_1337scr1_raw="/tmp/ottsecx_1337scr1_raw_$timestamp.txt"    
+    ottsecx_1337scr1_tmp="/tmp/ottsecx_1337scr1_tmp_$timestamp.txt"
+    ottsecx_1337scr1_wrk="/tmp/ottsecx_1337scr1_wrk_$timestamp.txt"
+    > "$ottsecx_1337scr1_raw"
     
-    yublueflower_1337scr1_regex='\.(jpg|jpeg|png|gif|svg|ico|css|js|woff2?|ttf|eot|pdf|zip|tar|gz|rar|mp4|mp3|docx?|xlsx?|pptx?|exe|apk|json|xml|csv)(\?|$)'
+    ottsecx_1337scr1_regex='\.(jpg|jpeg|png|gif|svg|ico|css|js|woff2?|ttf|eot|pdf|zip|tar|gz|rar|mp4|mp3|docx?|xlsx?|pptx?|exe|apk|json|xml|csv)(\?|$)'
 
-    yublueflower_1337b4sh_regex='(\?|&)(utm_(source|medium|campaign|term|content)|fbclid|gclid|yclid|msclkid|ga(_cid|id)?|mc_(cid|eid)|_hs(enc|mi)?|ref(_src|_url|id)?|src|source(Name)?|from|via|tracking|track(id)?|click|ad(id|group(id)?)?|pixel|campaignid|theme|style|layout|format|viewtype|preview|width|height|nocache|noload|cache|ver(sion)?|ts|timestamp|_|cb|rnd|client|browser|device|screen|dpi|env|platform|debug|log|tab|offset|start(index)?|step|scroll|position|expand|collapse|open|closed|show|autoplay|resumeTime|chaseplay|msockid|frm_id|ncid|_gl|twclid)='
+    ottsecx_1337b4sh_regex='(\?|&)(utm_(source|medium|campaign|term|content)|fbclid|gclid|yclid|msclkid|ga(_cid|id)?|mc_(cid|eid)|_hs(enc|mi)?|ref(_src|_url|id)?|src|source(Name)?|from|via|tracking|track(id)?|click|ad(id|group(id)?)?|pixel|campaignid|theme|style|layout|format|viewtype|preview|width|height|nocache|noload|cache|ver(sion)?|ts|timestamp|_|cb|rnd|client|browser|device|screen|dpi|env|platform|debug|log|tab|offset|start(index)?|step|scroll|position|expand|collapse|open|closed|show|autoplay|resumeTime|chaseplay|msockid|frm_id|ncid|_gl|twclid)='
 
     if [[ "$web_archives" != "--web-archives" ]]; then
         timeout -k 5s 10m katana -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
         perl -pe 's/[^[:print:]\t\r\n]//g' |
         grep -E "^${url%/}(/|$)" |
-        grep -Ev "$yublueflower_1337scr1_regex" |
-        grep -Ev "$yublueflower_1337b4sh_regex" |
+        grep -Ev "$ottsecx_1337scr1_regex" |
+        grep -Ev "$ottsecx_1337b4sh_regex" |
         gawk -F'?' '
         $2{
             out=$1"?"
@@ -221,7 +221,7 @@ function yublueflower_workflow() {
                 split(a[i],b,"=")
 
                 if(b[1]!="" && !seenk[b[1]]++){
-                    out=(out==($1"?") ? out : out"&") b[1]"=yublueflower"
+                    out=(out==($1"?") ? out : out"&") b[1]"=ottsecx"
                 }
             }
 
@@ -297,7 +297,7 @@ function yublueflower_workflow() {
             if (!seen[sig]++) {
                 print
             }
-        }' | yublueflower_1337c0de_log | while read -r line; do
+        }' | ottsecx_1337c0de_log | while read -r line; do
             echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
         done
 
@@ -308,7 +308,7 @@ function yublueflower_workflow() {
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
-            yublueflower_1337scr1_log | while read -r line; do
+            ottsecx_1337scr1_log | while read -r line; do
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
         fi
@@ -317,8 +317,8 @@ function yublueflower_workflow() {
         perl -pe 's/[^[:print:]\t\r\n]//g' |
         grep -E "^${url%/}(/|$)" |
         grep "\?.*=" |
-        grep -Ev "$yublueflower_1337scr1_regex" |
-        grep -Ev "$yublueflower_1337b4sh_regex" |
+        grep -Ev "$ottsecx_1337scr1_regex" |
+        grep -Ev "$ottsecx_1337b4sh_regex" |
         gawk -F'?' '
         $2{
             out=$1"?"
@@ -331,7 +331,7 @@ function yublueflower_workflow() {
                 split(a[i],b,"=")
 
                 if(b[1]!="" && !seenk[b[1]]++){
-                    out=(out==($1"?") ? out : out"&") b[1]"=yublueflower"
+                    out=(out==($1"?") ? out : out"&") b[1]"=ottsecx"
                 }
             }
 
@@ -407,7 +407,7 @@ function yublueflower_workflow() {
             if (!seen[sig]++) {
                 print
             }
-        }' | yublueflower_1337c0de_log | while read -r line; do
+        }' | ottsecx_1337c0de_log | while read -r line; do
             echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
         done
 
@@ -419,15 +419,15 @@ function yublueflower_workflow() {
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
-            yublueflower_1337scr1_log | while read -r line; do
+            ottsecx_1337scr1_log | while read -r line; do
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
 
             timeout -k 5s 10m katana -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
             perl -pe 's/[^[:print:]\t\r\n]//g' |
             grep -E "^${url%/}(/|$)" |
-            grep -Ev "$yublueflower_1337scr1_regex" |
-            grep -Ev "$yublueflower_1337b4sh_regex" |
+            grep -Ev "$ottsecx_1337scr1_regex" |
+            grep -Ev "$ottsecx_1337b4sh_regex" |
             gawk -F'?' '
             $2{
                 out=$1"?"
@@ -440,7 +440,7 @@ function yublueflower_workflow() {
                     split(a[i],b,"=")
 
                     if(b[1]!="" && !seenk[b[1]]++){
-                        out=(out==($1"?") ? out : out"&") b[1]"=yublueflower"
+                        out=(out==($1"?") ? out : out"&") b[1]"=ottsecx"
                     }
                 }
 
@@ -516,7 +516,7 @@ function yublueflower_workflow() {
                 if (!seen[sig]++) {
                     print
                 }
-            }' | yublueflower_1337c0de_log | while read -r line; do
+            }' | ottsecx_1337c0de_log | while read -r line; do
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
 
@@ -526,26 +526,26 @@ function yublueflower_workflow() {
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx -match-code 200 -silent |
-            yublueflower_1337scr1_log | while read -r line; do
+            ottsecx_1337scr1_log | while read -r line; do
                 echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
             done
         fi
     fi
 
-    tee -a "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_raw" > /dev/null && sort -u "$yublueflower_1337c0de_tmp" | tee "$yublueflower_1337c0de_wrk" > /dev/null && tee "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_wrk" > /dev/null
-    tee -a "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_raw" > /dev/null && sort -u "$yublueflower_1337scr1_tmp" | tee "$yublueflower_1337scr1_wrk" > /dev/null && tee "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_wrk" > /dev/null
+    tee -a "$ottsecx_1337c0de_tmp" < "$ottsecx_1337c0de_raw" > /dev/null && sort -u "$ottsecx_1337c0de_tmp" | tee "$ottsecx_1337c0de_wrk" > /dev/null && tee "$ottsecx_1337c0de_tmp" < "$ottsecx_1337c0de_wrk" > /dev/null
+    tee -a "$ottsecx_1337scr1_tmp" < "$ottsecx_1337scr1_raw" > /dev/null && sort -u "$ottsecx_1337scr1_tmp" | tee "$ottsecx_1337scr1_wrk" > /dev/null && tee "$ottsecx_1337scr1_tmp" < "$ottsecx_1337scr1_wrk" > /dev/null
 
-    rm -rf "$yublueflower_1337c0de_raw" "$yublueflower_1337c0de_tmp"
-    rm -rf "$yublueflower_1337scr1_raw" "$yublueflower_1337scr1_tmp"
+    rm -rf "$ottsecx_1337c0de_raw" "$ottsecx_1337c0de_tmp"
+    rm -rf "$ottsecx_1337scr1_raw" "$ottsecx_1337scr1_tmp"
     
     rraw=()
     for h in "${live_session[@]}"; do
         rraw+=("-header" "$h")
     done
 
-    yublueflower_1337pwnd_raw="/tmp/yublueflower_1337pwnd_raw_$timestamp.txt"
-    yublueflower_1337pwnd_wrk="/tmp/yublueflower_1337pwnd_wrk_$timestamp.txt"
-    > "$yublueflower_1337pwnd_raw"
+    ottsecx_1337pwnd_raw="/tmp/ottsecx_1337pwnd_raw_$timestamp.txt"
+    ottsecx_1337pwnd_wrk="/tmp/ottsecx_1337pwnd_wrk_$timestamp.txt"
+    > "$ottsecx_1337pwnd_raw"
 
     if [[ "$extended_workflows" != "--extended-workflows" ]]; then
 
@@ -558,7 +558,7 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$wrkp"
-        done | tee -a "$yublueflower_1337pwnd_raw"
+        done | tee -a "$ottsecx_1337pwnd_raw"
 
         for pwnd in low medium high critical; do
             timeout -k 5s 10m nuclei -u "$url" \
@@ -569,15 +569,15 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$wrkp"
-        done | tee -a "$yublueflower_1337pwnd_raw"
+        done | tee -a "$ottsecx_1337pwnd_raw"
 
-        timeout -k 5s 10m nuclei -l "$yublueflower_1337c0de_wrk" \
+        timeout -k 5s 10m nuclei -l "$ottsecx_1337c0de_wrk" \
             -timestamp \
             -dast \
             -c 50 \
             -silent \
             -markdown-export "$wrkp" \
-            | tee -a "$yublueflower_1337pwnd_raw"
+            | tee -a "$ottsecx_1337pwnd_raw"
 
     else
 
@@ -590,7 +590,7 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$wrkp"
-        done | tee -a "$yublueflower_1337pwnd_raw"
+        done | tee -a "$ottsecx_1337pwnd_raw"
 
         for pwnd in low medium high critical; do
             timeout -k 5s 10m nuclei -u "$url" \
@@ -601,17 +601,17 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$wrkp"
-        done | tee -a "$yublueflower_1337pwnd_raw"
+        done | tee -a "$ottsecx_1337pwnd_raw"
 
-        timeout -k 5s 10m nuclei -l "$yublueflower_1337scr1_wrk" \
+        timeout -k 5s 10m nuclei -l "$ottsecx_1337scr1_wrk" \
             -timestamp \
             -tags exposure \
             -c 50 \
             -silent \
             -markdown-export "$wrkp" \
-            | tee -a "$yublueflower_1337pwnd_raw"
+            | tee -a "$ottsecx_1337pwnd_raw"
 
-        timeout -k 5s 10m nuclei -l "$yublueflower_1337c0de_wrk" \
+        timeout -k 5s 10m nuclei -l "$ottsecx_1337c0de_wrk" \
             -timestamp \
             -headless \
             -headc 5 \
@@ -620,11 +620,11 @@ function yublueflower_workflow() {
             -c 50 \
             -silent \
             -markdown-export "$wrkp" \
-            | tee -a "$yublueflower_1337pwnd_raw"
+            | tee -a "$ottsecx_1337pwnd_raw"
 
     fi
 
-    perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yublueflower_1337pwnd_raw" | tee "$yublueflower_1337pwnd_wrk" > /dev/null
+    perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$ottsecx_1337pwnd_raw" | tee "$ottsecx_1337pwnd_wrk" > /dev/null
     p1=0; p2=0; p3=0; p4=0; p5=0; unknown=0
     while IFS= read -r line; do
         case "$line" in
@@ -635,7 +635,7 @@ function yublueflower_workflow() {
             *"[info]"*)     ((p5++));;
             *"[unknown]"*)  ((unknown++));;
         esac
-    done < "$yublueflower_1337pwnd_wrk"
+    done < "$ottsecx_1337pwnd_wrk"
 
     echo -e "\033[36m🧠 Priority P1–P5\033[0m"
     echo "Bug Bounty rewards await, P1 is bounty, P5 is trivia"
@@ -645,21 +645,21 @@ function yublueflower_workflow() {
     echo -e "P4: Low           → $p4"
     echo -e "P5: Informational → $p5"
     echo -e "Unknown           → $unknown"
-    echo -e "[\033[36m$(date '+%Y-%m-%d %H:%M:%S')\033[0m] Write-up path \033[36mglow $yublueflower_home/$wrkd\033[0m — security issues await"
+    echo -e "[\033[36m$(date '+%Y-%m-%d %H:%M:%S')\033[0m] Write-up path \033[36mglow $ottsecx_home/$wrkd\033[0m — security issues await"
     [[ -f "$wrkp/index.md" ]] && rm -rf "$wrkp/index.md"
     echo "Testing finished at $(date "+%Y-%m-%d %H:%M:%S")"
-    rm -rf "$yublueflower_1337pwnd_raw"
+    rm -rf "$ottsecx_1337pwnd_raw"
 
-    rm -rf "$yublueflower_1337c0de_wrk"
-    rm -rf "$yublueflower_1337scr1_wrk"
-    rm -rf "$yublueflower_1337pwnd_wrk"
+    rm -rf "$ottsecx_1337c0de_wrk"
+    rm -rf "$ottsecx_1337scr1_wrk"
+    rm -rf "$ottsecx_1337pwnd_wrk"
 }
 
 if [[ -n $1 && $1 != --help ]]; then
-    yublueflower_workflow "$@"
+    ottsecx_workflow "$@"
 else
-    [[ -z $1 ]] && yublueflower_env
-    yublueflower_banner; yublueflower_help
+    [[ -z $1 ]] && ottsecx_env
+    ottsecx_banner; ottsecx_help
     [[ -z $1 ]] && exec bash -l
     exit 0
 fi
