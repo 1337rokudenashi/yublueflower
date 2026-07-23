@@ -97,7 +97,7 @@ function yublueflower_env() {
 
 function yublueflower_help() {
     echo -e "\033[36mUsage:\033[0m"
-    echo "yublueflower --url http://testphp.vulnweb.com"
+    echo "yublueflower --url http://php.testinvicti.com"
     echo ""
     echo -e "\033[36mOptions:\033[0m"
     echo "--help                    Show help message"
