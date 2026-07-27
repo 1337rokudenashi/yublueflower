@@ -30,6 +30,8 @@ EOF
 }
 
 function yublueflower_env() {
+    local yublueflower_root="$HOME/yublueflower"
+    local yublueflower_env="$yublueflower_root/yublueflower-env"
     yublueflower="$HOME/.local/bin/yublueflower"
     path=$(realpath "$0")
     [[ "$path" != "$yublueflower" ]] && mkdir -p "$HOME/.local/bin" && cp "$path" "$yublueflower" && chmod +x "$yublueflower"
@@ -45,15 +47,15 @@ function yublueflower_env() {
         echo "Installing node.js v$required_node_version"
 
         wget -q https://nodejs.org/dist/v24.16.0/node-v24.16.0-linux-x64.tar.xz -O /tmp/node.tar.xz
-        rm -rf $HOME/yublueflower-env/node 2>/dev/null
-        mkdir -p $HOME/yublueflower-env/node
-        tar -C $HOME/yublueflower-env/node --strip-components=1 -xf /tmp/node.tar.xz
+        rm -rf "$yublueflower_env/node" 2>/dev/null
+        mkdir -p "$yublueflower_env/node"
+        tar -C "$yublueflower_env/node" --strip-components=1 -xf /tmp/node.tar.xz
         rm -rf /tmp/node.tar.xz
 
-        export PATH=$HOME/yublueflower-env/node/bin:$PATH
+        export PATH="$yublueflower_env/node/bin:$PATH"
 
-        if ! grep -q "export PATH=\$HOME/yublueflower-env/node/bin:\$PATH" ~/.profile; then
-            echo "export PATH=\$HOME/yublueflower-env/node/bin:\$PATH" >> ~/.profile
+        if ! grep -q "export PATH=\$HOME/yublueflower/yublueflower-env/node/bin:\$PATH" ~/.profile; then
+            echo "export PATH=\$HOME/yublueflower/yublueflower-env/node/bin:\$PATH" >> ~/.profile
         fi
     fi
     
@@ -64,26 +66,32 @@ function yublueflower_env() {
         echo "Installing go.dev $required_go_version"
 
         wget -q https://go.dev/dl/go1.26.3.linux-amd64.tar.gz -O /tmp/go.tar.gz
-        rm -rf $HOME/yublueflower-env/go 2>/dev/null  
-        mkdir -p $HOME/yublueflower-env/go
-        tar -C $HOME/yublueflower-env/go --strip-components=1 -xzf /tmp/go.tar.gz
+        rm -rf "$yublueflower_env/go" 2>/dev/null
+        mkdir -p "$yublueflower_env/go"
+        tar -C "$yublueflower_env/go" --strip-components=1 -xzf /tmp/go.tar.gz
         rm -rf /tmp/go.tar.gz
 
-        export GOROOT=$HOME/yublueflower-env/go
-        export GOPATH=$HOME/yublueflower-env/go/env  
+        export GOROOT="$yublueflower_env/go"
+        export GOPATH="$yublueflower_env/go/env"
         export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
-        if ! grep -q "export GOROOT=$HOME/yublueflower-env/go" ~/.profile; then
-            echo "export GOROOT=$HOME/yublueflower-env/go" >> ~/.profile
+        if ! grep -q "export GOROOT=\$HOME/yublueflower/yublueflower-env/go" ~/.profile; then
+            echo "export GOROOT=\$HOME/yublueflower/yublueflower-env/go" >> ~/.profile
         fi
-        if ! grep -q "export GOPATH=$HOME/yublueflower-env/go/env" ~/.profile; then
-        echo "export GOPATH=$HOME/yublueflower-env/go/env" >> ~/.profile
+        if ! grep -q "export GOPATH=\$HOME/yublueflower/yublueflower-env/go/env" ~/.profile; then
+        echo "export GOPATH=\$HOME/yublueflower/yublueflower-env/go/env" >> ~/.profile
         fi
         if ! grep -q "export PATH=\$GOROOT/bin:\$GOPATH/bin:\$PATH" ~/.profile; then
             echo "export PATH=\$GOROOT/bin:\$GOPATH/bin:\$PATH" >> ~/.profile
         fi
     fi
 
+    export GOPATH="$yublueflower_env/go/env"
+    if [[ -x "$yublueflower_env/go/bin/go" ]]; then
+        export GOROOT="$yublueflower_env/go"
+        export PATH="$GOROOT/bin:$PATH"
+    fi
+    export PATH="$GOPATH/bin:$PATH"
     mkdir -p "$GOPATH/bin" "$GOPATH/src" "$GOPATH/pkg"
 
     go install -v github.com/projectdiscovery/urlfinder/cmd/urlfinder@latest
@@ -117,6 +125,7 @@ function yublueflower_1337scr1_log() {
 }
 
 function yublueflower_workflow() {
+    local scan_start_epoch=$(date +%s)
     yublueflower_banner
     local url="" web_archives="" extended_workflows="" silent=""
     local bubble_tea=false
@@ -175,10 +184,17 @@ function yublueflower_workflow() {
         exit 1
     fi
 
-    local yublueflower_home="$HOME/yublueflower-cli"
-    local wrkd="yublueflower_$(date '+%Y%m%d_%H%M%S')"
+    local yublueflower_home="$HOME/yublueflower/yublueflower-cli"
+    local target_name="${url#http://}"
+    target_name="${target_name#https://}"
+    target_name=$(printf '%s' "$target_name" | sed -E 's/[^A-Za-z0-9._-]+/_/g; s/^_+//; s/_+$//')
+    [[ -z "$target_name" ]] && target_name="target"
+    local wrkd="${target_name}_$(date '+%Y%m%d_%H%M%S')"
     local wrkp="$yublueflower_home/$wrkd"
+    local yublueflower_tmp_home="/tmp/yublueflower-tmp"
+    local yublueflower_tmp="$yublueflower_tmp_home/$wrkd"
     mkdir -p "$yublueflower_home"
+    mkdir -p "$yublueflower_tmp"
     local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
     echo "Testing started at $timestamp"
 
@@ -189,14 +205,14 @@ function yublueflower_workflow() {
 
     domain=$(echo "$url" | sed -E 's|https?://||' | cut -d'/' -f1)
     timestamp=$(date "+%Y%m%d%H%M%S")
-    yublueflower_1337c0de_raw="/tmp/yublueflower_1337c0de_raw_$timestamp.txt"    
-    yublueflower_1337c0de_tmp="/tmp/yublueflower_1337c0de_tmp_$timestamp.txt"
-    yublueflower_1337c0de_wrk="/tmp/yublueflower_1337c0de_wrk_$timestamp.txt"
+    yublueflower_1337c0de_raw="$yublueflower_tmp/1337c0de_raw_$timestamp.txt"
+    yublueflower_1337c0de_tmp="$yublueflower_tmp/1337c0de_tmp_$timestamp.txt"
+    yublueflower_1337c0de_wrk="$yublueflower_tmp/1337c0de_wrk_$timestamp.txt"
     > "$yublueflower_1337c0de_raw"
 
-    yublueflower_1337scr1_raw="/tmp/yublueflower_1337scr1_raw_$timestamp.txt"    
-    yublueflower_1337scr1_tmp="/tmp/yublueflower_1337scr1_tmp_$timestamp.txt"
-    yublueflower_1337scr1_wrk="/tmp/yublueflower_1337scr1_wrk_$timestamp.txt"
+    yublueflower_1337scr1_raw="$yublueflower_tmp/1337scr1_raw_$timestamp.txt"
+    yublueflower_1337scr1_tmp="$yublueflower_tmp/1337scr1_tmp_$timestamp.txt"
+    yublueflower_1337scr1_wrk="$yublueflower_tmp/1337scr1_wrk_$timestamp.txt"
     > "$yublueflower_1337scr1_raw"
     
     yublueflower_1337scr1_regex='\.(jpg|jpeg|png|gif|svg|ico|css|js|woff2?|ttf|eot|pdf|zip|tar|gz|rar|mp4|mp3|docx?|xlsx?|pptx?|exe|apk|json|xml|csv)(\?|$)'
@@ -543,8 +559,8 @@ function yublueflower_workflow() {
         rraw+=("-header" "$h")
     done
 
-    yublueflower_1337pwnd_raw="/tmp/yublueflower_1337pwnd_raw_$timestamp.txt"
-    yublueflower_1337pwnd_wrk="/tmp/yublueflower_1337pwnd_wrk_$timestamp.txt"
+    yublueflower_1337pwnd_raw="$yublueflower_tmp/1337pwnd_raw_$timestamp.txt"
+    yublueflower_1337pwnd_wrk="$yublueflower_tmp/1337pwnd_wrk_$timestamp.txt"
     > "$yublueflower_1337pwnd_raw"
 
     if [[ "$extended_workflows" != "--extended-workflows" ]]; then
@@ -647,7 +663,19 @@ function yublueflower_workflow() {
     echo -e "Unknown           → $unknown"
     echo -e "[\033[36m$(date '+%Y-%m-%d %H:%M:%S')\033[0m] Write-up path \033[36mglow $yublueflower_home/$wrkd\033[0m — security issues await"
     [[ -f "$wrkp/index.md" ]] && rm -rf "$wrkp/index.md"
+    local scan_finish_epoch=$(date +%s)
     echo "Testing finished at $(date "+%Y-%m-%d %H:%M:%S")"
+    local scan_duration=$((scan_finish_epoch - scan_start_epoch))
+    local scan_hours=$((scan_duration / 3600))
+    local scan_minutes=$(((scan_duration % 3600) / 60))
+    local scan_seconds=$((scan_duration % 60))
+    if (( scan_hours > 0 )); then
+        printf 'Total duration   : %dh %02dm %02ds\n' "$scan_hours" "$scan_minutes" "$scan_seconds"
+    elif (( scan_minutes > 0 )); then
+        printf 'Total duration   : %dm %02ds\n' "$scan_minutes" "$scan_seconds"
+    else
+        printf 'Total duration   : %ds\n' "$scan_seconds"
+    fi
     rm -rf "$yublueflower_1337pwnd_raw"
 
     rm -rf "$yublueflower_1337c0de_wrk"
