@@ -7,21 +7,21 @@
       | /       `._
       || .-.      {
       |\ `-'       `.
-   .  \|            /   yublueflower v0.0.2 (latest)
+   .  \|            /   yublueflower v0.0.3 (latest)
  ~-.`.\\|        .-~_
     `.\-\     .-~   \
       `-'\~~.~      /
     .-~/|`-/~-.~--~
    /  |  \   ~-_\
 
-Tagline       : Bugs, but rewarded
+Tagline       : A security workflow to discover real-world threats
 Author        : 1337rokudenashi
 Architecture  : Kali GNU/Linux Rolling (x86_64)
 Time          : 2025-05-01 13:37:01
 Uptime        : 13 hours, 37 minutes
 
 Usage:
-yublueflower --url http://testphp.vulnweb.com
+yublueflower --url http://php.testinvicti.com
 
 Options:
 --help                    Show help message
@@ -42,8 +42,8 @@ Options:
 ## Required
 
 - **Operating System**: WSL (Windows Subsystem for Linux) with Kali Linux
-- **Dependencies**: go.dev (see [installation instructions](https://go.dev/doc/install))
 - **Dependencies**: nodejs (see [installation instructions](https://nodejs.org/en/download))
+- **Dependencies**: go.dev (see [installation instructions](https://go.dev/doc/install))
 
 ## Installation
 
@@ -60,7 +60,7 @@ bash yublueflower
 To run the tool, use the following command:
 
 ```bash
-yublueflower --url http://testphp.vulnweb.com
+yublueflower --url http://php.testinvicti.com
 ```
 
 ## License
