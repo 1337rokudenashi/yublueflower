@@ -25,8 +25,8 @@ yublueflower --url http://php.testinvicti.com
 
 Options:
 --help                    Show help message
---live-session string[]   Use --live-session to pass session (e.g., --live-session "Cookie: laravel_session=...; XSRF-TOKEN=...")
---bubble-tea              Use --bubble-tea to pipe base URLs
+--session-header string[] Use --session-header to pass session (e.g., --session-header "Cookie: laravel_session=...; XSRF-TOKEN=...")
+--brew                    Use --brew to pipe base URLs
 --web-archives            Use --web-archives to time travel assets
 --silent                  Keep crawl URL logs behaved
 --extended-workflows      Use --extended-workflows to get high Bug Bounty rewards

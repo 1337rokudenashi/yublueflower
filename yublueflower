@@ -109,8 +109,8 @@ function yublueflower_help() {
     echo ""
     echo -e "\033[36mOptions:\033[0m"
     echo "--help                    Show help message"
-    echo "--live-session string[]   Use --live-session to pass session (e.g., --live-session \"Cookie: laravel_session=...; XSRF-TOKEN=...\")"
-    echo "--bubble-tea              Use --bubble-tea to pipe base URLs"
+    echo "--session-header string[] Use --session-header to pass session (e.g., --session-header \"Cookie: laravel_session=...; XSRF-TOKEN=...\")"
+    echo "--brew                    Use --brew to pipe base URLs"
     echo "--web-archives            Use --web-archives to time travel assets"
     echo "--silent                  Keep crawl URL logs behaved"
     echo "--extended-workflows      Use --extended-workflows to get high Bug Bounty rewards"
@@ -128,8 +128,8 @@ function yublueflower_workflow() {
     local scan_start_epoch=$(date +%s)
     yublueflower_banner
     local url="" web_archives="" extended_workflows="" silent=""
-    local bubble_tea=false
-    local -a live_session=()
+    local brew=false
+    local -a session_header=()
     while [[ "$#" -gt 0 ]]; do
         case "$1" in
             --url)
@@ -150,10 +150,10 @@ function yublueflower_workflow() {
             --extended-workflows)
                 extended_workflows="--extended-workflows"
                 shift;;
-            --bubble-tea)
-                bubble_tea=true
+            --brew)
+                brew=true
                 shift;;
-            --live-session)
+            --session-header)
                 shift
                 header=""
                 while [[ "$1" != --* && -n "$1" ]]; do
@@ -162,9 +162,9 @@ function yublueflower_workflow() {
                 done
                 header="${header%" "}"
                 if [[ -n "$header" ]]; then
-                    live_session+=("$header")
+                    session_header+=("$header")
                 else
-                    echo -e "\033[31m[!] Missing header after --live-session. Use --help for usage instructions\033[0m"
+                    echo -e "\033[31m[!] Missing header after --session-header. Use --help for usage instructions\033[0m"
                     exit 1
                 fi
                 ;;
@@ -174,7 +174,7 @@ function yublueflower_workflow() {
         esac
     done
 
-    if [[ "$bubble_tea" == true ]]; then
+    if [[ "$brew" == true ]]; then
         xargs -P1 -I{} bash -c 'yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {}
         exit 0
     fi
@@ -555,7 +555,7 @@ function yublueflower_workflow() {
     rm -rf "$yublueflower_1337scr1_raw" "$yublueflower_1337scr1_tmp"
     
     rraw=()
-    for h in "${live_session[@]}"; do
+    for h in "${session_header[@]}"; do
         rraw+=("-header" "$h")
     done
 
