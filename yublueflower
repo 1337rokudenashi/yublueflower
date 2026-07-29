@@ -30,6 +30,34 @@ EOF
 }
 
 function yublueflower_env() {
+    local required_commands=(
+        bash chmod cp mkdir rm wget tar sed grep gawk perl cut sort tee
+        timeout xargs realpath date uptime uname lsb_release clear
+    )
+    local missing_commands=()
+
+    for command_name in "${required_commands[@]}"; do
+        if ! command -v "$command_name" >/dev/null 2>&1; then
+            missing_commands+=("$command_name")
+        fi
+    done
+
+    if (( ${#missing_commands[@]} > 0 )); then
+        echo "Missing required system dependencies:"
+        for command_name in "${missing_commands[@]}"; do
+            echo "  - $command_name"
+        done
+        echo ""
+        echo "Please install the missing packages using your system package manager."
+        echo ""
+        echo "Debian / Ubuntu / Kali Linux:"
+        echo "  apt install -y wget perl gawk coreutils findutils tar xz-utils lsb-release"
+        echo ""
+        echo "Note:"
+        echo "  Root privileges may be required."
+        exit 1
+    fi
+
     local yublueflower_root="$HOME/yublueflower"
     local yublueflower_env="$yublueflower_root/yublueflower-env"
     yublueflower="$HOME/.local/bin/yublueflower"
