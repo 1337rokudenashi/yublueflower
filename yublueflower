@@ -162,6 +162,7 @@ function yublueflower_cancel() {
     [[ -n "$yublueflower_tmp" ]] && rm -rf "$yublueflower_tmp"
     [[ -n "$wrkp" ]] && rm -rf "$wrkp"
     [[ -n "$yublueflower_ipc" ]] && rm -rf "$yublueflower_ipc"
+    [[ -n "$yublueflower_brew" ]] && rm -f "$yublueflower_brew"
 
     exit 130
 }
@@ -251,7 +252,11 @@ function yublueflower_workflow() {
     done
 
     if (( brew )); then
-        xargs -P1 -I{} bash -c 'yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {}
+        if [[ -n "$yublueflower_brew" ]]; then
+            xargs -P1 -I{} bash -c 'yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {} < "$yublueflower_brew"
+        else
+            xargs -P1 -I{} bash -c 'yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {}
+        fi
         exit 0
     fi
 
@@ -763,6 +768,19 @@ function yublueflower_workflow() {
 if [[ -n $1 && $1 != --help ]]; then
     if [[ "${DETACHED:-}" != "1" ]]; then
         export DETACHED=1
+        yublueflower_brew=""
+        yublueflower_has_brew=0
+        for yublueflower_arg in "$@"; do
+            if [[ "$yublueflower_arg" == --brew ]]; then
+                yublueflower_has_brew=1
+                break
+            fi
+        done
+        if (( yublueflower_has_brew )) && [[ ! -t 0 ]]; then
+            yublueflower_brew="/tmp/yublueflower-cli-$$.targets"
+            cat > "$yublueflower_brew"
+            export yublueflower_brew
+        fi
         yublueflower_ipc="/tmp/yublueflower-cli-$$.state"
         export yublueflower_ipc
         rm -f "$yublueflower_ipc"
@@ -788,6 +806,7 @@ if [[ -n $1 && $1 != --help ]]; then
         wait "$yublueflower_child"
         yublueflower_status=$?
         rm -f "$yublueflower_ipc"
+        [[ -n "$yublueflower_brew" ]] && rm -f "$yublueflower_brew"
         exit "$yublueflower_status"
     fi
 
