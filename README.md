@@ -66,6 +66,10 @@ To run the tool, use the following command:
 ```bash
 yublueflower --url http://php.testinvicti.com
 ```
+or
+```bash
+subfinder -d testinvicti.com | httpx | yublueflower --brew
+```
 
 ## License
 
