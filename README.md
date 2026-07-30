@@ -23,6 +23,10 @@ Uptime        : 13 hours, 37 minutes
 Usage:
 yublueflower --url http://php.testinvicti.com
 
+or
+
+subfinder -d testinvicti.com | httpx | yublueflower --brew
+
 Options:
 --help                    Show help message
 --session-header string[] Use --session-header to pass session (e.g., --session-header "Cookie: laravel_session=...; XSRF-TOKEN=...")
