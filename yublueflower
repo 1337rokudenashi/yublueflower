@@ -777,7 +777,7 @@ if [[ -n $1 && $1 != --help ]]; then
             fi
         done
         if (( yublueflower_has_brew )) && [[ ! -t 0 ]]; then
-            yublueflower_brew="/tmp/yublueflower-cli-$$.targets"
+            yublueflower_brew="/tmp/yublueflower-cli-$$.brew"
             cat > "$yublueflower_brew"
             export yublueflower_brew
         fi
