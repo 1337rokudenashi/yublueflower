@@ -202,7 +202,7 @@ function yublueflower_workflow() {
     local scan_start_epoch=$(date +%s)
     yublueflower_banner
     local url="" web_archives="" extended_workflows="" silent=""
-    local brew=false
+    local brew=0
     local -a session_header=()
     local session_headers_file=""
     local -a header_args=()
@@ -227,7 +227,7 @@ function yublueflower_workflow() {
                 extended_workflows="--extended-workflows"
                 shift;;
             --brew)
-                brew=true
+                brew=1
                 shift;;
             --session-header)
                 shift
@@ -250,7 +250,7 @@ function yublueflower_workflow() {
         esac
     done
 
-    if [[ "$brew" == true ]]; then
+    if (( brew )); then
         xargs -P1 -I{} bash -c 'yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {}
         exit 0
     fi
