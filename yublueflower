@@ -122,6 +122,7 @@ function yublueflower_env() {
     export PATH="$GOPATH/bin:$PATH"
     mkdir -p "$GOPATH/bin" "$GOPATH/src" "$GOPATH/pkg"
 
+    go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
     go install -v github.com/projectdiscovery/urlfinder/cmd/urlfinder@latest
     go install github.com/projectdiscovery/katana/cmd/katana@latest
     go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
