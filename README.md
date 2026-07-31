@@ -43,6 +43,8 @@ Options:
   <img src="https://img.shields.io/badge/kali%20linux-%2523121011.svg?style=for-the-badge&logo=kali-linux&logoColor=white">
 </p>
 
+yublueflower is a security workflow to discover real-world threats using open-source tools such as urlfinder, katana, httpx, nuclei, and glow, with findings mapped to CWE and CVE using matcher patterns.
+
 ## Required
 
 - **Operating System**: WSL (Windows Subsystem for Linux) with Kali Linux
