@@ -3,6 +3,10 @@
 
 export LC_ALL=C
 
+if [[ -z "${skip_banner+x}" ]]; then
+    skip_banner=0
+fi
+
 # A security workflow to discover real-world threats
 
 function yublueflower_banner() {
@@ -206,7 +210,6 @@ function yublueflower_brew() {
 
 function yublueflower_workflow() {
     local scan_start_epoch=$(date +%s)
-    yublueflower_banner
     local url="" web_archives="" extended_workflows="" silent=""
     local brew=0
     local -a session_header=()
@@ -256,11 +259,15 @@ function yublueflower_workflow() {
         esac
     done
 
+    if (( skip_banner == 0 )); then
+        yublueflower_banner
+    fi
+
     if (( brew )); then
         if [[ -n "$yublueflower_brew" ]]; then
-            xargs -P1 -I{} bash -c 'yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {} < "$yublueflower_brew"
+            xargs -P1 -I{} bash -c 'skip_banner=1 yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {} < "$yublueflower_brew"
         else
-            xargs -P1 -I{} bash -c 'yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {}
+            xargs -P1 -I{} bash -c 'skip_banner=1 yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {}
         fi
         exit 0
     fi
