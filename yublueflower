@@ -25,11 +25,11 @@ function yublueflower_banner() {
    /  |  \   ~-_\
 EOF
     echo -e "\033[0m"  
-    echo "Tagline       : A security workflow to discover real-world threats"
-    echo "Author        : 1337rokudenashi"
-    echo "Architecture  : $(lsb_release -ds) ($(uname -m))"
-    echo "Time          : $(date '+%Y-%m-%d %H:%M:%S')"
-    echo "Uptime        : $(uptime -p | sed 's/up //')"
+    echo "Tagline          : A security workflow to discover real-world threats"
+    echo "Author           : 1337rokudenashi"
+    echo "Architecture     : $(lsb_release -ds) ($(uname -m))"
+    echo "Time             : $(date '+%Y-%m-%d %H:%M:%S')"
+    echo "Uptime           : $(uptime -p | sed 's/up //')"
     echo ""
 }
 
@@ -138,19 +138,17 @@ function yublueflower_env() {
 
 function yublueflower_help() {
     echo -e "\033[36mUsage:\033[0m"
-    echo "yublueflower --url http://php.testinvicti.com"
-    echo ""
-    echo "or"
-    echo ""
-    echo "subfinder -d testinvicti.com | httpx | yublueflower --brew"
+    echo "  yublueflower --url http://php.testinvicti.com"
+    echo "  yublueflower --brew < yu.txt"
+    echo "  subfinder -d testinvicti.com | httpx | yublueflower --brew"
     echo ""
     echo -e "\033[36mOptions:\033[0m"
-    echo "--help                    Show help message"
-    echo "--session-header string[] Use --session-header to pass session (e.g., --session-header \"Cookie: laravel_session=...; XSRF-TOKEN=...\")"
-    echo "--brew                    Use --brew to pipe base URLs"
-    echo "--web-archives            Use --web-archives to time travel assets"
-    echo "--silent                  Keep crawl URL logs behaved"
-    echo "--extended-workflows      Use --extended-workflows to get high Bug Bounty rewards"
+    echo "  --help                    Show help message"
+    echo "  --session-header string[] Use --session-header to pass session (e.g., --session-header \"Cookie: laravel_session=...; XSRF-TOKEN=...\")"
+    echo "  --brew                    Use --brew to pipe base URLs"
+    echo "  --web-archives            Use --web-archives to time travel assets"
+    echo "  --silent                  Keep crawl URL logs behaved"
+    echo "  --extended-workflows      Use --extended-workflows to get high Bug Bounty rewards"
 }
 
 function yublueflower_1337c0de_log() {
@@ -293,15 +291,16 @@ function yublueflower_workflow() {
         printf '%s\n' "${session_header[@]}" > "$session_headers_file"
         header_args=(-H "$session_headers_file")
     fi
+    domain=$(echo "$url" | sed -E 's|https?://||' | cut -d'/' -f1)
     local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "Testing started at $timestamp"
+    echo "Target           : $domain"
+    echo "Testing started  : $timestamp"
 
     if ! [[ "$url" =~ ^https?:// ]]; then
         echo -e "\033[31m[!] Please include http:// or https://. Use --help for usage instructions\033[0m"
         exit 1
     fi
 
-    domain=$(echo "$url" | sed -E 's|https?://||' | cut -d'/' -f1)
     timestamp=$(date "+%Y%m%d%H%M%S")
     yublueflower_1337c0de_raw="$yublueflower_tmp/1337c0de_raw_$timestamp.txt"
     yublueflower_1337c0de_tmp="$yublueflower_tmp/1337c0de_tmp_$timestamp.txt"
@@ -658,9 +657,9 @@ function yublueflower_workflow() {
 
     if [[ "$extended_workflows" != "--extended-workflows" ]]; then
 
-        for pwnd in info unknown; do
+        for brew in info unknown; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
-                -s "$pwnd" \
+                -s "$brew" \
                 -timestamp \
                 -headless \
                 -headc 5 \
@@ -669,9 +668,9 @@ function yublueflower_workflow() {
                 -markdown-export "$wrkp"
         done | tee -a "$yublueflower_1337brew_raw"
 
-        for pwnd in low medium high critical; do
+        for brew in low medium high critical; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
-                -s "$pwnd" \
+                -s "$brew" \
                 -timestamp \
                 -headless \
                 -headc 5 \
@@ -690,9 +689,9 @@ function yublueflower_workflow() {
 
     else
 
-        for pwnd in info unknown; do
+        for brew in info unknown; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
-                -s "$pwnd" \
+                -s "$brew" \
                 -timestamp \
                 -headless \
                 -headc 5 \
@@ -701,9 +700,9 @@ function yublueflower_workflow() {
                 -markdown-export "$wrkp"
         done | tee -a "$yublueflower_1337brew_raw"
 
-        for pwnd in low medium high critical; do
+        for brew in low medium high critical; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
-                -s "$pwnd" \
+                -s "$brew" \
                 -timestamp \
                 -headless \
                 -headc 5 \
@@ -754,10 +753,10 @@ function yublueflower_workflow() {
     echo -e "P4: Low           → $p4"
     echo -e "P5: Informational → $p5"
     echo -e "Unknown           → $unknown"
-    echo -e "[\033[36m$(date '+%Y-%m-%d %H:%M:%S')\033[0m] Write-up path \033[36mglow $yublueflower_home/$wrkd\033[0m — security issues await"
+    echo -e "[\033[36m$(date '+%Y-%m-%d %H:%M:%S')\033[0m] Write-up path \033[36mglow ~/yublueflower/yublueflower-cli/$wrkd\033[0m — security issues await"
     [[ -f "$wrkp/index.md" ]] && rm -rf "$wrkp/index.md"
     local scan_finish_epoch=$(date +%s)
-    echo "Testing finished at $(date "+%Y-%m-%d %H:%M:%S")"
+    echo "Testing finished : $(date "+%Y-%m-%d %H:%M:%S")"
     local scan_duration=$((scan_finish_epoch - scan_start_epoch))
     local scan_hours=$((scan_duration / 3600))
     local scan_minutes=$(((scan_duration % 3600) / 60))
@@ -778,8 +777,8 @@ function yublueflower_workflow() {
 }
 
 if [[ -n $1 && $1 != --help ]]; then
-    if [[ "${DETACHED:-}" != "1" ]]; then
-        export DETACHED=1
+    if [[ "${yublueflower_detached:-}" != "1" ]]; then
+        export yublueflower_detached=1
         yublueflower_brew=""
         yublueflower_has_brew=0
         for yublueflower_arg in "$@"; do
