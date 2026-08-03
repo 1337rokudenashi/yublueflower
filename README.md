@@ -14,26 +14,24 @@
     .-~/|`-/~-.~--~
    /  |  \   ~-_\
 
-Tagline       : A security workflow to discover real-world threats
-Author        : 1337rokudenashi
-Architecture  : Kali GNU/Linux Rolling (x86_64)
-Time          : 2025-05-01 13:37:01
-Uptime        : 13 hours, 37 minutes
+Tagline          : A security workflow to discover real-world threats
+Author           : 1337rokudenashi
+Architecture     : Kali GNU/Linux Rolling (x86_64)
+Time             : 2025-05-01 13:37:01
+Uptime           : 13 hours, 37 minutes
 
 Usage:
-yublueflower --url http://php.testinvicti.com
-
-or
-
-subfinder -d testinvicti.com | httpx | yublueflower --brew
+  yublueflower --url http://php.testinvicti.com
+  yublueflower --brew < yu.txt
+  subfinder -d testinvicti.com | httpx | yublueflower --brew
 
 Options:
---help                    Show help message
---session-header string[] Use --session-header to pass session (e.g., --session-header "Cookie: laravel_session=...; XSRF-TOKEN=...")
---brew                    Use --brew to pipe base URLs
---web-archives            Use --web-archives to time travel assets
---silent                  Keep crawl URL logs behaved
---extended-workflows      Use --extended-workflows to get high Bug Bounty rewards
+  --help                    Show help message
+  --session-header string[] Use --session-header to pass session (e.g., --session-header "Cookie: laravel_session=...; XSRF-TOKEN=...")
+  --brew                    Use --brew to pipe base URLs
+  --web-archives            Use --web-archives to time travel assets
+  --silent                  Keep crawl URL logs behaved
+  --extended-workflows      Use --extended-workflows to get high Bug Bounty rewards
 ```
 
 <h1 align="center">yublueflower v0.0.3 (latest)</h1>
@@ -67,9 +65,7 @@ To run the tool, use the following command:
 
 ```bash
 yublueflower --url http://php.testinvicti.com
-```
-or
-```bash
+yublueflower --brew < yu.txt
 subfinder -d testinvicti.com | httpx | yublueflower --brew
 ```
 
