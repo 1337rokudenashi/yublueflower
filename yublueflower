@@ -668,7 +668,7 @@ function yublueflower_workflow() {
                 -markdown-export "$wrkp"
         done | tee -a "$yublueflower_1337brew_raw"
 
-        for brew in low medium high critical; do
+        for brew in critical high medium low; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
                 -s "$brew" \
                 -timestamp \
@@ -700,7 +700,7 @@ function yublueflower_workflow() {
                 -markdown-export "$wrkp"
         done | tee -a "$yublueflower_1337brew_raw"
 
-        for brew in low medium high critical; do
+        for brew in critical high medium low; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
                 -s "$brew" \
                 -timestamp \
