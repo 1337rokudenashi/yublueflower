@@ -783,7 +783,7 @@ function yublueflower_workflow() {
     printf 'p5  info        %s\n' "$p5"
     printf '    unknown     %s\n' "$unknown"
     echo ""
-    printf '\033[36m◇ write-up\033[0m\n'
+    printf '\033[36m◇ markdown\033[0m\n'
     echo "  glow ~/yublueflower/yublueflower-cli/$yublueflower_workspace_name"
     echo ""
     printf '\033[36m◇ finished\033[0m\n'
