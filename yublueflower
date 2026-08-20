@@ -160,17 +160,27 @@ function yublueflower_1337scr1_log() {
 }
 
 function yublueflower_1337brew_log() {
-    local line display_time target
+    local line display_time target info_count
     while IFS= read -r line; do
         printf '%s\n' "$line" >> "$yublueflower_1337brew_raw"
         if [[ "$line" =~ ^\[([^]]+)\][[:space:]]+\[([^]]+)\][[:space:]]+\[([^]]+)\][[:space:]]+(.*)$ ]]; then
             display_time=$(date '+%H:%M:%S')
             target="${BASH_REMATCH[4]}"
+            if [[ "${BASH_REMATCH[3]}" == "info" ]]; then
+                info_count=$(grep -Ec '^\[[^]]+\][[:space:]]+\[[^]]+\][[:space:]]+\[info\][[:space:]]+' "$yublueflower_1337brew_raw")
+                if (( info_count > 5 )); then
+                    if (( info_count == 6 )); then
+                        printf '\033[36m... more info ~/yublueflower/yublueflower-cli/%s\033[0m\n' "$yublueflower_workspace_name"
+                    fi
+                    continue
+                fi
+            fi
             if [[ "${BASH_REMATCH[1]}" == "extract-urls" && "$target" == *" ["* ]]; then
                 target="${target%% \[*} [...]"
             fi
             printf '\033[36m%s\033[0m  ◇ %s · %s · %s\n' "$display_time" "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}"
-            echo "           $target"
+            echo "           └─ $target"
+            echo ""
         else
             echo "$line"
         fi
@@ -432,8 +442,9 @@ function yublueflower_workflow() {
                 print
             }
         }' | yublueflower_1337c0de_log | while read -r line; do
-            printf '\033[36m%s\033[0m  → %s\n' "$(date '+%H:%M:%S')" "$line"
+            printf '\033[36m%s\033[0m  ◆ %s\n' "$(date '+%H:%M:%S')" "$line"
         done
+        echo ""
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -js-crawl -silent |
@@ -443,8 +454,9 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                printf '\033[36m%s\033[0m  → %s\n' "$(date '+%H:%M:%S')" "$line"
+                printf '\033[36m%s\033[0m  ◆ %s\n' "$(date '+%H:%M:%S')" "$line"
             done
+            echo ""
         fi
     else
         timeout --foreground -k 5s 10m urlfinder -d "$domain" -silent |
@@ -542,8 +554,9 @@ function yublueflower_workflow() {
                 print
             }
         }' | yublueflower_1337c0de_log | while read -r line; do
-            printf '\033[36m%s\033[0m  → %s\n' "$(date '+%H:%M:%S')" "$line"
+            printf '\033[36m%s\033[0m  ◆ %s\n' "$(date '+%H:%M:%S')" "$line"
         done
+        echo ""
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
             timeout --foreground -k 5s 10m urlfinder -d "$domain" -silent |
@@ -554,8 +567,9 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                printf '\033[36m%s\033[0m  → %s\n' "$(date '+%H:%M:%S')" "$line"
+                printf '\033[36m%s\033[0m  ◆ %s\n' "$(date '+%H:%M:%S')" "$line"
             done
+            echo ""
 
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
             perl -pe 's/[^[:print:]\t\r\n]//g' |
@@ -651,8 +665,9 @@ function yublueflower_workflow() {
                     print
                 }
             }' | yublueflower_1337c0de_log | while read -r line; do
-                printf '\033[36m%s\033[0m  → %s\n' "$(date '+%H:%M:%S')" "$line"
+                printf '\033[36m%s\033[0m  ◆ %s\n' "$(date '+%H:%M:%S')" "$line"
             done
+            echo ""
 
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
@@ -661,8 +676,9 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                printf '\033[36m%s\033[0m  → %s\n' "$(date '+%H:%M:%S')" "$line"
+                printf '\033[36m%s\033[0m  ◆ %s\n' "$(date '+%H:%M:%S')" "$line"
             done
+            echo ""
         fi
     fi
 
@@ -776,12 +792,12 @@ function yublueflower_workflow() {
 
     printf '\033[36m◇ priority p1–p5\033[0m\n'
     echo ""
-    printf 'p1  critical    %s\n' "$p1"
-    printf 'p2  high        %s\n' "$p2"
-    printf 'p3  medium      %s\n' "$p3"
-    printf 'p4  low         %s\n' "$p4"
-    printf 'p5  info        %s\n' "$p5"
-    printf '    unknown     %s\n' "$unknown"
+    printf '◆ p1  critical    %s\n' "$p1"
+    printf '◆ p2  high        %s\n' "$p2"
+    printf '◆ p3  medium      %s\n' "$p3"
+    printf '◆ p4  low         %s\n' "$p4"
+    printf '◆ p5  info        %s\n' "$p5"
+    printf '   unknown        %s\n' "$unknown"
     echo ""
     printf '\033[36m◇ markdown\033[0m\n'
     echo "  glow ~/yublueflower/yublueflower-cli/$yublueflower_workspace_name"
