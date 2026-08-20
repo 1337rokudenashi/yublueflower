@@ -185,7 +185,7 @@ function yublueflower_cancel() {
     fi
 
     [[ -n "$yublueflower_tmp" ]] && rm -rf "$yublueflower_tmp"
-    [[ -n "$wrkp" ]] && rm -rf "$wrkp"
+    [[ -n "$yublueflower_workspace_path" ]] && rm -rf "$yublueflower_workspace_path"
     [[ -n "$yublueflower_ipc" ]] && rm -rf "$yublueflower_ipc"
     [[ -n "$yublueflower_brew" ]] && rm -f "$yublueflower_brew"
 
@@ -216,11 +216,11 @@ function yublueflower_brew() {
         target_name="${target_name#https://}"
         target_name=$(printf '%s' "$target_name" | sed -E 's/[^A-Za-z0-9._-]+/_/g; s/^_+//; s/_+$//')
         [[ -z "$target_name" ]] && target_name="target"
-        wrkd="${target_name}_$(date '+%Y%m%d_%H%M%S')"
-        wrkp="$yublueflower_home/$wrkd"
-        yublueflower_tmp="/tmp/yublueflower-tmp/$wrkd"
+        yublueflower_workspace_name="${target_name}_$(date '+%Y%m%d_%H%M%S')"
+        yublueflower_workspace_path="$yublueflower_home/$yublueflower_workspace_name"
+        yublueflower_tmp="/tmp/yublueflower-tmp/$yublueflower_workspace_name"
         mkdir -p "$yublueflower_home" "$yublueflower_tmp"
-        export DIR="$wrkd"
+        export DIR="$yublueflower_workspace_name"
     fi
 }
 
@@ -298,10 +298,10 @@ function yublueflower_workflow() {
     target_name="${target_name#https://}"
     target_name=$(printf '%s' "$target_name" | sed -E 's/[^A-Za-z0-9._-]+/_/g; s/^_+//; s/_+$//')
     [[ -z "$target_name" ]] && target_name="target"
-    local wrkd="${DIR:-${target_name}_$(date '+%Y%m%d_%H%M%S')}"
-    wrkp="$yublueflower_home/$wrkd"
+    local yublueflower_workspace_name="${DIR:-${target_name}_$(date '+%Y%m%d_%H%M%S')}"
+    yublueflower_workspace_path="$yublueflower_home/$yublueflower_workspace_name"
     local yublueflower_tmp_home="/tmp/yublueflower-tmp"
-    yublueflower_tmp="$yublueflower_tmp_home/$wrkd"
+    yublueflower_tmp="$yublueflower_tmp_home/$yublueflower_workspace_name"
     mkdir -p "$yublueflower_home"
     mkdir -p "$yublueflower_tmp"
     if (( ${#session_header[@]} > 0 )); then
@@ -325,12 +325,12 @@ function yublueflower_workflow() {
     timestamp=$(date "+%Y%m%d%H%M%S")
     yublueflower_1337c0de_raw="$yublueflower_tmp/1337c0de_raw_$timestamp.txt"
     yublueflower_1337c0de_tmp="$yublueflower_tmp/1337c0de_tmp_$timestamp.txt"
-    yublueflower_1337c0de_wrk="$yublueflower_tmp/1337c0de_wrk_$timestamp.txt"
+    yublueflower_1337c0de_out="$yublueflower_tmp/1337c0de_wrk_$timestamp.txt"
     > "$yublueflower_1337c0de_raw"
 
     yublueflower_1337scr1_raw="$yublueflower_tmp/1337scr1_raw_$timestamp.txt"
     yublueflower_1337scr1_tmp="$yublueflower_tmp/1337scr1_tmp_$timestamp.txt"
-    yublueflower_1337scr1_wrk="$yublueflower_tmp/1337scr1_wrk_$timestamp.txt"
+    yublueflower_1337scr1_out="$yublueflower_tmp/1337scr1_wrk_$timestamp.txt"
     > "$yublueflower_1337scr1_raw"
     
     yublueflower_1337scr1_regex='\.(jpg|jpeg|png|gif|svg|ico|css|js|woff2?|ttf|eot|pdf|zip|tar|gz|rar|mp4|mp3|docx?|xlsx?|pptx?|exe|apk|json|xml|csv)(\?|$)'
@@ -666,14 +666,14 @@ function yublueflower_workflow() {
         fi
     fi
 
-    tee -a "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_raw" > /dev/null && sort -u "$yublueflower_1337c0de_tmp" | tee "$yublueflower_1337c0de_wrk" > /dev/null && tee "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_wrk" > /dev/null
-    tee -a "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_raw" > /dev/null && sort -u "$yublueflower_1337scr1_tmp" | tee "$yublueflower_1337scr1_wrk" > /dev/null && tee "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_wrk" > /dev/null
+    tee -a "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_raw" > /dev/null && sort -u "$yublueflower_1337c0de_tmp" | tee "$yublueflower_1337c0de_out" > /dev/null && tee "$yublueflower_1337c0de_tmp" < "$yublueflower_1337c0de_out" > /dev/null
+    tee -a "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_raw" > /dev/null && sort -u "$yublueflower_1337scr1_tmp" | tee "$yublueflower_1337scr1_out" > /dev/null && tee "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_out" > /dev/null
 
     rm -rf "$yublueflower_1337c0de_raw" "$yublueflower_1337c0de_tmp"
     rm -rf "$yublueflower_1337scr1_raw" "$yublueflower_1337scr1_tmp"
     
     yublueflower_1337brew_raw="$yublueflower_tmp/1337brew_raw_$timestamp.txt"
-    yublueflower_1337brew_wrk="$yublueflower_tmp/1337brew_wrk_$timestamp.txt"
+    yublueflower_1337brew_out="$yublueflower_tmp/1337brew_wrk_$timestamp.txt"
     > "$yublueflower_1337brew_raw"
 
     if [[ "$extended_workflows" != "--extended-workflows" ]]; then
@@ -685,7 +685,7 @@ function yublueflower_workflow() {
                 -headc 5 \
                 -c 50 \
                 -silent \
-                -markdown-export "$wrkp"
+                -markdown-export "$yublueflower_workspace_path"
         done | yublueflower_1337brew_log
 
         for brew in critical high medium low; do
@@ -695,14 +695,14 @@ function yublueflower_workflow() {
                 -headc 5 \
                 -c 50 \
                 -silent \
-                -markdown-export "$wrkp"
+                -markdown-export "$yublueflower_workspace_path"
         done | yublueflower_1337brew_log
 
-        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337c0de_wrk" \
+        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337c0de_out" \
             -dast \
             -c 50 \
             -silent \
-            -markdown-export "$wrkp" \
+            -markdown-export "$yublueflower_workspace_path" \
             | yublueflower_1337brew_log
 
     else
@@ -714,7 +714,7 @@ function yublueflower_workflow() {
                 -headc 5 \
                 -c 50 \
                 -silent \
-                -markdown-export "$wrkp"
+                -markdown-export "$yublueflower_workspace_path"
         done | yublueflower_1337brew_log
 
         for brew in critical high medium low; do
@@ -724,29 +724,29 @@ function yublueflower_workflow() {
                 -headc 5 \
                 -c 50 \
                 -silent \
-                -markdown-export "$wrkp"
+                -markdown-export "$yublueflower_workspace_path"
         done | yublueflower_1337brew_log
 
-        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337scr1_wrk" \
+        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337scr1_out" \
             -tags exposure \
             -c 50 \
             -silent \
-            -markdown-export "$wrkp" \
+            -markdown-export "$yublueflower_workspace_path" \
             | yublueflower_1337brew_log
 
-        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337c0de_wrk" \
+        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337c0de_out" \
             -headless \
             -headc 5 \
             -dast \
             -fa high \
             -c 50 \
             -silent \
-            -markdown-export "$wrkp" \
+            -markdown-export "$yublueflower_workspace_path" \
             | yublueflower_1337brew_log
 
     fi
 
-    perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yublueflower_1337brew_raw" | tee "$yublueflower_1337brew_wrk" > /dev/null
+    perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yublueflower_1337brew_raw" | tee "$yublueflower_1337brew_out" > /dev/null
     p1=0; p2=0; p3=0; p4=0; p5=0; unknown=0
     while IFS= read -r line; do
         case "$line" in
@@ -757,9 +757,9 @@ function yublueflower_workflow() {
             *"[info]"*)     ((p5++));;
             *"[unknown]"*)  ((unknown++));;
         esac
-    done < "$yublueflower_1337brew_wrk"
+    done < "$yublueflower_1337brew_out"
 
-    [[ -f "$wrkp/index.md" ]] && rm -rf "$wrkp/index.md"
+    [[ -f "$yublueflower_workspace_path/index.md" ]] && rm -rf "$yublueflower_workspace_path/index.md"
     local scan_finish_epoch=$(date +%s)
     local scan_duration=$((scan_finish_epoch - scan_start_epoch))
     local scan_hours=$((scan_duration / 3600))
@@ -784,7 +784,7 @@ function yublueflower_workflow() {
     printf '    unknown     %s\n' "$unknown"
     echo ""
     printf '\033[36m◇ write-up\033[0m\n'
-    echo "  glow ~/yublueflower/yublueflower-cli/$wrkd"
+    echo "  glow ~/yublueflower/yublueflower-cli/$yublueflower_workspace_name"
     echo ""
     printf '\033[36m◇ finished\033[0m\n'
     echo "  $(date "+%Y-%m-%d %H:%M:%S")"
@@ -798,9 +798,9 @@ function yublueflower_workflow() {
     rm -rf "$yublueflower_1337brew_raw"
     [[ -n "$session_headers_file" ]] && rm -f "$session_headers_file"
 
-    rm -rf "$yublueflower_1337c0de_wrk"
-    rm -rf "$yublueflower_1337scr1_wrk"
-    rm -rf "$yublueflower_1337brew_wrk"
+    rm -rf "$yublueflower_1337c0de_out"
+    rm -rf "$yublueflower_1337scr1_out"
+    rm -rf "$yublueflower_1337brew_out"
 }
 
 if [[ -n $1 && $1 != --help ]]; then
@@ -834,7 +834,7 @@ if [[ -n $1 && $1 != --help ]]; then
                 yublueflower_pid="${yublueflower_msg[0]}"
                 if (( ${#yublueflower_msg[@]} >= 3 )); then
                     yublueflower_tmp="${yublueflower_msg[1]}"
-                    wrkp="${yublueflower_msg[2]}"
+                    yublueflower_workspace_path="${yublueflower_msg[2]}"
                     break
                 fi
             fi
@@ -853,7 +853,7 @@ if [[ -n $1 && $1 != --help ]]; then
     printf '%s\n' \
         "$yublueflower_pid" \
         "$yublueflower_tmp" \
-        "$wrkp" \
+        "$yublueflower_workspace_path" \
         > "$yublueflower_ipc"
     yublueflower_workflow "$@"
 else
