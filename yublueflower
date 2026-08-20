@@ -159,6 +159,24 @@ function yublueflower_1337scr1_log() {
     [[ "$silent" == "--silent" ]] && cat >> "$yublueflower_1337scr1_raw" || tee -a "$yublueflower_1337scr1_raw"
 }
 
+function yublueflower_1337brew_log() {
+    local line display_time target
+    while IFS= read -r line; do
+        printf '%s\n' "$line" >> "$yublueflower_1337brew_raw"
+        if [[ "$line" =~ ^\[([^]]+)\][[:space:]]+\[([^]]+)\][[:space:]]+\[([^]]+)\][[:space:]]+(.*)$ ]]; then
+            display_time=$(date '+%H:%M:%S')
+            target="${BASH_REMATCH[4]}"
+            if [[ "${BASH_REMATCH[1]}" == "extract-urls" && "$target" == *" ["* ]]; then
+                target="${target%% \[*} [...]"
+            fi
+            echo "$display_time  ◇ ${BASH_REMATCH[1]} · ${BASH_REMATCH[2]} · ${BASH_REMATCH[3]}"
+            echo "           $target"
+        else
+            echo "$line"
+        fi
+    done
+}
+
 function yublueflower_cancel() {
     if [[ -n "$yublueflower_pid" ]]; then
         kill -TERM -- "-$yublueflower_pid" 2>/dev/null
@@ -293,8 +311,11 @@ function yublueflower_workflow() {
     fi
     domain=$(echo "$url" | sed -E 's|https?://||' | cut -d'/' -f1)
     local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "Target           : $domain"
-    echo "Testing started  : $timestamp"
+    printf '\033[36m◇ target\033[0m    %s\n' "$domain"
+    printf '\033[36m◇ started\033[0m   %s\n' "$timestamp"
+    echo ""
+    printf '\033[36m◇ $ (starting)\033[0m\n'
+    echo ""
 
     if ! [[ "$url" =~ ^https?:// ]]; then
         echo -e "\033[31m[!] Please include http:// or https://. Use --help for usage instructions\033[0m"
@@ -411,7 +432,7 @@ function yublueflower_workflow() {
                 print
             }
         }' | yublueflower_1337c0de_log | while read -r line; do
-            echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
+            echo "$(date '+%H:%M:%S')  → $line"
         done
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
@@ -422,7 +443,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
+                echo "$(date '+%H:%M:%S')  → $line"
             done
         fi
     else
@@ -521,7 +542,7 @@ function yublueflower_workflow() {
                 print
             }
         }' | yublueflower_1337c0de_log | while read -r line; do
-            echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
+            echo "$(date '+%H:%M:%S')  → $line"
         done
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
@@ -533,7 +554,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
+                echo "$(date '+%H:%M:%S')  → $line"
             done
 
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
@@ -630,7 +651,7 @@ function yublueflower_workflow() {
                     print
                 }
             }' | yublueflower_1337c0de_log | while read -r line; do
-                echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
+                echo "$(date '+%H:%M:%S')  → $line"
             done
 
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -js-crawl -silent |
@@ -640,7 +661,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                echo -e "[\e[36m$(date '+%Y-%m-%d %H:%M:%S')\e[0m] $line"
+                echo "$(date '+%H:%M:%S')  → $line"
             done
         fi
     fi
@@ -660,67 +681,60 @@ function yublueflower_workflow() {
         for brew in info unknown; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
                 -s "$brew" \
-                -timestamp \
                 -headless \
                 -headc 5 \
                 -c 50 \
                 -silent \
                 -markdown-export "$wrkp"
-        done | tee -a "$yublueflower_1337brew_raw"
+        done | yublueflower_1337brew_log
 
         for brew in critical high medium low; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
                 -s "$brew" \
-                -timestamp \
                 -headless \
                 -headc 5 \
                 -c 50 \
                 -silent \
                 -markdown-export "$wrkp"
-        done | tee -a "$yublueflower_1337brew_raw"
+        done | yublueflower_1337brew_log
 
         timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337c0de_wrk" \
-            -timestamp \
             -dast \
             -c 50 \
             -silent \
             -markdown-export "$wrkp" \
-            | tee -a "$yublueflower_1337brew_raw"
+            | yublueflower_1337brew_log
 
     else
 
         for brew in info unknown; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
                 -s "$brew" \
-                -timestamp \
                 -headless \
                 -headc 5 \
                 -c 50 \
                 -silent \
                 -markdown-export "$wrkp"
-        done | tee -a "$yublueflower_1337brew_raw"
+        done | yublueflower_1337brew_log
 
         for brew in critical high medium low; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
                 -s "$brew" \
-                -timestamp \
                 -headless \
                 -headc 5 \
                 -c 50 \
                 -silent \
                 -markdown-export "$wrkp"
-        done | tee -a "$yublueflower_1337brew_raw"
+        done | yublueflower_1337brew_log
 
         timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337scr1_wrk" \
-            -timestamp \
             -tags exposure \
             -c 50 \
             -silent \
             -markdown-export "$wrkp" \
-            | tee -a "$yublueflower_1337brew_raw"
+            | yublueflower_1337brew_log
 
         timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337c0de_wrk" \
-            -timestamp \
             -headless \
             -headc 5 \
             -dast \
@@ -728,7 +742,7 @@ function yublueflower_workflow() {
             -c 50 \
             -silent \
             -markdown-export "$wrkp" \
-            | tee -a "$yublueflower_1337brew_raw"
+            | yublueflower_1337brew_log
 
     fi
 
@@ -745,28 +759,41 @@ function yublueflower_workflow() {
         esac
     done < "$yublueflower_1337brew_wrk"
 
-    echo -e "\033[36m🧠 Priority P1–P5\033[0m"
-    echo "Bug Bounty rewards await, P1 is bounty, P5 is trivia"
-    echo -e "P1: Critical      → $p1"
-    echo -e "P2: High          → $p2"
-    echo -e "P3: Medium        → $p3"
-    echo -e "P4: Low           → $p4"
-    echo -e "P5: Informational → $p5"
-    echo -e "Unknown           → $unknown"
-    echo -e "[\033[36m$(date '+%Y-%m-%d %H:%M:%S')\033[0m] Write-up path \033[36mglow ~/yublueflower/yublueflower-cli/$wrkd\033[0m — security issues await"
     [[ -f "$wrkp/index.md" ]] && rm -rf "$wrkp/index.md"
     local scan_finish_epoch=$(date +%s)
-    echo "Testing finished : $(date "+%Y-%m-%d %H:%M:%S")"
     local scan_duration=$((scan_finish_epoch - scan_start_epoch))
     local scan_hours=$((scan_duration / 3600))
     local scan_minutes=$(((scan_duration % 3600) / 60))
     local scan_seconds=$((scan_duration % 60))
+
     if (( scan_hours > 0 )); then
-        printf 'Total duration   : %dh %02dm %02ds\n' "$scan_hours" "$scan_minutes" "$scan_seconds"
+        printf '\033[36m◇ $ (finished in \033[0m%dh %02dm %02ds\033[36m)\033[0m\n\n' "$scan_hours" "$scan_minutes" "$scan_seconds"
     elif (( scan_minutes > 0 )); then
-        printf 'Total duration   : %dm %02ds\n' "$scan_minutes" "$scan_seconds"
+        printf '\033[36m◇ $ (finished in \033[0m%dm %02ds\033[36m)\033[0m\n\n' "$scan_minutes" "$scan_seconds"
     else
-        printf 'Total duration   : %ds\n' "$scan_seconds"
+        printf '\033[36m◇ $ (finished in \033[0m%ds\033[36m)\033[0m\n\n' "$scan_seconds"
+    fi
+
+    printf '\033[36m◇ priority p1–p5\033[0m\n'
+    echo ""
+    printf 'p1  critical    %s\n' "$p1"
+    printf 'p2  high        %s\n' "$p2"
+    printf 'p3  medium      %s\n' "$p3"
+    printf 'p4  low         %s\n' "$p4"
+    printf 'p5  info        %s\n' "$p5"
+    printf '    unknown     %s\n' "$unknown"
+    echo ""
+    printf '\033[36m◇ write-up\033[0m\n'
+    echo "  glow ~/yublueflower/yublueflower-cli/$wrkd"
+    echo ""
+    printf '\033[36m◇ finished\033[0m\n'
+    echo "  $(date "+%Y-%m-%d %H:%M:%S")"
+    if (( scan_hours > 0 )); then
+        printf '  duration  %dh %02dm %02ds\n' "$scan_hours" "$scan_minutes" "$scan_seconds"
+    elif (( scan_minutes > 0 )); then
+        printf '  duration  %dm %02ds\n' "$scan_minutes" "$scan_seconds"
+    else
+        printf '  duration  %ds\n' "$scan_seconds"
     fi
     rm -rf "$yublueflower_1337brew_raw"
     [[ -n "$session_headers_file" ]] && rm -f "$session_headers_file"
