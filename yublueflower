@@ -160,21 +160,22 @@ function yublueflower_1337scr1_log() {
 }
 
 function yublueflower_1337brew_log() {
-    local line display_time target info_count
+    local line normalized_line display_time target info_count
     while IFS= read -r line; do
         printf '%s\n' "$line" >> "$yublueflower_1337brew_raw"
+        normalized_line=$(printf '%s\n' "$line" | perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g')
+        if [[ "$normalized_line" =~ (^|[^[:alnum:]_])\[?info\]?([^[:alnum:]_]|$) ]]; then
+            info_count=$(perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yublueflower_1337brew_raw" | grep -Eoc '(^|[^[:alnum:]_])\[?info\]?([^[:alnum:]_]|$)')
+            if (( info_count > 5 )); then
+                if (( info_count == 6 )); then
+                    printf '\033[36m... more info ~/yublueflower/yublueflower-cli/%s\033[0m\n' "$yublueflower_workspace_name"
+                fi
+                continue
+            fi
+        fi
         if [[ "$line" =~ ^\[([^]]+)\][[:space:]]+\[([^]]+)\][[:space:]]+\[([^]]+)\][[:space:]]+(.*)$ ]]; then
             display_time=$(date '+%H:%M:%S')
             target="${BASH_REMATCH[4]}"
-            if [[ "${BASH_REMATCH[3]}" == "info" ]]; then
-                info_count=$(grep -Ec '^\[[^]]+\][[:space:]]+\[[^]]+\][[:space:]]+\[info\][[:space:]]+' "$yublueflower_1337brew_raw")
-                if (( info_count > 5 )); then
-                    if (( info_count == 6 )); then
-                        printf '\033[36m... more info ~/yublueflower/yublueflower-cli/%s\033[0m\n' "$yublueflower_workspace_name"
-                    fi
-                    continue
-                fi
-            fi
             if [[ "${BASH_REMATCH[1]}" == "extract-urls" && "$target" == *" ["* ]]; then
                 target="${target%% \[*} [...]"
             fi
