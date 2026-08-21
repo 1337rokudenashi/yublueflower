@@ -804,6 +804,7 @@ function yublueflower_workflow() {
     local scan_minutes=$(((scan_duration % 3600) / 60))
     local scan_seconds=$((scan_duration % 60))
 
+    echo ""
     if (( scan_hours > 0 )); then
         printf '\033[36m◇ $ (finished in \033[0m%dh %02dm %02ds\033[36m)\033[0m\n\n' "$scan_hours" "$scan_minutes" "$scan_seconds"
     elif (( scan_minutes > 0 )); then
@@ -813,17 +814,14 @@ function yublueflower_workflow() {
     fi
 
     printf '\033[36m◇ priority p1–p5\033[0m\n'
-    echo ""
     printf '◆ p1  critical    %s\n' "$p1"
     printf '◆ p2  high        %s\n' "$p2"
     printf '◆ p3  medium      %s\n' "$p3"
     printf '◆ p4  low         %s\n' "$p4"
     printf '◆ p5  info        %s\n' "$p5"
     printf '◆     unknown     %s\n' "$unknown"
-    echo ""
     printf '\033[36m◇ markdown\033[0m\n'
     echo "  glow ~/yublueflower/yublueflower-cli/$yublueflower_workspace_name"
-    echo ""
     printf '\033[36m◇ finished\033[0m\n'
     echo "  $(date "+%Y-%m-%d %H:%M:%S")"
     if (( scan_hours > 0 )); then
@@ -833,6 +831,7 @@ function yublueflower_workflow() {
     else
         printf '  duration  %ds\n' "$scan_seconds"
     fi
+    echo ""
     rm -rf "$yublueflower_1337brew_raw"
     [[ -n "$session_headers_file" ]] && rm -f "$session_headers_file"
 
