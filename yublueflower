@@ -160,8 +160,17 @@ function yublueflower_1337scr1_log() {
 }
 
 function yublueflower_1337brew_log() {
-    local line normalized_line display_time target info_count
+    local line normalized_line previous_line previous_normalized_line display_time target severity info_count last_severity
     while IFS= read -r line; do
+        if [[ -z "$last_severity" && -s "$yublueflower_1337brew_raw" ]]; then
+            previous_line=$(sed -n '$p' "$yublueflower_1337brew_raw")
+            previous_normalized_line=$(printf '%s\n' "$previous_line" | perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g')
+            if [[ "$previous_line" =~ ^\[[^]]+\][[:space:]]+\[[^]]+\][[:space:]]+\[([^]]+)\] ]]; then
+                last_severity="${BASH_REMATCH[1]}"
+            elif [[ "$previous_normalized_line" =~ ·[[:space:]]+[^·]+[[:space:]]+·[[:space:]]+(critical|high|medium|low|info|unknown)([[:space:]]|$) ]]; then
+                last_severity="${BASH_REMATCH[1]}"
+            fi
+        fi
         printf '%s\n' "$line" >> "$yublueflower_1337brew_raw"
         normalized_line=$(printf '%s\n' "$line" | perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g')
         if [[ "$normalized_line" =~ (^|[^[:alnum:]_])\[?info\]?([^[:alnum:]_]|$) ]]; then
@@ -176,13 +185,25 @@ function yublueflower_1337brew_log() {
         if [[ "$line" =~ ^\[([^]]+)\][[:space:]]+\[([^]]+)\][[:space:]]+\[([^]]+)\][[:space:]]+(.*)$ ]]; then
             display_time=$(date '+%H:%M:%S')
             target="${BASH_REMATCH[4]}"
+            severity="${BASH_REMATCH[3]}"
             if [[ "${BASH_REMATCH[1]}" == "extract-urls" && "$target" == *" ["* ]]; then
                 target="${target%% \[*} [...]"
             fi
+            if [[ -n "$last_severity" && "$severity" != "$last_severity" ]]; then
+                echo ""
+            fi
             printf '\033[36m%s\033[0m  ◇ %s · %s · %s\n' "$display_time" "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}"
             echo "           └─ $target"
-            echo ""
+            last_severity="$severity"
         else
+            severity=""
+            if [[ "$normalized_line" =~ ·[[:space:]]+[^·]+[[:space:]]+·[[:space:]]+(critical|high|medium|low|info|unknown)([[:space:]]|$) ]]; then
+                severity="${BASH_REMATCH[1]}"
+                if [[ -n "$last_severity" && "$severity" != "$last_severity" ]]; then
+                    echo ""
+                fi
+                last_severity="$severity"
+            fi
             echo "$line"
         fi
     done
