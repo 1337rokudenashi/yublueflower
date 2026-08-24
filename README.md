@@ -43,6 +43,10 @@ Options:
 
 yublueflower is a security workflow to discover real-world threats using open-source tools such as urlfinder, katana, httpx, nuclei, and glow, with findings mapped to CWE and CVE using matcher patterns.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/1337rokudenashi/yublueflower/refs/heads/main/yublueflower.png">
+</p>
+
 ## Required
 
 - **Operating System**: WSL (Windows Subsystem for Linux) with Kali Linux
