@@ -800,9 +800,9 @@ function yublueflower_workflow() {
     printf '◆ p4  low         %s\n' "$p4"
     printf '◆ p5  info        %s\n' "$p5"
     printf '◆     unknown     %s\n' "$unknown"
-    echo ""
     printf '\033[36m◇ markdown\033[0m\n'
     echo "  glow ~/yublueflower/yublueflower-cli/$yublueflower_workspace_name"
+    echo ""
     printf '\033[36m◇ finished\033[0m\n'
     echo "  $(date "+%Y-%m-%d %H:%M:%S")"
     if (( scan_hours > 0 )); then
