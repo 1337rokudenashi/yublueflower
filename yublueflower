@@ -445,7 +445,7 @@ function yublueflower_workflow() {
                 print
             }
         }' | yublueflower_1337c0de_log | while read -r line; do
-            printf '    \033[36m%s\033[0m  ◇ %s · \033[36m%s\033[0m\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+            printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
         done
         echo ""
 
@@ -457,7 +457,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ %s · \033[36m%s\033[0m\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+                printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
             done
             echo ""
         fi
@@ -557,7 +557,7 @@ function yublueflower_workflow() {
                 print
             }
         }' | yublueflower_1337c0de_log | while read -r line; do
-            printf '    \033[36m%s\033[0m  ◇ %s · \033[36m%s\033[0m\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+            printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
         done
         echo ""
 
@@ -570,7 +570,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ %s · \033[36m%s\033[0m\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+                printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
             done
             echo ""
 
@@ -668,7 +668,7 @@ function yublueflower_workflow() {
                     print
                 }
             }' | yublueflower_1337c0de_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ %s · \033[36m%s\033[0m\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+                printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
             done
             echo ""
 
@@ -679,7 +679,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ %s · \033[36m%s\033[0m\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+                printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
             done
             echo ""
         fi
@@ -795,12 +795,12 @@ function yublueflower_workflow() {
     fi
 
     printf '\033[36m◇ priority p1–p5\033[0m\n'
-    printf '◆ p1  critical    %s\n' "$p1"
-    printf '◆ p2  high        %s\n' "$p2"
-    printf '◆ p3  medium      %s\n' "$p3"
-    printf '◆ p4  low         %s\n' "$p4"
-    printf '◆ p5  info        %s\n' "$p5"
-    printf '◆     unknown     %s\n' "$unknown"
+    printf '    ◆ p1  critical    %s\n' "$p1"
+    printf '    ◆ p2  high        %s\n' "$p2"
+    printf '    ◆ p3  medium      %s\n' "$p3"
+    printf '    ◆ p4  low         %s\n' "$p4"
+    printf '    ◆ p5  info        %s\n' "$p5"
+    printf '    ◆     unknown     %s\n' "$unknown"
     printf '\033[36m◇ markdown\033[0m\n'
     echo "  glow ~/yublueflower/yublueflower-cli/$yublueflower_workspace_name"
     echo ""
