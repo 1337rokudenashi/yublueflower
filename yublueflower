@@ -445,7 +445,7 @@ function yublueflower_workflow() {
                 print
             }
         }' | yublueflower_1337c0de_log | while read -r line; do
-            printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+            printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
         done
         echo ""
 
@@ -457,7 +457,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
             done
             echo ""
         fi
@@ -557,7 +557,7 @@ function yublueflower_workflow() {
                 print
             }
         }' | yublueflower_1337c0de_log | while read -r line; do
-            printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+            printf '    \033[36m%s\033[0m  ◇ \033[32mtime-travel\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
         done
         echo ""
 
@@ -570,7 +570,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+                printf '    \033[36m%s\033[0m  ◇ \033[32mtime-travel\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
             done
             echo ""
 
@@ -668,7 +668,7 @@ function yublueflower_workflow() {
                     print
                 }
             }' | yublueflower_1337c0de_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
             done
             echo ""
 
@@ -679,7 +679,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
             done
             echo ""
         fi
