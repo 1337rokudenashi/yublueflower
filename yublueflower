@@ -151,15 +151,24 @@ function yublueflower_help() {
     echo "  --extended-workflows      Use --extended-workflows to get high Bug Bounty rewards"
 }
 
-function yublueflower_1337c0de_log() {
+function yublueflower_1337c0de_tee() {
     [[ "$silent" == "--silent" ]] && cat >> "$yublueflower_1337c0de_raw" || tee -a "$yublueflower_1337c0de_raw"
 }
 
-function yublueflower_1337scr1_log() {
+function yublueflower_1337scr1_tee() {
     [[ "$silent" == "--silent" ]] && cat >> "$yublueflower_1337scr1_raw" || tee -a "$yublueflower_1337scr1_raw"
 }
 
-function yublueflower_1337brew_log() {
+function yublueflower_discovery_metadata() {
+    local line="$1" endpoint path query
+    endpoint=$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g; s|^/||')
+    path=$(printf '%s' "$line" | sed -E 's|https?://[^/]+([^?]*).*|\1|')
+    query=$(printf '%s' "$line" | sed -nE 's|^[^?]*\?([^=&]+).*|\1|p')
+    printf '\033[36m["%s"]\033[0m \033[33m[path="%s"]\033[0m' "$endpoint" "$path"
+    [[ -n "$query" ]] && printf ' \033[33m[query="%s"]\033[0m' "$query"
+}
+
+function yublueflower_1337brew_tee() {
     local line normalized_line display_time target info_count
     while IFS= read -r line; do
         printf '%s\n' "$line" >> "$yublueflower_1337brew_raw"
@@ -444,8 +453,8 @@ function yublueflower_workflow() {
             if (!seen[sig]++) {
                 print
             }
-        }' | yublueflower_1337c0de_log | while read -r line; do
-            printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+        }' | yublueflower_1337c0de_tee | while read -r line; do
+            printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_discovery_metadata "$line")"
         done
         echo ""
 
@@ -456,8 +465,8 @@ function yublueflower_workflow() {
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
-            yublueflower_1337scr1_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+            yublueflower_1337scr1_tee | while read -r line; do
+                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_discovery_metadata "$line")"
             done
             echo ""
         fi
@@ -556,8 +565,8 @@ function yublueflower_workflow() {
             if (!seen[sig]++) {
                 print
             }
-        }' | yublueflower_1337c0de_log | while read -r line; do
-            printf '    \033[36m%s\033[0m  ◇ \033[32mtime-travel\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+        }' | yublueflower_1337c0de_tee | while read -r line; do
+            printf '    \033[36m%s\033[0m  ◇ \033[32mtime-travel\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_discovery_metadata "$line")"
         done
         echo ""
 
@@ -569,8 +578,8 @@ function yublueflower_workflow() {
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
-            yublueflower_1337scr1_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32mtime-travel\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+            yublueflower_1337scr1_tee | while read -r line; do
+                printf '    \033[36m%s\033[0m  ◇ \033[32mtime-travel\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_discovery_metadata "$line")"
             done
             echo ""
 
@@ -667,8 +676,8 @@ function yublueflower_workflow() {
                 if (!seen[sig]++) {
                     print
                 }
-            }' | yublueflower_1337c0de_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+            }' | yublueflower_1337c0de_tee | while read -r line; do
+                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_discovery_metadata "$line")"
             done
             echo ""
 
@@ -678,8 +687,8 @@ function yublueflower_workflow() {
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
-            yublueflower_1337scr1_log | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s · ["\033[36m%s\033[0m"]\n' "$(date '+%H:%M:%S')" "$line" "$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g')"
+            yublueflower_1337scr1_tee | while read -r line; do
+                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · \033[34mhttp\033[0m · \033[34minfo\033[0m · %s %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_discovery_metadata "$line")"
             done
             echo ""
         fi
@@ -705,7 +714,7 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$yublueflower_workspace_path"
-        done | yublueflower_1337brew_log
+        done | yublueflower_1337brew_tee
 
         for brew in critical high medium low; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
@@ -715,14 +724,14 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$yublueflower_workspace_path"
-        done | yublueflower_1337brew_log
+        done | yublueflower_1337brew_tee
 
         timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337c0de_out" \
             -dast \
             -c 50 \
             -silent \
             -markdown-export "$yublueflower_workspace_path" \
-            | yublueflower_1337brew_log
+            | yublueflower_1337brew_tee
 
     else
 
@@ -734,7 +743,7 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$yublueflower_workspace_path"
-        done | yublueflower_1337brew_log
+        done | yublueflower_1337brew_tee
 
         for brew in critical high medium low; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
@@ -744,14 +753,14 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$yublueflower_workspace_path"
-        done | yublueflower_1337brew_log
+        done | yublueflower_1337brew_tee
 
         timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337scr1_out" \
             -tags exposure \
             -c 50 \
             -silent \
             -markdown-export "$yublueflower_workspace_path" \
-            | yublueflower_1337brew_log
+            | yublueflower_1337brew_tee
 
         timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yublueflower_1337c0de_out" \
             -headless \
@@ -761,7 +770,7 @@ function yublueflower_workflow() {
             -c 50 \
             -silent \
             -markdown-export "$yublueflower_workspace_path" \
-            | yublueflower_1337brew_log
+            | yublueflower_1337brew_tee
 
     fi
 
