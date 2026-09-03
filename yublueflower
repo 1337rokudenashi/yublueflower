@@ -461,7 +461,7 @@ function yublueflower_workflow() {
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$))' |
+            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$)|/(api|apis|api/v[0-9]+|v[0-9]+/api|rest|restapi|graphql|graphiql|swagger(-ui)?|openapi|api[-_]?docs|redoc|rapidoc|oauth2?|oidc|saml|authorize|authorization|authentication|auth|login|logout|signin|signup|register|token|tokens|access[-_]?token|refresh[-_]?token|session|sessions|jwt|jwk|jwks|webhook(s)?|callback(s)?|event(s)?|internal|private|admin(istrator)?|management|credential(s)?)(/|\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
@@ -574,7 +574,7 @@ function yublueflower_workflow() {
             timeout --foreground -k 5s 10m urlfinder -d "$domain" -silent |
             perl -pe 's/[^[:print:]\t\r\n]//g' |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$))' |
+            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$)|/(api|apis|api/v[0-9]+|v[0-9]+/api|rest|restapi|graphql|graphiql|swagger(-ui)?|openapi|api[-_]?docs|redoc|rapidoc|oauth2?|oidc|saml|authorize|authorization|authentication|auth|login|logout|signin|signup|register|token|tokens|access[-_]?token|refresh[-_]?token|session|sessions|jwt|jwk|jwks|webhook(s)?|callback(s)?|event(s)?|internal|private|admin(istrator)?|management|credential(s)?)(/|\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
@@ -683,7 +683,7 @@ function yublueflower_workflow() {
 
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|api|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$))' |
+            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$)|/(api|apis|api/v[0-9]+|v[0-9]+/api|rest|restapi|graphql|graphiql|swagger(-ui)?|openapi|api[-_]?docs|redoc|rapidoc|oauth2?|oidc|saml|authorize|authorization|authentication|auth|login|logout|signin|signup|register|token|tokens|access[-_]?token|refresh[-_]?token|session|sessions|jwt|jwk|jwks|webhook(s)?|callback(s)?|event(s)?|internal|private|admin(istrator)?|management|credential(s)?)(/|\?|$))' |
             sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
