@@ -24,12 +24,12 @@ function yublueflower_banner() {
     .-~/|`-/~-.~--~
    /  |  \   ~-_\
 EOF
-    echo -e "\033[0m"  
-    echo "Tagline          : A security workflow to discover real-world threats"
-    echo "Author           : 1337rokudenashi"
-    echo "Architecture     : $(lsb_release -ds) ($(uname -m))"
-    echo "Time             : $(date '+%Y-%m-%d %H:%M:%S')"
-    echo "Uptime           : $(uptime -p | sed 's/up //')"
+    echo -e "\033[0m"
+    echo "User            : $(whoami)"
+    echo "Host            : $(hostname)"
+    echo "Architecture    : $(lsb_release -ds) ($(uname -m))"
+    echo "Time            : $(date '+%Y-%m-%d %H:%M:%S')"
+    echo "Uptime          : $(uptime -p | sed 's/up //')"
     echo ""
 }
 
@@ -149,6 +149,8 @@ function yublueflower_help() {
     echo "  --web-archives            Use --web-archives to time travel assets"
     echo "  --silent                  Keep crawl URL logs behaved"
     echo "  --extended-workflows      Use --extended-workflows to get high Bug Bounty rewards"
+    echo ""
+    printf 'yublueflower is made with ♥ by \033[36m@1337rokudenashi\033[0m and it is released under the MIT license.\n'
 }
 
 function yublueflower_1337c0de_tee() {
