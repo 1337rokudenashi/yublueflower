@@ -160,8 +160,7 @@ function yublueflower_1337scr1_tee() {
 }
 
 function yublueflower_metadata() {
-    local line="$1" endpoint path query
-    endpoint=$(printf '%s' "$line" | sed -E 's|https?://[^/]+||; s/=[^&]*/=/g; s|^/||')
+    local line="$1" path query
     path=$(printf '%s' "$line" | sed -E 's|https?://[^/]+([^?]*).*|\1|')
     query=$(printf '%s' "$line" | sed -nE 's|^[^?]*\?([^=&]+).*|\1|p')
     printf '\033[36m[path="%s"]\033[0m' "$path"
