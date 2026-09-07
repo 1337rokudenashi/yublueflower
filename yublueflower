@@ -455,7 +455,7 @@ function yublueflower_workflow() {
                 print
             }
         }' | yublueflower_1337c0de_tee | while read -r line; do
-            printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s · %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
+            printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
         done
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
@@ -467,7 +467,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_tee | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s · %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
+                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
             done
         fi
     else
@@ -566,7 +566,7 @@ function yublueflower_workflow() {
                 print
             }
         }' | yublueflower_1337c0de_tee | while read -r line; do
-            printf '    \033[36m%s\033[0m  ◇ \033[32mtime-travel\033[0m · %s · %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
+            printf '    \033[36m%s\033[0m  ◇ \033[32mtime-travel\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
         done
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
@@ -579,7 +579,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_tee | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32mtime-travel\033[0m · %s · %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
+                printf '    \033[36m%s\033[0m  ◇ \033[32mtime-travel\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
             done
 
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
@@ -676,7 +676,7 @@ function yublueflower_workflow() {
                     print
                 }
             }' | yublueflower_1337c0de_tee | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s · %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
+                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
             done
 
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -js-crawl -silent |
@@ -687,7 +687,7 @@ function yublueflower_workflow() {
             sort -u |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_tee | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s · %s\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
+                printf '    \033[36m%s\033[0m  ◇ \033[32mcrawl\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$line" "$(yublueflower_metadata "$line")"
             done
         fi
     fi
