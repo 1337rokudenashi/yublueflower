@@ -161,6 +161,105 @@ function yublueflower_1337scr1_tee() {
     [[ "$silent" == "--silent" ]] && cat >> "$yublueflower_1337scr1_raw" || tee -a "$yublueflower_1337scr1_raw"
 }
 
+function yublueflower_scr1() {
+    gawk -F'?' '
+    $2{
+        out=$1"?"
+
+        delete seenk
+
+        n=split($2,a,"&")
+
+        for(i=1;i<=n;i++){
+            split(a[i],b,"=")
+
+            if(b[1]!="" && !seenk[b[1]]++){
+                out=(out==($1"?") ? out : out"&") b[1]"=yublueflower"
+            }
+        }
+
+        if(out!=($1"?"))
+            print out
+    }' |
+    grep -Ev 'https?://[^ ]+https?://' |
+    grep -Ev '[?&][^=]*[^a-zA-Z0-9_.-][^=]*=' |
+    cut -d' ' -f1 |
+    gawk -F'?' '
+    {
+        path = $1
+
+        nseg = split(path, seg, "/")
+
+        path = ""
+
+        for (i = 1; i <= nseg; i++) {
+
+            if (seg[i] ~ /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/) {
+                seg[i] = ":uuid"
+            }
+            else if (seg[i] ~ /^[0-9a-fA-F]{24,}$/) {
+                seg[i] = ":rid"
+            }
+            else if (length(seg[i]) >= 14 && seg[i] ~ /^[A-Za-z0-9_-]+$/ && seg[i] ~ /[A-Za-z]/ && seg[i] ~ /[0-9]/) {
+                seg[i] = ":rid"
+            }
+            else if (seg[i] ~ /^[0-9]+$/) {
+                seg[i] = ":id"
+            }
+
+            path = (path == "" ? seg[i] : path "/" seg[i])
+        }
+
+        sig = path
+
+        if ($2) {
+
+            delete ordered
+            delete keys
+
+            c = 0
+
+            n = split($2, p, "&")
+
+            for (i = 1; i <= n; i++) {
+
+                split(p[i], kv, "=")
+
+                if (kv[1] != "" && !keys[kv[1]]++) {
+                    ordered[++c] = kv[1]
+                }
+            }
+
+            for (i = 1; i <= c; i++) {
+
+                for (j = i + 1; j <= c; j++) {
+
+                    if (ordered[i] > ordered[j]) {
+                        tmp = ordered[i]
+                        ordered[i] = ordered[j]
+                        ordered[j] = tmp
+                    }
+                }
+            }
+
+            for (i = 1; i <= c; i++) {
+                sig = sig "&" ordered[i]
+            }
+        }
+
+        if (!seen[sig]++) {
+            print
+        }
+    }'
+}
+
+function yublueflower_b4sh() {
+    grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$)|/(api|apis|api/v[0-9]+|v[0-9]+/api|rest|restapi|graphql|graphiql|swagger(-ui)?|openapi|api[-_]?docs|redoc|rapidoc|oauth2?|oidc|saml|authorize|authorization|authentication|auth|login|logout|signin|signup|register|token|tokens|access[-_]?token|refresh[-_]?token|session|sessions|jwt|jwk|jwks|webhook(s)?|callback(s)?|event(s)?|internal|private|admin(istrator)?|management|credential(s)?)(/|\?|$))' |
+    grep -Eiv '\.(css|woff2?|ttf|eot|png|jpe?g|gif|svg|ico|webp|mp4|mp3)([?#].*)?$' |
+    sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
+    sort -u
+}
+
 function yublueflower_metadata() {
     local line="$1" path query
     path=$(printf '%s' "$line" | sed -E 's|https?://[^/]+([^?]*).*|\1|')
@@ -366,105 +465,14 @@ function yublueflower_workflow() {
         grep -E "^${url%/}(/|$)" |
         grep -Ev "$yublueflower_1337scr1_regex" |
         grep -Ev "$yublueflower_1337b4sh_regex" |
-        gawk -F'?' '
-        $2{
-            out=$1"?"
-
-            delete seenk
-
-            n=split($2,a,"&")
-
-            for(i=1;i<=n;i++){
-                split(a[i],b,"=")
-
-                if(b[1]!="" && !seenk[b[1]]++){
-                    out=(out==($1"?") ? out : out"&") b[1]"=yublueflower"
-                }
-            }
-
-            if(out!=($1"?"))
-                print out
-        }' |
-        grep -Ev 'https?://[^ ]+https?://' |
-        grep -Ev '[?&][^=]*[^a-zA-Z0-9_.-][^=]*=' |
-        cut -d' ' -f1 |
-        gawk -F'?' '
-        {
-            path = $1
-
-            nseg = split(path, seg, "/")
-
-            path = ""
-
-            for (i = 1; i <= nseg; i++) {
-
-                if (seg[i] ~ /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/) {
-                    seg[i] = ":uuid"
-                }
-                else if (seg[i] ~ /^[0-9a-fA-F]{24,}$/) {
-                    seg[i] = ":rid"
-                }
-                else if (length(seg[i]) >= 14 && seg[i] ~ /^[A-Za-z0-9_-]+$/ && seg[i] ~ /[A-Za-z]/ && seg[i] ~ /[0-9]/) {
-                    seg[i] = ":rid"
-                }
-                else if (seg[i] ~ /^[0-9]+$/) {
-                    seg[i] = ":id"
-                }
-
-                path = (path == "" ? seg[i] : path "/" seg[i])
-            }
-
-            sig = path
-
-            if ($2) {
-
-                delete ordered
-                delete keys
-
-                c = 0
-
-                n = split($2, p, "&")
-
-                for (i = 1; i <= n; i++) {
-
-                    split(p[i], kv, "=")
-
-                    if (kv[1] != "" && !keys[kv[1]]++) {
-                        ordered[++c] = kv[1]
-                    }
-                }
-
-                for (i = 1; i <= c; i++) {
-
-                    for (j = i + 1; j <= c; j++) {
-
-                        if (ordered[i] > ordered[j]) {
-                            tmp = ordered[i]
-                            ordered[i] = ordered[j]
-                            ordered[j] = tmp
-                        }
-                    }
-                }
-
-                for (i = 1; i <= c; i++) {
-                    sig = sig "&" ordered[i]
-                }
-            }
-
-            if (!seen[sig]++) {
-                print
-            }
-        }' | yublueflower_1337c0de_tee | while read -r line; do
+        yublueflower_scr1 | yublueflower_1337c0de_tee | while read -r line; do
             printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yublueflower_metadata "$line")"
         done
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$)|/(api|apis|api/v[0-9]+|v[0-9]+/api|rest|restapi|graphql|graphiql|swagger(-ui)?|openapi|api[-_]?docs|redoc|rapidoc|oauth2?|oidc|saml|authorize|authorization|authentication|auth|login|logout|signin|signup|register|token|tokens|access[-_]?token|refresh[-_]?token|session|sessions|jwt|jwk|jwks|webhook(s)?|callback(s)?|event(s)?|internal|private|admin(istrator)?|management|credential(s)?)(/|\?|$))' |
-            grep -Eiv '\.(css|woff2?|ttf|eot|png|jpe?g|gif|svg|ico|webp|mp4|mp3)([?#].*)?$' |
-            sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
-            sort -u |
+            yublueflower_b4sh |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_tee | while read -r line; do
                 printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yublueflower_metadata "$line")"
@@ -477,95 +485,7 @@ function yublueflower_workflow() {
         grep "\?.*=" |
         grep -Ev "$yublueflower_1337scr1_regex" |
         grep -Ev "$yublueflower_1337b4sh_regex" |
-        gawk -F'?' '
-        $2{
-            out=$1"?"
-
-            delete seenk
-
-            n=split($2,a,"&")
-
-            for(i=1;i<=n;i++){
-                split(a[i],b,"=")
-
-                if(b[1]!="" && !seenk[b[1]]++){
-                    out=(out==($1"?") ? out : out"&") b[1]"=yublueflower"
-                }
-            }
-
-            if(out!=($1"?"))
-                print out
-        }' |
-        grep -Ev 'https?://[^ ]+https?://' |
-        grep -Ev '[?&][^=]*[^a-zA-Z0-9_.-][^=]*=' |
-        cut -d' ' -f1 |
-        gawk -F'?' '
-        {
-            path = $1
-
-            nseg = split(path, seg, "/")
-
-            path = ""
-
-            for (i = 1; i <= nseg; i++) {
-
-                if (seg[i] ~ /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/) {
-                    seg[i] = ":uuid"
-                }
-                else if (seg[i] ~ /^[0-9a-fA-F]{24,}$/) {
-                    seg[i] = ":rid"
-                }
-                else if (length(seg[i]) >= 14 && seg[i] ~ /^[A-Za-z0-9_-]+$/ && seg[i] ~ /[A-Za-z]/ && seg[i] ~ /[0-9]/) {
-                    seg[i] = ":rid"
-                }
-                else if (seg[i] ~ /^[0-9]+$/) {
-                    seg[i] = ":id"
-                }
-
-                path = (path == "" ? seg[i] : path "/" seg[i])
-            }
-
-            sig = path
-
-            if ($2) {
-
-                delete ordered
-                delete keys
-
-                c = 0
-
-                n = split($2, p, "&")
-
-                for (i = 1; i <= n; i++) {
-
-                    split(p[i], kv, "=")
-
-                    if (kv[1] != "" && !keys[kv[1]]++) {
-                        ordered[++c] = kv[1]
-                    }
-                }
-
-                for (i = 1; i <= c; i++) {
-
-                    for (j = i + 1; j <= c; j++) {
-
-                        if (ordered[i] > ordered[j]) {
-                            tmp = ordered[i]
-                            ordered[i] = ordered[j]
-                            ordered[j] = tmp
-                        }
-                    }
-                }
-
-                for (i = 1; i <= c; i++) {
-                    sig = sig "&" ordered[i]
-                }
-            }
-
-            if (!seen[sig]++) {
-                print
-            }
-        }' | yublueflower_1337c0de_tee | while read -r line; do
+        yublueflower_scr1 | yublueflower_1337c0de_tee | while read -r line; do
             printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yublueflower_metadata "$line")"
         done
 
@@ -573,10 +493,7 @@ function yublueflower_workflow() {
             timeout --foreground -k 5s 10m urlfinder -d "$domain" -silent |
             perl -pe 's/[^[:print:]\t\r\n]//g' |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$)|/(api|apis|api/v[0-9]+|v[0-9]+/api|rest|restapi|graphql|graphiql|swagger(-ui)?|openapi|api[-_]?docs|redoc|rapidoc|oauth2?|oidc|saml|authorize|authorization|authentication|auth|login|logout|signin|signup|register|token|tokens|access[-_]?token|refresh[-_]?token|session|sessions|jwt|jwk|jwks|webhook(s)?|callback(s)?|event(s)?|internal|private|admin(istrator)?|management|credential(s)?)(/|\?|$))' |
-            grep -Eiv '\.(css|woff2?|ttf|eot|png|jpe?g|gif|svg|ico|webp|mp4|mp3)([?#].*)?$' |
-            sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
-            sort -u |
+            yublueflower_b4sh |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_tee | while read -r line; do
                 printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yublueflower_metadata "$line")"
@@ -587,104 +504,13 @@ function yublueflower_workflow() {
             grep -E "^${url%/}(/|$)" |
             grep -Ev "$yublueflower_1337scr1_regex" |
             grep -Ev "$yublueflower_1337b4sh_regex" |
-            gawk -F'?' '
-            $2{
-                out=$1"?"
-
-                delete seenk
-
-                n=split($2,a,"&")
-
-                for(i=1;i<=n;i++){
-                    split(a[i],b,"=")
-
-                    if(b[1]!="" && !seenk[b[1]]++){
-                        out=(out==($1"?") ? out : out"&") b[1]"=yublueflower"
-                    }
-                }
-
-                if(out!=($1"?"))
-                    print out
-            }' |
-            grep -Ev 'https?://[^ ]+https?://' |
-            grep -Ev '[?&][^=]*[^a-zA-Z0-9_.-][^=]*=' |
-            cut -d' ' -f1 |
-            gawk -F'?' '
-            {
-                path = $1
-
-                nseg = split(path, seg, "/")
-
-                path = ""
-
-                for (i = 1; i <= nseg; i++) {
-
-                    if (seg[i] ~ /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/) {
-                        seg[i] = ":uuid"
-                    }
-                    else if (seg[i] ~ /^[0-9a-fA-F]{24,}$/) {
-                        seg[i] = ":rid"
-                    }
-                    else if (length(seg[i]) >= 14 && seg[i] ~ /^[A-Za-z0-9_-]+$/ && seg[i] ~ /[A-Za-z]/ && seg[i] ~ /[0-9]/) {
-                        seg[i] = ":rid"
-                    }
-                    else if (seg[i] ~ /^[0-9]+$/) {
-                        seg[i] = ":id"
-                    }
-
-                    path = (path == "" ? seg[i] : path "/" seg[i])
-                }
-
-                sig = path
-
-                if ($2) {
-
-                    delete ordered
-                    delete keys
-
-                    c = 0
-
-                    n = split($2, p, "&")
-
-                    for (i = 1; i <= n; i++) {
-
-                        split(p[i], kv, "=")
-
-                        if (kv[1] != "" && !keys[kv[1]]++) {
-                            ordered[++c] = kv[1]
-                        }
-                    }
-
-                    for (i = 1; i <= c; i++) {
-
-                        for (j = i + 1; j <= c; j++) {
-
-                            if (ordered[i] > ordered[j]) {
-                                tmp = ordered[i]
-                                ordered[i] = ordered[j]
-                                ordered[j] = tmp
-                            }
-                        }
-                    }
-
-                    for (i = 1; i <= c; i++) {
-                        sig = sig "&" ordered[i]
-                    }
-                }
-
-                if (!seen[sig]++) {
-                    print
-                }
-            }' | yublueflower_1337c0de_tee | while read -r line; do
+            yublueflower_scr1 | yublueflower_1337c0de_tee | while read -r line; do
                 printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yublueflower_metadata "$line")"
             done
 
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
-            grep -Ei '(\.(env|git|json)(\?|$)|/(config|env|auth|oauth|sso|admin|graphql|swagger|openapi|internal|private|debug|staging|firebase|aws|gcp|azure|payment|billing|webhook|settings)[^/]*\.js(\?|$)|\.(yml|yaml)(\?|$)|/(api|apis|api/v[0-9]+|v[0-9]+/api|rest|restapi|graphql|graphiql|swagger(-ui)?|openapi|api[-_]?docs|redoc|rapidoc|oauth2?|oidc|saml|authorize|authorization|authentication|auth|login|logout|signin|signup|register|token|tokens|access[-_]?token|refresh[-_]?token|session|sessions|jwt|jwk|jwks|webhook(s)?|callback(s)?|event(s)?|internal|private|admin(istrator)?|management|credential(s)?)(/|\?|$))' |
-            grep -Eiv '\.(css|woff2?|ttf|eot|png|jpe?g|gif|svg|ico|webp|mp4|mp3)([?#].*)?$' |
-            sed -E 's/(\.env|\.git|\.json|\.js|\.yml|\.yaml).*/\1/' |
-            sort -u |
+            yublueflower_b4sh |
             httpx "${header_args[@]}" -match-code 200 -silent |
             yublueflower_1337scr1_tee | while read -r line; do
                 printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yublueflower_metadata "$line")"
