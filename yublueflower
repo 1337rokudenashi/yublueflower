@@ -133,7 +133,7 @@ function yublueflower_env() {
     go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
     go install github.com/charmbracelet/glow@latest
     
-    clear
+    # clear
 }
 
 function yublueflower_help() {
@@ -151,6 +151,7 @@ function yublueflower_help() {
     echo "  --extended-workflows      Use --extended-workflows to get high Bug Bounty rewards"
     echo ""
     printf 'yublueflower is made with ♥ by \033[36m@1337rokudenashi\033[0m and it is released under the MIT license.\n'
+    echo ""
 }
 
 function yublueflower_0037scr1() {
