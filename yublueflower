@@ -10,14 +10,19 @@ fi
 # A security workflow to discover real-world threats
 
 function yublueflower_banner() {
-    echo -e "\033[36m"  
+    echo ""
+    echo "$(lsb_release -ds)"
+    echo "$(uname -m)"
+    echo ""
+
+    echo -e "\033[36m"
     cat << "EOF"
        .   .-~\
       /'.'   `-:
       | /       `._
       || .-.      {
       |\ `-'       `.
-   .  \|            /   yublueflower v0.0.3 (latest)
+   .  \|            /   yublueflower v0.0.3 · latest
  ~-.`.\\|        .-~_
     `.\-\     .-~   \
       `-'\~~.~      /
@@ -25,11 +30,6 @@ function yublueflower_banner() {
    /  |  \   ~-_\
 EOF
     echo -e "\033[0m"
-    echo "User            : $(whoami)"
-    echo "Host            : $(hostname)"
-    echo "Architecture    : $(lsb_release -ds) ($(uname -m))"
-    echo "Time            : $(date '+%Y-%m-%d %H:%M:%S')"
-    echo "Uptime          : $(uptime -p | sed 's/up //')"
     echo ""
 }
 
@@ -137,18 +137,31 @@ function yublueflower_env() {
 }
 
 function yublueflower_help() {
-    echo -e "\033[36mUsage:\033[0m"
-    echo "  yublueflower --url http://php.testinvicti.com"
-    echo "  yublueflower --brew < yu.txt"
-    echo "  subfinder -d testinvicti.com | httpx | yublueflower --brew"
+    echo -e "\033[36m◇ usage\033[0m"
     echo ""
-    echo -e "\033[36mOptions:\033[0m"
-    echo "  --help                    Show help message"
-    echo "  --session-header string[] Use --session-header to pass session (e.g., --session-header \"Cookie: laravel_session=...; XSRF-TOKEN=...\")"
-    echo "  --brew                    Use --brew to pipe base URLs"
-    echo "  --web-archives            Use --web-archives to time travel assets"
-    echo "  --silent                  Keep crawl URL logs behaved"
-    echo "  --extended-workflows      Use --extended-workflows to get high Bug Bounty rewards"
+    echo "    yublueflower --url http://php.testinvicti.com"
+    echo "    yublueflower --brew < yu.txt"
+    echo "    subfinder -d testinvicti.com | httpx | yublueflower --brew"
+    echo ""
+    echo -e "\033[36m◇ options\033[0m"
+    echo ""
+    echo "    --help"
+    echo "        Show help message"
+    echo ""
+    echo "    --session-header string[]"
+    echo "        Use --session-header to pass session (e.g., --session-header \"Cookie: laravel_session=...; XSRF-TOKEN=...\")"
+    echo ""
+    echo "    --brew"
+    echo "        Use --brew to pipe base URLs"
+    echo ""
+    echo "    --web-archives"
+    echo "        Use --web-archives to time travel assets"
+    echo ""
+    echo "    --silent"
+    echo "        Keep crawl URL logs behaved"
+    echo ""
+    echo "    --extended-workflows"
+    echo "        Use --extended-workflows to get high Bug Bounty rewards"
     echo ""
     printf 'yublueflower is made with ♥ by \033[36m@1337rokudenashi\033[0m and it is released under the MIT license.\n'
     echo ""
