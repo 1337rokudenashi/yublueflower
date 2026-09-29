@@ -2,36 +2,64 @@
 
 ```bash
 
+┏━(Message from Kali developers)
+┃
+┃ This is a minimal installation of Kali Linux, you likely
+┃ want to install supplementary tools. Learn how:
+┃ ⇒ https://www.kali.org/docs/troubleshooting/common-minimum-setup/
+┃
+┗━(Run: “touch ~/.hushlogin” to hide this message)
+┌──(1337rokudenashi㉿localhost)-[~]
+└─$ yublueflower --help
+
+Kali GNU/Linux Rolling
+x86_64
+
+
        .   .-~\
       /'.'   `-:
       | /       `._
       || .-.      {
       |\ `-'       `.
-   .  \|            /   yublueflower v0.0.3 (latest)
+   .  \|            /   yublueflower v0.0.3 · latest
  ~-.`.\\|        .-~_
     `.\-\     .-~   \
       `-'\~~.~      /
     .-~/|`-/~-.~--~
    /  |  \   ~-_\
 
-Tagline          : A security workflow to discover real-world threats
-Author           : 1337rokudenashi
-Architecture     : Kali GNU/Linux Rolling (x86_64)
-Time             : 2025-05-01 13:37:01
-Uptime           : 13 hours, 37 minutes
 
-Usage:
-  yublueflower --url http://php.testinvicti.com
-  yublueflower --brew < yu.txt
-  subfinder -d testinvicti.com | httpx | yublueflower --brew
+◇ usage
 
-Options:
-  --help                    Show help message
-  --session-header string[] Use --session-header to pass session (e.g., --session-header "Cookie: laravel_session=...; XSRF-TOKEN=...")
-  --brew                    Use --brew to pipe base URLs
-  --web-archives            Use --web-archives to time travel assets
-  --silent                  Keep crawl URL logs behaved
-  --extended-workflows      Use --extended-workflows to get high Bug Bounty rewards
+    yublueflower --url http://php.testinvicti.com
+    yublueflower --brew < yu.txt
+    subfinder -d testinvicti.com | httpx | yublueflower --brew
+
+◇ options
+
+    --help
+        Show help message
+
+    --session-header string[]
+        Use --session-header to pass session (e.g., --session-header "Cookie: laravel_session=...; XSRF-TOKEN=...")
+
+    --brew
+        Use --brew to pipe base URLs
+
+    --web-archives
+        Use --web-archives to time travel assets
+
+    --silent
+        Keep crawl URL logs behaved
+
+    --extended-workflows
+        Use --extended-workflows to get high Bug Bounty rewards
+
+yublueflower is made with ♥ by @1337rokudenashi and it is released under the MIT license.
+
+
+┌──(1337rokudenashi㉿localhost)-[~]
+└─$
 ```
 
 <h1 align="center">yublueflower v0.0.3 (latest)</h1>
