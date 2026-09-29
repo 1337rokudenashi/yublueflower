@@ -62,7 +62,7 @@ yublueflower is made with ♥ by @1337rokudenashi and it is released under the M
 └─$
 ```
 
-<h1 align="center">yublueflower v0.0.3 (latest)</h1>
+<h1 align="center">yublueflower v0.0.3 · latest</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/bash-%2523121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white">
