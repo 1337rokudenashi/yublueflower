@@ -9,33 +9,29 @@
 ┃ ⇒ https://www.kali.org/docs/troubleshooting/common-minimum-setup/
 ┃
 ┗━(Run: “touch ~/.hushlogin” to hide this message)
-┌──(1337rokudenashi㉿localhost)-[~]
+┌──(yublueflower㉿localhost)-[~]
 └─$ yublueflower --help
 
-Kali GNU/Linux Rolling
+bash · Kali GNU/Linux Rolling
 x86_64
-
 
        .   .-~\
       /'.'   `-:
       | /       `._
       || .-.      {
       |\ `-'       `.
-   .  \|            /   yublueflower v0.0.3 · latest
- ~-.`.\\|        .-~_
-    `.\-\     .-~   \
-      `-'\~~.~      /
+   .  \|          /   yublueflower v0.0.3 · latest
+ ~-.`.\\|      .-~_
+    `.\-\   .-~   \
+      `-'\~~.~    /
     .-~/|`-/~-.~--~
    /  |  \   ~-_\
-
 
 ◇ usage
 
     yublueflower --url http://php.testinvicti.com
     yublueflower --brew < yu.txt
     subfinder -d testinvicti.com | httpx | yublueflower --brew
-
-◇ options
 
     --help
         Show help message
@@ -58,7 +54,7 @@ x86_64
 yublueflower is made with ♥ by @1337rokudenashi and it is released under the MIT license.
 
 
-┌──(1337rokudenashi㉿localhost)-[~]
+┌──(yublueflower㉿localhost)-[~]
 └─$
 ```
 
