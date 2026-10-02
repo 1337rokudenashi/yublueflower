@@ -11,9 +11,8 @@ fi
 
 function yublueflower_banner() {
     echo ""
-    echo "$(lsb_release -ds)"
+    echo "$(basename "$SHELL") · $(lsb_release -ds)"
     echo "$(uname -m)"
-    echo ""
 
     echo -e "\033[36m"
     cat << "EOF"
@@ -22,15 +21,14 @@ function yublueflower_banner() {
       | /       `._
       || .-.      {
       |\ `-'       `.
-   .  \|            /   yublueflower v0.0.3 · latest
- ~-.`.\\|        .-~_
-    `.\-\     .-~   \
-      `-'\~~.~      /
+   .  \|          /   yublueflower v0.0.3 · latest
+ ~-.`.\\|      .-~_
+    `.\-\   .-~   \
+      `-'\~~.~    /
     .-~/|`-/~-.~--~
    /  |  \   ~-_\
 EOF
     echo -e "\033[0m"
-    echo ""
 }
 
 function yublueflower_env() {
@@ -143,8 +141,7 @@ function yublueflower_help() {
     echo "    yublueflower --brew < yu.txt"
     echo "    subfinder -d testinvicti.com | httpx | yublueflower --brew"
     echo ""
-    echo -e "\033[36m◇ options\033[0m"
-    echo ""
+    
     echo "    --help"
     echo "        Show help message"
     echo ""
@@ -683,11 +680,11 @@ if [[ -n $1 && $1 != --help ]]; then
             fi
         done
         if (( yublueflower_has_brew )) && [[ ! -t 0 ]]; then
-            yublueflower_b4sh="/tmp/yublueflower-cli-$$.brew"
+            yublueflower_b4sh="/tmp/yublueflower-cli-$$.scr1"
             cat > "$yublueflower_b4sh"
             export yublueflower_b4sh
         fi
-        yublueflower_ipc="/tmp/yublueflower-cli-$$.state"
+        yublueflower_ipc="/tmp/yublueflower-cli-$$.b4sh"
         export yublueflower_ipc
         rm -f "$yublueflower_ipc"
 
