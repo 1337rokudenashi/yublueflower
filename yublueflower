@@ -34,7 +34,7 @@ EOF
 function yublueflower_env() {
     local required_commands=(
         bash chmod cp mkdir rm wget tar sed grep gawk perl cut sort tee
-        timeout xargs realpath date uptime uname lsb_release clear
+        timeout xargs realpath date uptime uname lsb_release uuid clear
     )
     local missing_commands=()
 
@@ -53,7 +53,7 @@ function yublueflower_env() {
         echo "Please install the missing packages using your system package manager."
         echo ""
         echo "Debian / Ubuntu / Kali Linux:"
-        echo "  apt install -y wget perl gawk coreutils findutils tar xz-utils lsb-release"
+        echo "  apt install -y wget perl gawk coreutils findutils tar xz-utils uuid-runtime lsb-release"
         echo ""
         echo "Note:"
         echo "  Root privileges may be required."
@@ -529,8 +529,6 @@ function yublueflower_workflow() {
         fi
     fi
 
-    echo ""
-
     tee -a "$yublueflower_0037scr1_tmp" < "$yublueflower_0037scr1_raw" > /dev/null && sort -u "$yublueflower_0037scr1_tmp" | tee "$yublueflower_0037scr1_out" > /dev/null && tee "$yublueflower_0037scr1_tmp" < "$yublueflower_0037scr1_out" > /dev/null
     tee -a "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_raw" > /dev/null && sort -u "$yublueflower_1337scr1_tmp" | tee "$yublueflower_1337scr1_out" > /dev/null && tee "$yublueflower_1337scr1_tmp" < "$yublueflower_1337scr1_out" > /dev/null
 
@@ -680,11 +678,11 @@ if [[ -n $1 && $1 != --help ]]; then
             fi
         done
         if (( yublueflower_has_brew )) && [[ ! -t 0 ]]; then
-            yublueflower_b4sh="/tmp/yublueflower-cli-$$.scr1"
+            yublueflower_b4sh="/tmp/yublueflower-cli-$$.$(uuid -v 4)"
             cat > "$yublueflower_b4sh"
             export yublueflower_b4sh
         fi
-        yublueflower_ipc="/tmp/yublueflower-cli-$$.b4sh"
+        yublueflower_ipc="/tmp/yublueflower-cli-$$.$(uuid -v 4)"
         export yublueflower_ipc
         rm -f "$yublueflower_ipc"
 
