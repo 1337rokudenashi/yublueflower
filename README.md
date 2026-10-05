@@ -9,7 +9,7 @@
 ┃ ⇒ https://www.kali.org/docs/troubleshooting/common-minimum-setup/
 ┃
 ┗━(Run: “touch ~/.hushlogin” to hide this message)
-┌──(yublueflower㉿localhost)-[~]
+┌──(1337rokudenashi㉿localhost)-[~]
 └─$ yublueflower --help
 
 bash · Kali GNU/Linux Rolling
@@ -54,7 +54,7 @@ x86_64
 yublueflower is made with ♥ by @1337rokudenashi and it is released under the MIT license.
 
 
-┌──(yublueflower㉿localhost)-[~]
+┌──(1337rokudenashi㉿localhost)-[~]
 └─$
 ```
 
