@@ -466,16 +466,16 @@ function yublueflower_workflow() {
     yublueflower_1337scr1_out="$yublueflower_tmp/1337scr1_out_$timestamp.txt"
     > "$yublueflower_1337scr1_raw"
     
-    yublueflower_0037scr1_regex='\.(jpg|jpeg|png|gif|svg|ico|css|js|woff2?|ttf|eot|pdf|zip|tar|gz|rar|mp4|mp3|docx?|xlsx?|pptx?|exe|apk|json|xml|csv)(\?|$)'
+    yu_0037scr1_RegEx='\.(jpg|jpeg|png|gif|svg|ico|css|js|woff2?|ttf|eot|pdf|zip|tar|gz|rar|mp4|mp3|docx?|xlsx?|pptx?|exe|apk|json|xml|csv)(\?|$)'
 
-    yublueflower_1337scr1_regex='(\?|&)(utm_(source|medium|campaign|term|content)|fbclid|gclid|yclid|msclkid|ga(_cid|id)?|mc_(cid|eid)|_hs(enc|mi)?|ref(_src|_url|id)?|src|source(Name)?|from|via|tracking|track(id)?|click|ad(id|group(id)?)?|pixel|campaignid|theme|style|layout|format|viewtype|preview|width|height|nocache|noload|cache|ver(sion)?|ts|timestamp|_|cb|rnd|client|browser|device|screen|dpi|env|platform|debug|log|tab|offset|start(index)?|step|scroll|position|expand|collapse|open|closed|show|autoplay|resumeTime|chaseplay|msockid|frm_id|ncid|_gl|twclid)='
+    yu_1337scr1_RegEx='(\?|&)(utm_(source|medium|campaign|term|content)|fbclid|gclid|yclid|msclkid|ga(_cid|id)?|mc_(cid|eid)|_hs(enc|mi)?|ref(_src|_url|id)?|src|source(Name)?|from|via|tracking|track(id)?|click|ad(id|group(id)?)?|pixel|campaignid|theme|style|layout|format|viewtype|preview|width|height|nocache|noload|cache|ver(sion)?|ts|timestamp|_|cb|rnd|client|browser|device|screen|dpi|env|platform|debug|log|tab|offset|start(index)?|step|scroll|position|expand|collapse|open|closed|show|autoplay|resumeTime|chaseplay|msockid|frm_id|ncid|_gl|twclid)='
 
     if [[ "$web_archives" != "--web-archives" ]]; then
         timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
         perl -pe 's/[^[:print:]\t\r\n]//g' |
         grep -E "^${url%/}(/|$)" |
-        grep -Ev "$yublueflower_0037scr1_regex" |
-        grep -Ev "$yublueflower_1337scr1_regex" |
+        grep -Ev "$yu_0037scr1_RegEx" |
+        grep -Ev "$yu_1337scr1_RegEx" |
         yublueflower_scr1 | yublueflower_0037scr1 | while read -r line; do
             printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yublueflower_0037b4sh "$line")"
         done
@@ -494,8 +494,8 @@ function yublueflower_workflow() {
         perl -pe 's/[^[:print:]\t\r\n]//g' |
         grep -E "^${url%/}(/|$)" |
         grep "\?.*=" |
-        grep -Ev "$yublueflower_0037scr1_regex" |
-        grep -Ev "$yublueflower_1337scr1_regex" |
+        grep -Ev "$yu_0037scr1_RegEx" |
+        grep -Ev "$yu_1337scr1_RegEx" |
         yublueflower_scr1 | yublueflower_0037scr1 | while read -r line; do
             printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yublueflower_0037b4sh "$line")"
         done
@@ -513,8 +513,8 @@ function yublueflower_workflow() {
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
             perl -pe 's/[^[:print:]\t\r\n]//g' |
             grep -E "^${url%/}(/|$)" |
-            grep -Ev "$yublueflower_0037scr1_regex" |
-            grep -Ev "$yublueflower_1337scr1_regex" |
+            grep -Ev "$yu_0037scr1_RegEx" |
+            grep -Ev "$yu_1337scr1_RegEx" |
             yublueflower_scr1 | yublueflower_0037scr1 | while read -r line; do
                 printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yublueflower_0037b4sh "$line")"
             done
@@ -541,9 +541,9 @@ function yublueflower_workflow() {
 
     if [[ "$extended_workflows" != "--extended-workflows" ]]; then
 
-        for brew in info unknown; do
+        for i in info unknown; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
-                -s "$brew" \
+                -s "$i" \
                 -headless \
                 -headc 5 \
                 -c 50 \
@@ -551,9 +551,9 @@ function yublueflower_workflow() {
                 -markdown-export "$yublueflower_workspace_path"
         done | yublueflower_1337b4sh
 
-        for brew in critical high medium low; do
+        for i in critical high medium low; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
-                -s "$brew" \
+                -s "$i" \
                 -headless \
                 -headc 5 \
                 -c 50 \
@@ -570,9 +570,9 @@ function yublueflower_workflow() {
 
     else
 
-        for brew in info unknown; do
+        for i in info unknown; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
-                -s "$brew" \
+                -s "$i" \
                 -headless \
                 -headc 5 \
                 -c 50 \
@@ -580,9 +580,9 @@ function yublueflower_workflow() {
                 -markdown-export "$yublueflower_workspace_path"
         done | yublueflower_1337b4sh
 
-        for brew in critical high medium low; do
+        for i in critical high medium low; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
-                -s "$brew" \
+                -s "$i" \
                 -headless \
                 -headc 5 \
                 -c 50 \
