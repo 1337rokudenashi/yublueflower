@@ -33,8 +33,8 @@ EOF
 
 function yublueflower_env() {
     local required_commands=(
-        bash chmod cp mkdir rm wget tar sed grep gawk perl cut sort tee
-        timeout xargs realpath date uptime uname lsb_release uuid clear
+        bash cat chmod cp mkdir rm wget tar sed grep gawk perl cut sort tee tail xargs timeout date sleep
+        basename realpath uname ps setsid uuid lsb_release
     )
     local missing_commands=()
 
@@ -53,7 +53,7 @@ function yublueflower_env() {
         echo "Please install the missing packages using your system package manager."
         echo ""
         echo "Debian / Ubuntu / Kali Linux:"
-        echo "  apt install -y wget perl gawk coreutils findutils tar xz-utils uuid-runtime lsb-release"
+        echo "  apt install -y bash coreutils wget sed grep gawk perl findutils tar gzip xz-utils procps util-linux uuid lsb-release ca-certificates"
         echo ""
         echo "Note:"
         echo "  Root privileges may be required."
