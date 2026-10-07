@@ -74,7 +74,7 @@ function yublueflower_env() {
     required_node_version="24.16.0"
 
     if [[ -z "$node_version" ]] || [[ "$(printf '%s\n' "$node_version" "$required_node_version" | sort -V | tail -n1)" != "$node_version" ]]; then
-        echo "Installing node.js v$required_node_version"
+        echo "nodejs.org node-v$required_node_version-linux-x64.tar.xz"
 
         wget -q https://nodejs.org/dist/v24.16.0/node-v24.16.0-linux-x64.tar.xz -O /tmp/node.tar.xz
         rm -rf "$yublueflower_env/node" 2>/dev/null
@@ -93,7 +93,7 @@ function yublueflower_env() {
     required_go_version="1.26.3"
 
     if [[ -z "$go_version" ]] || [[ "$(printf '%s\n' "$go_version" "$required_go_version" | sort -V | tail -n1)" != "$go_version" ]]; then
-        echo "Installing go.dev $required_go_version"
+        echo "go.dev go$required_go_version.linux-amd64.tar.gz"
 
         wget -q https://go.dev/dl/go1.26.3.linux-amd64.tar.gz -O /tmp/go.tar.gz
         rm -rf "$yublueflower_env/go" 2>/dev/null
