@@ -320,12 +320,12 @@ function yublueflower_cancel() {
     [[ -n "$yublueflower_tmp" ]] && rm -rf "$yublueflower_tmp"
     [[ -n "$yublueflower_workspace_path" ]] && rm -rf "$yublueflower_workspace_path"
     [[ -n "$yublueflower_ipc" ]] && rm -rf "$yublueflower_ipc"
-    [[ -n "$yublueflower_local" ]] && rm -f "$yublueflower_local"
+    [[ -n "$yublueflower_cli" ]] && rm -f "$yublueflower_cli"
 
     exit 130
 }
 
-function yublueflower_local() {
+function yublueflower_cli() {
     local url=""
     while [[ "$#" -gt 0 ]]; do
         case "$1" in
@@ -413,8 +413,8 @@ function yublueflower_bash() {
     fi
 
     if (( brew )); then
-        if [[ -n "$yublueflower_local" ]]; then
-            xargs -P1 -I{} bash -c 'skip_banner=1 yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {} < "$yublueflower_local"
+        if [[ -n "$yublueflower_cli" ]]; then
+            xargs -P1 -I{} bash -c 'skip_banner=1 yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {} < "$yublueflower_cli"
         else
             xargs -P1 -I{} bash -c 'skip_banner=1 yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {}
         fi
@@ -669,7 +669,7 @@ function yublueflower_bash() {
 if [[ -n $1 && $1 != --help ]]; then
     if [[ "${yublueflower_detached:-}" != "1" ]]; then
         export yublueflower_detached=1
-        yublueflower_local=""
+        yublueflower_cli=""
         yublueflower_has_brew=0
         for yublueflower_arg in "$@"; do
             if [[ "$yublueflower_arg" == --brew ]]; then
@@ -678,9 +678,9 @@ if [[ -n $1 && $1 != --help ]]; then
             fi
         done
         if (( yublueflower_has_brew )) && [[ ! -t 0 ]]; then
-            yublueflower_local="/tmp/yublueflower-cli-$$·$(uuid -v 4)"
-            cat > "$yublueflower_local"
-            export yublueflower_local
+            yublueflower_cli="/tmp/yublueflower-cli-$$·$(uuid -v 4)"
+            cat > "$yublueflower_cli"
+            export yublueflower_cli
         fi
         yublueflower_ipc="/tmp/yublueflower-cli-$$·$(uuid -v 4)"
         export yublueflower_ipc
@@ -707,12 +707,12 @@ if [[ -n $1 && $1 != --help ]]; then
         wait "$yublueflower_child"
         yublueflower_status=$?
         rm -f "$yublueflower_ipc"
-        [[ -n "$yublueflower_local" ]] && rm -f "$yublueflower_local"
+        [[ -n "$yublueflower_cli" ]] && rm -f "$yublueflower_cli"
         exit "$yublueflower_status"
     fi
 
     read -r yublueflower_pid < <(ps -o pgid= -p "$$")
-    yublueflower_local "$@"
+    yublueflower_cli "$@"
     printf '%s\n' \
         "$yublueflower_pid" \
         "$yublueflower_tmp" \
