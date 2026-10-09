@@ -164,12 +164,12 @@ function yublueflower_help() {
     echo ""
 }
 
-function yu_0037node() {
-    [[ "$silent" == "--silent" ]] && cat >> "$yu_0037node_raw" || tee -a "$yu_0037node_raw"
+function yu_0037node_local() {
+    [[ "$silent" == "--silent" ]] && cat >> "$yu_0037node_local_raw" || tee -a "$yu_0037node_local_raw"
 }
 
-function yu_1337node() {
-    [[ "$silent" == "--silent" ]] && cat >> "$yu_1337node_raw" || tee -a "$yu_1337node_raw"
+function yu_1337node_local() {
+    [[ "$silent" == "--silent" ]] && cat >> "$yu_1337node_local_raw" || tee -a "$yu_1337node_local_raw"
 }
 
 function yu_node_RegEx() {
@@ -271,7 +271,7 @@ function yu_bash_RegEx() {
     sort -u
 }
 
-function yu_0037bash() {
+function yu_0037bash_local() {
     local line="$1" path query
     path=$(printf '%s' "$line" | sed -E 's|https?://[^/]+([^?]*).*|\1|')
     query=$(printf '%s' "$line" | sed -nE 's|^[^?]*\?([^=&]+).*|\1|p')
@@ -279,13 +279,13 @@ function yu_0037bash() {
     [[ -n "$query" ]] && printf ' \033[36mquery="%s"\033[0m' "$query"
 }
 
-function yu_1337bash() {
+function yu_1337bash_local() {
     local line normalized_line display_time target info_count
     while IFS= read -r line; do
-        printf '%s\n' "$line" >> "$yu_1337bash_raw"
+        printf '%s\n' "$line" >> "$yu_1337bash_local_raw"
         normalized_line=$(printf '%s\n' "$line" | perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g')
         if [[ "$normalized_line" =~ (^|[^[:alnum:]_])\[?info\]?([^[:alnum:]_]|$) ]]; then
-            info_count=$(perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yu_1337bash_raw" | grep -Eoc '(^|[^[:alnum:]_])\[?info\]?([^[:alnum:]_]|$)')
+            info_count=$(perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yu_1337bash_local_raw" | grep -Eoc '(^|[^[:alnum:]_])\[?info\]?([^[:alnum:]_]|$)')
             if (( info_count > 5 )); then
                 if (( info_count == 6 )); then
                     printf '    \033[36m... more info ~/yublueflower/yublueflower-cli/%s\033[0m\n' "$yublueflower_workspace_name"
@@ -320,12 +320,12 @@ function yublueflower_cancel() {
     [[ -n "$yublueflower_tmp" ]] && rm -rf "$yublueflower_tmp"
     [[ -n "$yublueflower_workspace_path" ]] && rm -rf "$yublueflower_workspace_path"
     [[ -n "$yublueflower_ipc" ]] && rm -rf "$yublueflower_ipc"
-    [[ -n "$yublueflower_bash" ]] && rm -f "$yublueflower_bash"
+    [[ -n "$yublueflower_local" ]] && rm -f "$yublueflower_local"
 
     exit 130
 }
 
-function yublueflower_bash() {
+function yublueflower_local() {
     local url=""
     while [[ "$#" -gt 0 ]]; do
         case "$1" in
@@ -357,7 +357,7 @@ function yublueflower_bash() {
     fi
 }
 
-function yublueflower_workflow() {
+function yublueflower_bash() {
     local scan_start_epoch=$(date +%s)
     local url="" web_archives="" extended_workflows="" silent=""
     local brew=0
@@ -413,8 +413,8 @@ function yublueflower_workflow() {
     fi
 
     if (( brew )); then
-        if [[ -n "$yublueflower_bash" ]]; then
-            xargs -P1 -I{} bash -c 'skip_banner=1 yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {} < "$yublueflower_bash"
+        if [[ -n "$yublueflower_local" ]]; then
+            xargs -P1 -I{} bash -c 'skip_banner=1 yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {} < "$yublueflower_local"
         else
             xargs -P1 -I{} bash -c 'skip_banner=1 yublueflower --url "$1" '"$web_archives $extended_workflows $silent"'' _ {}
         fi
@@ -456,15 +456,15 @@ function yublueflower_workflow() {
     fi
 
     timestamp=$(date "+%Y%m%d%H%M%S")
-    yu_0037node_raw="$yublueflower_tmp/0037scr1_raw_$timestamp.txt"
-    yu_0037node_tmp="$yublueflower_tmp/0037scr1_tmp_$timestamp.txt"
-    yu_0037node_out="$yublueflower_tmp/0037scr1_out_$timestamp.txt"
-    > "$yu_0037node_raw"
+    yu_0037node_local_raw="$yublueflower_tmp/0037scr1_raw_$timestamp.txt"
+    yu_0037node_local_tmp="$yublueflower_tmp/0037scr1_tmp_$timestamp.txt"
+    yu_0037node_local_out="$yublueflower_tmp/0037scr1_out_$timestamp.txt"
+    > "$yu_0037node_local_raw"
 
-    yu_1337node_raw="$yublueflower_tmp/1337scr1_raw_$timestamp.txt"
-    yu_1337node_tmp="$yublueflower_tmp/1337scr1_tmp_$timestamp.txt"
-    yu_1337node_out="$yublueflower_tmp/1337scr1_out_$timestamp.txt"
-    > "$yu_1337node_raw"
+    yu_1337node_local_raw="$yublueflower_tmp/1337scr1_raw_$timestamp.txt"
+    yu_1337node_local_tmp="$yublueflower_tmp/1337scr1_tmp_$timestamp.txt"
+    yu_1337node_local_out="$yublueflower_tmp/1337scr1_out_$timestamp.txt"
+    > "$yu_1337node_local_raw"
     
     yu_0037scr1_RegEx='\.(jpg|jpeg|png|gif|svg|ico|css|js|woff2?|ttf|eot|pdf|zip|tar|gz|rar|mp4|mp3|docx?|xlsx?|pptx?|exe|apk|json|xml|csv)(\?|$)'
 
@@ -476,8 +476,8 @@ function yublueflower_workflow() {
         grep -E "^${url%/}(/|$)" |
         grep -Ev "$yu_0037scr1_RegEx" |
         grep -Ev "$yu_1337scr1_RegEx" |
-        yu_node_RegEx | yu_0037node | while read -r line; do
-            printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash "$line")"
+        yu_node_RegEx | yu_0037node_local | while read -r line; do
+            printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash_local "$line")"
         done
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
@@ -485,8 +485,8 @@ function yublueflower_workflow() {
             grep -E "^${url%/}(/|$)" |
             yu_bash_RegEx |
             httpx "${header_args[@]}" -match-code 200 -silent |
-            yu_1337node | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash "$line")"
+            yu_1337node_local | while read -r line; do
+                printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash_local "$line")"
             done
         fi
     else
@@ -496,8 +496,8 @@ function yublueflower_workflow() {
         grep "\?.*=" |
         grep -Ev "$yu_0037scr1_RegEx" |
         grep -Ev "$yu_1337scr1_RegEx" |
-        yu_node_RegEx | yu_0037node | while read -r line; do
-            printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash "$line")"
+        yu_node_RegEx | yu_0037node_local | while read -r line; do
+            printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash_local "$line")"
         done
 
         if [[ "$extended_workflows" == "--extended-workflows" ]]; then
@@ -506,8 +506,8 @@ function yublueflower_workflow() {
             grep -E "^${url%/}(/|$)" |
             yu_bash_RegEx |
             httpx "${header_args[@]}" -match-code 200 -silent |
-            yu_1337node | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash "$line")"
+            yu_1337node_local | while read -r line; do
+                printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash_local "$line")"
             done
 
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -match-regex '.*\?.*=.*' -js-crawl -silent |
@@ -515,29 +515,29 @@ function yublueflower_workflow() {
             grep -E "^${url%/}(/|$)" |
             grep -Ev "$yu_0037scr1_RegEx" |
             grep -Ev "$yu_1337scr1_RegEx" |
-            yu_node_RegEx | yu_0037node | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash "$line")"
+            yu_node_RegEx | yu_0037node_local | while read -r line; do
+                printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash_local "$line")"
             done
 
             timeout --foreground -k 5s 10m katana "${header_args[@]}" -u "$url" -js-crawl -silent |
             grep -E "^${url%/}(/|$)" |
             yu_bash_RegEx |
             httpx "${header_args[@]}" -match-code 200 -silent |
-            yu_1337node | while read -r line; do
-                printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash "$line")"
+            yu_1337node_local | while read -r line; do
+                printf '    \033[36m%s\033[0m  ◇ \033[32m%s\033[0m · %s [%s]\n' "$(date '+%H:%M:%S')" "$(printf '%s' "$line" | sed -E 's|^https?://([^/:]+).*|\1|')" "$line" "$(yu_0037bash_local "$line")"
             done
         fi
     fi
 
-    tee -a "$yu_0037node_tmp" < "$yu_0037node_raw" > /dev/null && sort -u "$yu_0037node_tmp" | tee "$yu_0037node_out" > /dev/null && tee "$yu_0037node_tmp" < "$yu_0037node_out" > /dev/null
-    tee -a "$yu_1337node_tmp" < "$yu_1337node_raw" > /dev/null && sort -u "$yu_1337node_tmp" | tee "$yu_1337node_out" > /dev/null && tee "$yu_1337node_tmp" < "$yu_1337node_out" > /dev/null
+    tee -a "$yu_0037node_local_tmp" < "$yu_0037node_local_raw" > /dev/null && sort -u "$yu_0037node_local_tmp" | tee "$yu_0037node_local_out" > /dev/null && tee "$yu_0037node_local_tmp" < "$yu_0037node_local_out" > /dev/null
+    tee -a "$yu_1337node_local_tmp" < "$yu_1337node_local_raw" > /dev/null && sort -u "$yu_1337node_local_tmp" | tee "$yu_1337node_local_out" > /dev/null && tee "$yu_1337node_local_tmp" < "$yu_1337node_local_out" > /dev/null
 
-    rm -rf "$yu_0037node_raw" "$yu_0037node_tmp"
-    rm -rf "$yu_1337node_raw" "$yu_1337node_tmp"
+    rm -rf "$yu_0037node_local_raw" "$yu_0037node_local_tmp"
+    rm -rf "$yu_1337node_local_raw" "$yu_1337node_local_tmp"
     
-    yu_1337bash_raw="$yublueflower_tmp/1337b4sh_raw_$timestamp.txt"
-    yu_1337bash_out="$yublueflower_tmp/1337b4sh_out_$timestamp.txt"
-    > "$yu_1337bash_raw"
+    yu_1337bash_local_raw="$yublueflower_tmp/1337b4sh_raw_$timestamp.txt"
+    yu_1337bash_local_out="$yublueflower_tmp/1337b4sh_out_$timestamp.txt"
+    > "$yu_1337bash_local_raw"
 
     if [[ "$extended_workflows" != "--extended-workflows" ]]; then
 
@@ -549,7 +549,7 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$yublueflower_workspace_path"
-        done | yu_1337bash
+        done | yu_1337bash_local
 
         for i in critical high medium low; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
@@ -559,14 +559,14 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$yublueflower_workspace_path"
-        done | yu_1337bash
+        done | yu_1337bash_local
 
-        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yu_0037node_out" \
+        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yu_0037node_local_out" \
             -dast \
             -c 50 \
             -silent \
             -markdown-export "$yublueflower_workspace_path" \
-            | yu_1337bash
+            | yu_1337bash_local
 
     else
 
@@ -578,7 +578,7 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$yublueflower_workspace_path"
-        done | yu_1337bash
+        done | yu_1337bash_local
 
         for i in critical high medium low; do
             timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -u "$url" \
@@ -588,16 +588,16 @@ function yublueflower_workflow() {
                 -c 50 \
                 -silent \
                 -markdown-export "$yublueflower_workspace_path"
-        done | yu_1337bash
+        done | yu_1337bash_local
 
-        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yu_1337node_out" \
+        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yu_1337node_local_out" \
             -tags exposure \
             -c 50 \
             -silent \
             -markdown-export "$yublueflower_workspace_path" \
-            | yu_1337bash
+            | yu_1337bash_local
 
-        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yu_0037node_out" \
+        timeout --foreground -k 5s 10m nuclei "${header_args[@]}" -l "$yu_0037node_local_out" \
             -headless \
             -headc 5 \
             -dast \
@@ -605,11 +605,11 @@ function yublueflower_workflow() {
             -c 50 \
             -silent \
             -markdown-export "$yublueflower_workspace_path" \
-            | yu_1337bash
+            | yu_1337bash_local
 
     fi
 
-    perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yu_1337bash_raw" | tee "$yu_1337bash_out" > /dev/null
+    perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$yu_1337bash_local_raw" | tee "$yu_1337bash_local_out" > /dev/null
     p1=0; p2=0; p3=0; p4=0; p5=0; unknown=0
     while IFS= read -r line; do
         case "$line" in
@@ -620,7 +620,7 @@ function yublueflower_workflow() {
             *"[info]"*)     ((p5++));;
             *"[unknown]"*)  ((unknown++));;
         esac
-    done < "$yu_1337bash_out"
+    done < "$yu_1337bash_local_out"
 
     [[ -f "$yublueflower_workspace_path/index.md" ]] && rm -rf "$yublueflower_workspace_path/index.md"
     local scan_finish_epoch=$(date +%s)
@@ -658,18 +658,18 @@ function yublueflower_workflow() {
         printf '  duration  %ds\n' "$scan_seconds"
     fi
     echo ""
-    rm -rf "$yu_1337bash_raw"
+    rm -rf "$yu_1337bash_local_raw"
     [[ -n "$session_headers_file" ]] && rm -f "$session_headers_file"
 
-    rm -rf "$yu_0037node_out"
-    rm -rf "$yu_1337node_out"
-    rm -rf "$yu_1337bash_out"
+    rm -rf "$yu_0037node_local_out"
+    rm -rf "$yu_1337node_local_out"
+    rm -rf "$yu_1337bash_local_out"
 }
 
 if [[ -n $1 && $1 != --help ]]; then
     if [[ "${yublueflower_detached:-}" != "1" ]]; then
         export yublueflower_detached=1
-        yublueflower_bash=""
+        yublueflower_local=""
         yublueflower_has_brew=0
         for yublueflower_arg in "$@"; do
             if [[ "$yublueflower_arg" == --brew ]]; then
@@ -678,9 +678,9 @@ if [[ -n $1 && $1 != --help ]]; then
             fi
         done
         if (( yublueflower_has_brew )) && [[ ! -t 0 ]]; then
-            yublueflower_bash="/tmp/yublueflower-cli-$$·$(uuid -v 4)"
-            cat > "$yublueflower_bash"
-            export yublueflower_bash
+            yublueflower_local="/tmp/yublueflower-cli-$$·$(uuid -v 4)"
+            cat > "$yublueflower_local"
+            export yublueflower_local
         fi
         yublueflower_ipc="/tmp/yublueflower-cli-$$·$(uuid -v 4)"
         export yublueflower_ipc
@@ -707,18 +707,18 @@ if [[ -n $1 && $1 != --help ]]; then
         wait "$yublueflower_child"
         yublueflower_status=$?
         rm -f "$yublueflower_ipc"
-        [[ -n "$yublueflower_bash" ]] && rm -f "$yublueflower_bash"
+        [[ -n "$yublueflower_local" ]] && rm -f "$yublueflower_local"
         exit "$yublueflower_status"
     fi
 
     read -r yublueflower_pid < <(ps -o pgid= -p "$$")
-    yublueflower_bash "$@"
+    yublueflower_local "$@"
     printf '%s\n' \
         "$yublueflower_pid" \
         "$yublueflower_tmp" \
         "$yublueflower_workspace_path" \
         > "$yublueflower_ipc"
-    yublueflower_workflow "$@"
+    yublueflower_bash "$@"
 else
     [[ -z $1 ]] && yublueflower_env
     yublueflower_banner; yublueflower_help
