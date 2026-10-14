@@ -65,7 +65,7 @@ yublueflower is made with ♥ by @1337rokudenashi and it is released under the M
 yublueflower is a security workflow to discover real-world threats using open-source tools such as urlfinder, katana, httpx, nuclei, and glow, with findings mapped to CWE and CVE using matcher patterns.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/1337rokudenashi/yublueflower/refs/heads/main/yublueflower.png">
+  <img src="https://raw.githubusercontent.com/1337rokudenashi/yublueflower/refs/heads/main/screenshot.png">
 </p>
 
 ## Required
