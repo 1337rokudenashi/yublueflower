@@ -12,9 +12,6 @@
 ┌──(1337rokudenashi㉿localhost)-[~]
 └─$ yublueflower --help
 
-bash · Kali GNU/Linux Rolling
-x86_64
-
        .   .-~\
       /'.'   `-:
       | /       `._
