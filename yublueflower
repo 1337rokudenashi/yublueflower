@@ -10,9 +10,6 @@ fi
 # A security workflow to discover real-world threats
 
 function yublueflower_banner() {
-    echo ""
-    echo "$(basename "$SHELL") · $(lsb_release -ds)"
-    echo "$(uname -m)"
 
     echo -e "\033[36m"
     cat << "EOF"
